@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { UserRole } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 import { Button, AvatarUpload } from '../components/ui';
 import { Settings, LogOut, ChevronRight, User, Ticket, LifeBuoy, Crown, CheckCircle2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { uploadAvatar, updateUserAvatar } from '../services/avatarService';
+import { supabase } from '../services/supabaseClient';
 
 interface ProfileProps {
    userRole: UserRole;
@@ -14,6 +15,35 @@ const Profile: React.FC<ProfileProps> = ({ userRole }) => {
    const navigate = useNavigate();
    const { user, signOut } = useAuth();
    const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+   const [loading, setLoading] = useState(true);
+
+   // Fetch avatar from database on mount
+   useEffect(() => {
+      const fetchAvatar = async () => {
+         if (!user?.id) {
+            setLoading(false);
+            return;
+         }
+
+         try {
+            const { data, error } = await supabase
+               .from('users')
+               .select('avatar_url')
+               .eq('id', user.id)
+               .single();
+
+            if (data?.avatar_url) {
+               setAvatarUrl(data.avatar_url);
+            }
+         } catch (err) {
+            console.error('Error fetching avatar:', err);
+         } finally {
+            setLoading(false);
+         }
+      };
+
+      fetchAvatar();
+   }, [user?.id]);
 
    const handleLogout = async () => {
       await signOut();
@@ -38,7 +68,7 @@ const Profile: React.FC<ProfileProps> = ({ userRole }) => {
    const userEmail = user?.email || 'email@exemplo.com';
    const userPlan = user?.user_metadata?.plan || 'Basic';
    const defaultAvatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(userName) + '&background=D4AF37&color=000';
-   const displayAvatar = avatarUrl || user?.user_metadata?.avatar_url || defaultAvatar;
+   const displayAvatar = avatarUrl || defaultAvatar;
    const memberSince = new Date(user?.created_at || Date.now()).toLocaleDateString('pt-BR', { year: 'numeric', month: 'short' });
 
    return (
