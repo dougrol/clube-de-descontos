@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, ChevronRight, User, ShieldAlert, AlertCircle } from 'lucide-react';
+import { Mail, Lock, ChevronRight, AlertCircle, Store, User, Sparkles } from 'lucide-react';
 import { Button, Input } from '../components/ui';
 import { UserRole } from '../types';
 import { supabase } from '../services/supabaseClient';
@@ -10,7 +10,7 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedRole, setSelectedRole] = useState<UserRole>(UserRole.USER);
+  const [selectedRole, setSelectedRole] = useState<'client' | 'partner'>('client');
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -26,10 +26,8 @@ const Login: React.FC = () => {
 
       if (error) throw error;
 
-      // Role redirect logic is handled in App.tsx routing or AuthContext
-      // But we can double check role if needed or just let route guard handle it
-      // For now, simple redirect
-      if (selectedRole === UserRole.PARTNER) {
+      // Redirect based on selected role
+      if (selectedRole === 'partner') {
         navigate('/partner-dashboard');
       } else {
         navigate('/home');
@@ -46,14 +44,14 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex flex-col justify-center px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-black flex flex-col justify-center px-6 relative overflow-hidden">
       {/* Background Decor */}
       <div className="absolute -top-20 -right-20 w-64 h-64 bg-gold-600/10 rounded-full blur-3xl" />
       <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-gold-600/5 rounded-full blur-3xl" />
 
       <div className="relative z-10 w-full max-w-sm mx-auto animate-fade-in">
+        {/* Logo */}
         <div className="mb-8 flex flex-col items-center">
-          {/* Logo Icon */}
           <div className="mb-4 relative">
             <div className="absolute inset-0 bg-gold-500 blur-2xl opacity-20 rounded-full"></div>
             <svg width="80" height="80" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="relative z-10 drop-shadow-xl">
@@ -68,38 +66,54 @@ const Login: React.FC = () => {
           <p className="text-gold-500/80 text-[10px] tracking-[0.3em] uppercase font-medium">Consultoria</p>
         </div>
 
-        {/* Role Switcher */}
-        <div className="grid grid-cols-3 bg-white/5 p-1 rounded-xl mb-8 relative">
+        {/* Role Switcher - Only Client and Partner */}
+        <div className="grid grid-cols-2 gap-3 mb-8">
+          {/* Client Option */}
           <button
-            onClick={() => setSelectedRole(UserRole.USER)}
-            className={`py-2 text-xs font-medium rounded-lg transition-all ${selectedRole === UserRole.USER ? 'bg-gold-500 text-black shadow-lg' : 'text-gray-400 hover:text-white'}`}
+            onClick={() => setSelectedRole('client')}
+            className={`p-4 rounded-xl border-2 transition-all duration-300 flex flex-col items-center gap-2 ${selectedRole === 'client'
+                ? 'bg-gold-500 border-gold-500 text-black shadow-lg shadow-gold-500/20'
+                : 'bg-white/5 border-white/10 text-gray-400 hover:border-white/30'
+              }`}
           >
-            Cliente
+            <User size={24} />
+            <span className="text-sm font-bold">Cliente</span>
+            <span className="text-[10px] opacity-70">Acesse benefícios</span>
           </button>
+
+          {/* Partner Option - Highlighted */}
           <button
-            onClick={() => setSelectedRole(UserRole.PARTNER)}
-            className={`py-2 text-xs font-medium rounded-lg transition-all ${selectedRole === UserRole.PARTNER ? 'bg-gold-500 text-black shadow-lg' : 'text-gray-400 hover:text-white'}`}
+            onClick={() => setSelectedRole('partner')}
+            className={`p-4 rounded-xl border-2 transition-all duration-300 flex flex-col items-center gap-2 relative overflow-hidden ${selectedRole === 'partner'
+                ? 'bg-gold-500 border-gold-500 text-black shadow-lg shadow-gold-500/20'
+                : 'bg-gradient-to-br from-signal-500/10 to-orange-500/10 border-signal-500/30 text-white hover:border-signal-500/60'
+              }`}
           >
-            Parceiro
-          </button>
-          <button
-            onClick={() => setSelectedRole(UserRole.ADMIN)}
-            className={`py-2 text-xs font-medium rounded-lg transition-all ${selectedRole === UserRole.ADMIN ? 'bg-gold-500 text-black shadow-lg' : 'text-gray-400 hover:text-white'}`}
-          >
-            Admin
+            {selectedRole !== 'partner' && (
+              <div className="absolute top-1 right-1">
+                <Sparkles size={14} className="text-signal-500" />
+              </div>
+            )}
+            <Store size={24} />
+            <span className="text-sm font-bold">Parceiro</span>
+            <span className="text-[10px] opacity-70">Gerencie sua loja</span>
           </button>
         </div>
 
+        {/* Dynamic Header */}
         <div className="mb-6 text-center">
           <h3 className="text-lg text-white font-medium">
-            Login {selectedRole === UserRole.ADMIN ? 'Administrativo' : selectedRole === UserRole.PARTNER ? 'de Parceiro' : 'do Cliente'}
+            {selectedRole === 'partner' ? 'Acesse seu Painel' : 'Entre no Clube'}
           </h3>
           <p className="text-gray-500 text-xs mt-1">
-            {selectedRole === UserRole.PARTNER ? 'Gerencie sua loja e cupons' : 'Acesse o Clube de Vantagens'}
+            {selectedRole === 'partner'
+              ? 'Gerencie cupons, veja estatísticas e atualize sua loja'
+              : 'Descontos exclusivos em parceiros selecionados'}
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Login Form */}
+        <form onSubmit={handleSubmit} className="space-y-5">
           {error && (
             <div className="bg-red-500/10 border border-red-500/50 rounded-lg p-3 flex items-start gap-3">
               <AlertCircle size={18} className="text-red-500 shrink-0 mt-0.5" />
@@ -110,7 +124,7 @@ const Login: React.FC = () => {
           <Input
             icon={<Mail size={18} />}
             type="email"
-            placeholder={selectedRole === UserRole.PARTNER ? "email@empresa.com" : "seu@email.com"}
+            placeholder={selectedRole === 'partner' ? "email@empresa.com" : "seu@email.com"}
             label="E-mail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -136,27 +150,32 @@ const Login: React.FC = () => {
 
           <Button type="submit" isLoading={isLoading} className="mt-4">
             <span className="flex items-center">
-              ACESSAR PAINEL <ChevronRight size={18} className="ml-1" />
+              {selectedRole === 'partner' ? 'ACESSAR PAINEL' : 'ENTRAR NO CLUBE'}
+              <ChevronRight size={18} className="ml-1" />
             </span>
           </Button>
         </form>
 
         {/* Footer Actions */}
         <div className="mt-8 pt-6 border-t border-white/5 space-y-4">
-          {/* Partner Registration Link */}
-          {selectedRole === UserRole.PARTNER && (
-            <div className="text-center bg-white/5 p-4 rounded-xl border border-white/5">
-              <p className="text-gray-400 text-xs mb-2">Quer oferecer descontos no clube?</p>
+          {/* Partner Highlight when on Client mode */}
+          {selectedRole === 'client' && (
+            <div className="bg-gradient-to-r from-signal-500/10 to-orange-500/10 border border-signal-500/30 p-4 rounded-xl text-center">
+              <p className="text-white text-sm mb-2">
+                <Store size={16} className="inline mr-2 text-signal-500" />
+                Tem um negócio?
+              </p>
               <button
                 onClick={() => navigate('/register-partner')}
-                className="text-gold-500 font-bold text-sm hover:underline"
+                className="text-signal-500 font-bold text-sm hover:underline"
               >
-                SEJA UM PARCEIRO
+                SEJA UM PARCEIRO →
               </button>
             </div>
           )}
 
-          {selectedRole === UserRole.USER && (
+          {/* Client Registration when on Client mode */}
+          {selectedRole === 'client' && (
             <div className="text-center">
               <p className="text-gray-500 text-sm">
                 Não é membro?{' '}
@@ -167,6 +186,19 @@ const Login: React.FC = () => {
                   Assine agora
                 </button>
               </p>
+            </div>
+          )}
+
+          {/* Partner Registration Link when on Partner mode */}
+          {selectedRole === 'partner' && (
+            <div className="text-center bg-white/5 p-4 rounded-xl border border-white/5">
+              <p className="text-gray-400 text-xs mb-2">Quer oferecer descontos no clube?</p>
+              <button
+                onClick={() => navigate('/register-partner')}
+                className="text-gold-500 font-bold text-sm hover:underline"
+              >
+                CADASTRE SUA LOJA
+              </button>
             </div>
           )}
         </div>

@@ -3,6 +3,7 @@ import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-d
 import Layout from './components/Layout';
 import Splash from './screens/Splash';
 import Login from './screens/Login';
+import AdminLogin from './screens/AdminLogin';
 import Register from './screens/Register';
 import Home from './screens/Home';
 import Benefits from './screens/Benefits';
@@ -43,7 +44,11 @@ const AppRoutes: React.FC<{ onFinishSplash: () => void }> = ({ onFinishSplash })
         {/* Public Routes */}
         <Route
           path="/login"
-          element={!isAuthenticated ? <Login /> : <Navigate to={role === UserRole.PARTNER ? "/partner-dashboard" : "/home"} />}
+          element={!isAuthenticated ? <Login /> : <Navigate to={role === UserRole.PARTNER ? "/partner-dashboard" : role === UserRole.ADMIN ? "/admin" : "/home"} />}
+        />
+        <Route
+          path="/admin-login"
+          element={!isAuthenticated ? <AdminLogin /> : <Navigate to={role === UserRole.ADMIN ? "/admin" : "/home"} />}
         />
         <Route
           path="/register-partner"
