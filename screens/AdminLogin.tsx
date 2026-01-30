@@ -31,12 +31,20 @@ const AdminLogin: React.FC = () => {
                 .eq('id', data.user?.id)
                 .single();
 
-            if (userData?.role !== 'admin') {
+            console.log('Admin login - User role from DB:', userData?.role);
+
+            // Case-insensitive check for admin role
+            const userRole = userData?.role?.toString().toUpperCase();
+            if (userRole !== 'ADMIN') {
                 await supabase.auth.signOut();
                 throw new Error('Acesso não autorizado. Esta área é restrita a administradores.');
             }
 
-            navigate('/admin');
+            // Wait for AuthContext to sync the auth state
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            // Force navigation to admin panel
+            window.location.hash = '#/admin';
 
         } catch (err: any) {
             console.error('Admin login error:', err);
