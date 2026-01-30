@@ -1,0 +1,132 @@
+/*
+  Simple admin HTTP server to securely create/upsert `public.users` using Supabase service_role key.
+  Usage:
+    SUPABASE_URL=https://your.supabase.co SUPABASE_SERVICE_ROLE_KEY=your_service_role_key node server/admin-server.js
+
+  Endpoint:
+    POST /create-user
+    JSON body: { id: string, email?: string, name?: string, role?: string, plan?: string }
+
+  Notes:
+    - This server must run only in a trusted environment (backend). Do NOT expose service_role key publicly.
+    - Requires Node 18+ (global fetch available). If using older Node, install node-fetch.
+*/
+
+const http = require('http');
+
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const PORT = process.env.PORT ? Number(process.env.PORT) : 8787;
+const ADMIN_API_KEY = process.env.ADMIN_API_KEY; // optional: allow internal callers
+
+if (!SUPABASE_URL || !SERVICE_ROLE_KEY) {
+  console.error('Missing required environment variables: SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.');
+  process.exit(1);
+}
+
+const headers = {
+  'Content-Type': 'application/json',
+  Authorization: `Bearer ${SERVICE_ROLE_KEY}`,
+  apikey: SERVICE_ROLE_KEY,
+};
+
+const server = http.createServer(async (req, res) => {
+  if (req.method === 'POST' && req.url === '/create-user') {
+    // Authentication options:
+    // 1) Internal caller with x-admin-api-key matching ADMIN_API_KEY (if configured)
+    // 2) End-user: send Authorization: Bearer <access_token> (user JWT). We validate it against Supabase.
+    const providedAdminKey = req.headers['x-admin-api-key'];
+    const authHeader = req.headers['authorization'];
+
+    const allowByAdminKey = ADMIN_API_KEY && providedAdminKey && providedAdminKey === ADMIN_API_KEY;
+
+    let validatedUserId = null;
+    if (!allowByAdminKey) {
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'unauthorized' }));
+        return;
+      }
+
+      const token = authHeader.split(' ')[1];
+      try {
+        // Validate token by calling Supabase auth endpoint
+        const userResp = await fetch(`${SUPABASE_URL.replace(/\/+$/,'')}/auth/v1/user`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            apikey: SERVICE_ROLE_KEY
+          }
+        });
+
+        if (!userResp.ok) {
+          res.writeHead(401, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'invalid_token' }));
+          return;
+        }
+
+        const userJson = await userResp.json();
+        validatedUserId = userJson?.id || null;
+      } catch (vErr) {
+        console.error('Token validation error:', vErr);
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'invalid_token' }));
+        return;
+      }
+    }
+    try {
+      let body = '';
+      for await (const chunk of req) body += chunk;
+      const payload = JSON.parse(body || '{}');
+
+      if (!payload.id) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Missing id in body' }));
+        return;
+      }
+
+      // Build insert object
+      const insertObj = {
+        id: payload.id,
+        email: payload.email || null,
+        name: payload.name || null,
+        role: payload.role || 'USER',
+        plan: payload.plan || null,
+      };
+
+      const resp = await fetch(`${SUPABASE_URL.replace(/\/+$/,'')}/rest/v1/users?on_conflict=id`, {
+        method: 'POST',
+        headers: {
+          ...headers,
+          Prefer: 'return=representation,resolution=merge-duplicates'
+        },
+        body: JSON.stringify(insertObj),
+      });
+
+      const data = await resp.text();
+      const status = resp.status;
+
+      res.writeHead(status, { 'Content-Type': 'application/json' });
+      res.end(data);
+    } catch (err) {
+      console.error('Error in /create-user:', err);
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'internal_error' }));
+    }
+    return;
+  }
+
+  // Health
+  if (req.method === 'GET' && req.url === '/health') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ ok: true }));
+    return;
+  }
+
+  res.writeHead(404, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify({ error: 'not_found' }));
+});
+
+server.listen(PORT, () => {
+  console.log(`Admin server listening on http://localhost:${PORT}`);
+});

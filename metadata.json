@@ -1,0 +1,7 @@
+{
+  "name": "Tavares Car",
+  "description": "Aplicativo premium de clube de vantagens e gestão de assinaturas automotivas com estética exclusiva Black & Gold.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}

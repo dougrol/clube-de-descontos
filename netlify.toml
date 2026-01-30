@@ -1,0 +1,13 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Environment variables for frontend (VITE_ prefix required)
+[build.environment]
+  NODE_VERSION = "20"
+
+# SPA fallback - redirect all routes to index.html for React Router
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -1,0 +1,385 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { BarChart3, Users, QrCode, Ticket, Settings, LogOut, Save, X, Edit3, Image as ImageIcon, CheckCircle, MapPin } from 'lucide-react';
+import { Card, SectionTitle, Badge, Button, Input } from '../components/ui';
+import { getStoredUser, logoutUser, getPartners, updatePartner } from '../services/storage';
+import { Partner, UserRole } from '../types';
+
+const PartnerDashboard: React.FC = () => {
+    const navigate = useNavigate();
+    const [partner, setPartner] = useState<Partner | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    // Modal States
+    const [isEditing, setIsEditing] = useState(false);
+    const [isValidating, setIsValidating] = useState(false);
+    const [validationStep, setValidationStep] = useState(0); // 0: Scan, 1: Success
+
+    // Form State
+    const [editForm, setEditForm] = useState<Partner | null>(null);
+
+    useEffect(() => {
+        console.log('PartnerDashboard: useEffect started');
+        // 1. Get Logged User
+        const { user, isAuthenticated } = getStoredUser();
+        console.log('PartnerDashboard: User auth state:', { user, isAuthenticated });
+
+        if (!isAuthenticated || user.role !== UserRole.PARTNER) {
+            console.error('PartnerDashboard: Auth mismatch.', { appAuth: isAuthenticated, userRole: user.role });
+            // Stop infinite loop: Don't navigate, just show error
+            // navigate('/login'); 
+            setLoading(false);
+            return;
+        }
+
+        // 2. Find Associated Partner
+        const partners = getPartners();
+        console.log('PartnerDashboard: Partners found:', partners.length);
+
+        // Logic to find the correct partner for this user
+        let foundPartner = null;
+        if (user.partnerId) {
+            console.log('PartnerDashboard: Searching by partnerId:', user.partnerId);
+            foundPartner = partners.find(p => p.id === user.partnerId);
+        } else {
+            console.log('PartnerDashboard: No partnerId, trying fallbacks');
+            // Fallback for the demo partner user
+            if (user.email === 'parceiro@teste.com') {
+                foundPartner = partners.find(p => p.id === 'p_demo_1');
+            }
+            // General Fallback
+            if (!foundPartner) {
+                console.log('PartnerDashboard: Using general fallback (first partner)');
+                foundPartner = partners[0];
+            }
+        }
+
+        console.log('PartnerDashboard: Final found partner:', foundPartner);
+        setPartner(foundPartner || null);
+        setEditForm(foundPartner || null);
+        console.log('PartnerDashboard: Setting loading to false');
+        setLoading(false);
+    }, []);
+
+    const handleLogout = () => {
+        logoutUser();
+        navigate('/login');
+    };
+
+    const handleSaveProfile = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (editForm && updatePartner(editForm)) {
+            setPartner(editForm);
+            setIsEditing(false);
+            alert("Perfil atualizado com sucesso!");
+        }
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        if (editForm) {
+            setEditForm({ ...editForm, [e.target.name]: e.target.value });
+        }
+    };
+
+    const simulateValidation = () => {
+        setValidationStep(1); // Scanning...
+        setTimeout(() => {
+            setValidationStep(2); // Success
+        }, 2000);
+    };
+
+    if (loading) return <div className="min-h-screen bg-black flex items-center justify-center text-white">Carregando painel...</div>;
+
+    if (!partner) {
+        return (
+            <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white p-6 text-center">
+                <h2 className="text-xl font-bold text-red-500 mb-2">Erro de Acesso</h2>
+                <p className="text-gray-400 mb-6">Não foi possível carregar o perfil do parceiro. Seus dados locais podem estar desatualizados.</p>
+
+                <div className="flex flex-col gap-3 w-full max-w-xs">
+                    <Button onClick={() => navigate('/login')} variant="outline">
+                        Voltar para Login
+                    </Button>
+                    <button
+                        onClick={() => {
+                            localStorage.clear();
+                            window.location.reload();
+                        }}
+                        className="text-xs text-red-400 hover:text-red-300 underline"
+                    >
+                        Resetar Banco de Dados (Correção)
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="min-h-screen bg-obsidian-950 font-sans text-white pb-32">
+            {/* Header */}
+            <header className="bg-obsidian-900 border-b border-white/5 p-6 md:px-12 flex justify-between items-center sticky top-0 z-40 backdrop-blur-md bg-opacity-80">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gold-500/10 rounded-lg flex items-center justify-center border border-gold-500/20">
+                        <Settings className="text-gold-500" size={20} />
+                    </div>
+                    <div>
+                        <h1 className="text-lg font-bold leading-tight">{partner.name}</h1>
+                        <p className="text-[10px] text-gray-400 tracking-wider uppercase">Painel do Parceiro</p>
+                    </div>
+                </div>
+                <button onClick={handleLogout} className="text-gray-400 hover:text-white transition-colors flex items-center gap-2 text-xs font-bold uppercase tracking-widest">
+                    Sair <LogOut size={16} />
+                </button>
+            </header>
+
+            <div className="p-6 md:p-12 max-w-[1600px] mx-auto space-y-8">
+
+                {/* Stats Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <Card className="flex flex-col gap-4">
+                        <div className="flex justify-between items-start">
+                            <div className="p-2 bg-blue-500/10 rounded-lg text-blue-500"><Users size={20} /></div>
+                            <Badge variant="outline" className="text-xs">Hoje</Badge>
+                        </div>
+                        <div>
+                            <h3 className="text-3xl font-bold">24</h3>
+                            <p className="text-gray-500 text-sm">Visitas de Clientes</p>
+                        </div>
+                    </Card>
+
+                    <Card className="flex flex-col gap-4">
+                        <div className="flex justify-between items-start">
+                            <div className="p-2 bg-green-500/10 rounded-lg text-green-500"><Ticket size={20} /></div>
+                            <Badge variant="outline" className="text-xs">+12%</Badge>
+                        </div>
+                        <div>
+                            <h3 className="text-3xl font-bold">8</h3>
+                            <p className="text-gray-500 text-sm">Cupons Validados</p>
+                        </div>
+                    </Card>
+
+                    <Card className="flex flex-col gap-4">
+                        <div className="flex justify-between items-start">
+                            <div className="p-2 bg-gold-500/10 rounded-lg text-gold-500"><QrCode size={20} /></div>
+                            <Badge variant="outline" className="text-xs">Ativo</Badge>
+                        </div>
+                        <div>
+                            <h3 className="text-3xl font-bold">QR</h3>
+                            <p className="text-gray-500 text-sm">Validar Desconto</p>
+                        </div>
+                    </Card>
+
+                    <Card className="bg-gold-500 text-black border-none relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-4 opacity-10"><BarChart3 size={100} /></div>
+                        <div className="h-full flex flex-col justify-between relative z-10">
+                            <div className="flex justify-between items-center">
+                                <span className="font-bold opacity-70">Status</span>
+                            </div>
+                            <div>
+                                <p className="text-sm font-medium opacity-80 mb-1">Benefício Atual</p>
+                                <h3 className="text-2xl font-black truncate">{partner.benefit}</h3>
+                            </div>
+                        </div>
+                    </Card>
+                </div>
+
+                {/* Quick Actions */}
+                <section>
+                    <SectionTitle title="Ações Rápidas" subtitle="Gerencie sua parceria" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                        <button onClick={() => { setIsValidating(true); setValidationStep(0); }} className="bg-obsidian-900 border border-white/10 hover:border-gold-500/50 p-8 rounded-xl flex items-center gap-6 transition-all group text-left hover:bg-white/5">
+                            <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center group-hover:bg-gold-500 group-hover:text-black transition-colors shadow-lg">
+                                <QrCode size={32} />
+                            </div>
+                            <div>
+                                <h4 className="font-bold text-xl mb-1">Validar Cupom</h4>
+                                <p className="text-sm text-gray-500">Ler QR Code do cliente para aplicar desconto</p>
+                            </div>
+                        </button>
+
+                        <button onClick={() => setIsEditing(true)} className="bg-obsidian-900 border border-white/10 hover:border-gold-500/50 p-8 rounded-xl flex items-center gap-6 transition-all group text-left hover:bg-white/5">
+                            <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center group-hover:bg-gold-500 group-hover:text-black transition-colors shadow-lg">
+                                <Edit3 size={32} />
+                            </div>
+                            <div>
+                                <h4 className="font-bold text-xl mb-1">Editar Perfil</h4>
+                                <p className="text-sm text-gray-500">Alterar benefício, regras, fotos e descrição</p>
+                            </div>
+                        </button>
+                    </div>
+                </section>
+            </div>
+
+            {/* --- MODALS --- */}
+
+            {/* EDIT PROFILE MODAL */}
+            {isEditing && editForm && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in">
+                    <div className="bg-obsidian-900 w-full max-w-2xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+                        <div className="p-6 border-b border-white/5 flex justify-between items-center">
+                            <h2 className="text-xl font-bold flex items-center gap-2"><Settings size={20} className="text-gold-500" /> Editar Dados da Loja</h2>
+                            <button onClick={() => setIsEditing(false)} className="text-gray-400 hover:text-white"><X size={24} /></button>
+                        </div>
+
+                        <div className="p-6 overflow-y-auto custom-scrollbar space-y-6">
+                            {/* Basic Info */}
+                            <div className="space-y-4">
+                                <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest border-b border-white/10 pb-2">Informações Básicas</h4>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <Input label="Nome da Loja" name="name" value={editForm.name} onChange={handleChange} />
+                                    <Input label="Benefício (Destaque)" name="benefit" value={editForm.benefit} onChange={handleChange} placeholder="Ex: 10% OFF" />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Descrição</label>
+                                    <textarea
+                                        name="description"
+                                        value={editForm.description}
+                                        onChange={handleChange as any}
+                                        className="w-full bg-white/5 border border-white/10 rounded-sm px-4 py-3 text-sm text-white focus:border-gold-500 focus:bg-obsidian-900 outline-none transition-all min-h-[80px]"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Regras de Uso</label>
+                                    <textarea
+                                        name="fullRules"
+                                        value={editForm.fullRules}
+                                        onChange={handleChange as any}
+                                        className="w-full bg-white/5 border border-white/10 rounded-sm px-4 py-3 text-sm text-white focus:border-gold-500 focus:bg-obsidian-900 outline-none transition-all min-h-[80px]"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Images */}
+                            <div className="space-y-4">
+                                <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest border-b border-white/10 pb-2">Imagens</h4>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <Input label="URL do Logo" name="logoUrl" value={editForm.logoUrl} onChange={handleChange} icon={<ImageIcon size={16} />} />
+                                    <Input label="URL da Capa" name="coverUrl" value={editForm.coverUrl} onChange={handleChange} icon={<ImageIcon size={16} />} />
+                                </div>
+                            </div>
+
+                            {/* Location Section - CONSOLIDATED */}
+                            <div className="space-y-4 bg-white/5 p-4 rounded-lg border border-white/10">
+                                <div className="flex justify-between items-center">
+                                    <h4 className="text-sm font-bold text-white flex items-center gap-2"><MapPin size={16} className="text-gold-500" /> Localização e Endereço</h4>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            if (navigator.geolocation) {
+                                                navigator.geolocation.getCurrentPosition((pos) => {
+                                                    setEditForm(prev => prev ? ({
+                                                        ...prev,
+                                                        coordinates: {
+                                                            lat: pos.coords.latitude,
+                                                            lng: pos.coords.longitude
+                                                        }
+                                                    }) : null);
+                                                    alert("Coordenadas GPS atualizadas!");
+                                                }, (err) => alert("Erro ao obter localização."));
+                                            } else {
+                                                alert("Geolocalização não suportada.");
+                                            }
+                                        }}
+                                        className="text-[10px] bg-gold-500/10 text-gold-500 border border-gold-500/50 px-3 py-1.5 rounded hover:bg-gold-500 hover:text-black transition-colors font-bold uppercase tracking-wider flex items-center gap-1"
+                                    >
+                                        <MapPin size={12} /> Pegar Minha Localização
+                                    </button>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <Input label="Cidade" name="city" value={editForm.city} onChange={handleChange} />
+                                    <Input label="Endereço Completo" name="address" value={editForm.address || ''} onChange={handleChange} placeholder="Rua, Número, Bairro" />
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Latitude</label>
+                                        <input
+                                            type="number"
+                                            step="any"
+                                            className="w-full bg-black/20 border border-white/10 text-gray-300 rounded-sm py-2 px-3 text-xs focus:outline-none focus:border-gold-500 font-mono"
+                                            value={editForm.coordinates?.lat || ''}
+                                            onChange={(e) => setEditForm(prev => prev ? ({ ...prev, coordinates: { ...prev.coordinates, lat: parseFloat(e.target.value) || 0, lng: prev.coordinates?.lng || 0 } }) : null)}
+                                            placeholder="0.000000"
+                                        />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Longitude</label>
+                                        <input
+                                            type="number"
+                                            step="any"
+                                            className="w-full bg-black/20 border border-white/10 text-gray-300 rounded-sm py-2 px-3 text-xs focus:outline-none focus:border-gold-500 font-mono"
+                                            value={editForm.coordinates?.lng || ''}
+                                            onChange={(e) => setEditForm(prev => prev ? ({ ...prev, coordinates: { ...prev.coordinates, lng: parseFloat(e.target.value) || 0, lat: prev.coordinates?.lat || 0 } }) : null)}
+                                            placeholder="0.000000"
+                                        />
+                                    </div>
+                                </div>
+                                <p className="text-[10px] text-gray-500 text-center pt-2">
+                                    *As coordenadas são usadas para o botão "Traçar Rota". O endereço é visual.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="p-6 border-t border-white/5 bg-obsidian-950/50 flex justify-end gap-3">
+                            <Button variant="outline" onClick={() => setIsEditing(false)}>Cancelar</Button>
+                            <Button onClick={handleSaveProfile} className="px-8"><Save size={18} className="mr-2" /> Salvar Alterações</Button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* VALIDATE COUPON MODAL */}
+            {isValidating && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-fade-in">
+                    <div className="bg-obsidian-900 w-full max-w-sm rounded-3xl border border-white/10 shadow-2xl overflow-hidden p-8 text-center relative">
+                        <button onClick={() => setIsValidating(false)} className="absolute top-4 right-4 text-gray-400 hover:text-white"><X size={24} /></button>
+
+                        {validationStep === 0 && (
+                            <div className="py-8">
+                                <div className="w-48 h-48 border-2 border-gold-500 rounded-2xl mx-auto mb-6 relative overflow-hidden">
+                                    <div className="absolute inset-0 bg-gold-500/10 animate-pulse"></div>
+                                    <div className="absolute top-0 left-0 w-full h-1 bg-gold-500 shadow-[0_0_20px_#D4AF37] animate-[scan_2s_linear_infinite]"></div>
+                                </div>
+                                <h3 className="text-xl font-bold mb-2">Escaneando...</h3>
+                                <p className="text-gray-400 text-sm mb-6">Aponte a câmera para o QR Code do cliente</p>
+                                <Button onClick={simulateValidation} className="w-full">SIMULAR LEITURA</Button>
+                            </div>
+                        )}
+
+                        {validationStep === 1 && (
+                            <div className="py-12">
+                                <div className="w-16 h-16 border-4 border-t-gold-500 border-white/10 rounded-full animate-spin mx-auto mb-6"></div>
+                                <h3 className="text-lg font-bold">Verificando validade...</h3>
+                            </div>
+                        )}
+
+                        {validationStep === 2 && (
+                            <div className="py-8 animate-scale-up">
+                                <div className="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(34,197,94,0.4)]">
+                                    <CheckCircle size={48} className="text-black" />
+                                </div>
+                                <h3 className="text-2xl font-bold text-white mb-1">Cupom Válido!</h3>
+                                <p className="text-green-400 font-bold mb-6">Desconto de {partner?.benefit} Aplicado</p>
+
+                                <div className="bg-white/5 rounded-xl p-4 mb-6 text-left">
+                                    <p className="text-xs text-gray-500 uppercase">Cliente</p>
+                                    <p className="font-bold">Carlos Tavares</p>
+                                    <div className="h-px bg-white/10 my-2"></div>
+                                    <p className="text-xs text-gray-500 uppercase">Código</p>
+                                    <p className="font-mono text-gold-500">#TRV-8829</p>
+                                </div>
+
+                                <Button onClick={() => setIsValidating(false)} className="w-full">FINALIZAR</Button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default PartnerDashboard;
