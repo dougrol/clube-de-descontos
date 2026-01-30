@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { UserRole } from '../types';
 import { useAuth } from '../contexts/AuthContext';
-import { Button } from '../components/ui';
+import { Button, AvatarUpload } from '../components/ui';
 import { Settings, LogOut, ChevronRight, User, Ticket, LifeBuoy, Crown, CheckCircle2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { uploadAvatar, updateUserAvatar } from '../services/avatarService';
 
 interface ProfileProps {
    userRole: UserRole;
@@ -12,17 +13,32 @@ interface ProfileProps {
 const Profile: React.FC<ProfileProps> = ({ userRole }) => {
    const navigate = useNavigate();
    const { user, signOut } = useAuth();
+   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
    const handleLogout = async () => {
       await signOut();
       navigate('/login');
    }
 
+   const handleAvatarUpload = async (file: File) => {
+      if (!user?.id) return;
+
+      try {
+         const newUrl = await uploadAvatar(user.id, file);
+         await updateUserAvatar(user.id, newUrl);
+         setAvatarUrl(newUrl);
+      } catch (error: any) {
+         console.error('Avatar upload failed:', error);
+         throw error; // Re-throw to show error in component
+      }
+   };
+
    // Fallback data if user is loading or incomplete
    const userName = user?.user_metadata?.name || 'Membro Tavares';
    const userEmail = user?.email || 'email@exemplo.com';
    const userPlan = user?.user_metadata?.plan || 'Basic';
-   const userAvatar = user?.user_metadata?.avatar_url || 'https://ui-avatars.com/api/?name=' + userName + '&background=D4AF37&color=000';
+   const defaultAvatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(userName) + '&background=D4AF37&color=000';
+   const displayAvatar = avatarUrl || user?.user_metadata?.avatar_url || defaultAvatar;
    const memberSince = new Date(user?.created_at || Date.now()).toLocaleDateString('pt-BR', { year: 'numeric', month: 'short' });
 
    return (
@@ -38,13 +54,15 @@ const Profile: React.FC<ProfileProps> = ({ userRole }) => {
 
          <div className="p-6 pb-24 space-y-8 relative z-10">
 
-            {/* Profile Header */}
+            {/* Profile Header with Avatar Upload */}
             <div className="flex flex-col items-center text-center">
                <div className="relative mb-4">
-                  <div className="h-28 w-28 rounded-full p-1 bg-gradient-to-b from-gold-400 to-gold-700">
-                     <div className="h-full w-full rounded-full border-4 border-black overflow-hidden bg-gray-800">
-                        <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" />
-                     </div>
+                  <div className="p-1 bg-gradient-to-b from-gold-400 to-gold-700 rounded-full">
+                     <AvatarUpload
+                        currentImageUrl={displayAvatar}
+                        onUpload={handleAvatarUpload}
+                        size="lg"
+                     />
                   </div>
                   <div className="absolute bottom-0 right-0 bg-gold-500 text-black rounded-full p-1.5 border-4 border-black">
                      <CheckCircle2 size={16} strokeWidth={3} />
@@ -52,6 +70,7 @@ const Profile: React.FC<ProfileProps> = ({ userRole }) => {
                </div>
                <h2 className="text-2xl font-bold text-white">{userName}</h2>
                <p className="text-gray-500 text-sm">{userEmail}</p>
+               <p className="text-gold-500 text-xs mt-1">Toque na foto para alterar</p>
             </div>
 
             {/* Premium Gold Card - Only for Non-Admins */}

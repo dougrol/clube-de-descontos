@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BarChart3, Users, QrCode, Ticket, Settings, LogOut, Save, X, Edit3, Image as ImageIcon, CheckCircle, MapPin } from 'lucide-react';
-import { Card, SectionTitle, Badge, Button, Input } from '../components/ui';
+import { BarChart3, Users, QrCode, Ticket, Settings, LogOut, Save, X, Edit3, Image as ImageIcon, CheckCircle, MapPin, Camera, Upload } from 'lucide-react';
+import { Card, SectionTitle, Badge, Button, Input, AvatarUpload } from '../components/ui';
 import { getStoredUser, logoutUser, getPartners, updatePartner } from '../services/storage';
 import { Partner, UserRole } from '../types';
+import { uploadPartnerImage, updatePartnerImage } from '../services/avatarService';
 
 const PartnerDashboard: React.FC = () => {
     const navigate = useNavigate();
@@ -251,12 +252,63 @@ const PartnerDashboard: React.FC = () => {
                                 </div>
                             </div>
 
-                            {/* Images */}
+                            {/* Images with Upload */}
                             <div className="space-y-4">
                                 <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest border-b border-white/10 pb-2">Imagens</h4>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <Input label="URL do Logo" name="logoUrl" value={editForm.logoUrl} onChange={handleChange} icon={<ImageIcon size={16} />} />
-                                    <Input label="URL da Capa" name="coverUrl" value={editForm.coverUrl} onChange={handleChange} icon={<ImageIcon size={16} />} />
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {/* Logo Upload */}
+                                    <div className="flex flex-col items-center gap-3 p-4 bg-white/5 rounded-xl border border-white/10">
+                                        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Logo</p>
+                                        <AvatarUpload
+                                            currentImageUrl={editForm.logoUrl || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(editForm.name) + '&background=333&color=D4AF37'}
+                                            onUpload={async (file) => {
+                                                if (!partner?.id) return;
+                                                const url = await uploadPartnerImage(partner.id, file, 'logo');
+                                                setEditForm(prev => prev ? { ...prev, logoUrl: url } : null);
+                                            }}
+                                            size="lg"
+                                        />
+                                        <p className="text-[10px] text-gray-500">Clique para alterar</p>
+                                    </div>
+
+                                    {/* Cover Upload */}
+                                    <div className="flex flex-col items-center gap-3 p-4 bg-white/5 rounded-xl border border-white/10">
+                                        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Capa</p>
+                                        <div
+                                            className="w-full aspect-video rounded-lg border-2 border-dashed border-white/20 overflow-hidden relative cursor-pointer hover:border-gold-500 transition-colors group"
+                                            onClick={() => {
+                                                const input = document.createElement('input');
+                                                input.type = 'file';
+                                                input.accept = 'image/jpeg,image/png,image/webp,image/gif';
+                                                input.onchange = async (e) => {
+                                                    const file = (e.target as HTMLInputElement).files?.[0];
+                                                    if (file && partner?.id) {
+                                                        try {
+                                                            const url = await uploadPartnerImage(partner.id, file, 'cover');
+                                                            setEditForm(prev => prev ? { ...prev, coverUrl: url } : null);
+                                                        } catch (err: any) {
+                                                            alert(err.message || 'Erro no upload');
+                                                        }
+                                                    }
+                                                };
+                                                input.click();
+                                            }}
+                                        >
+                                            {editForm.coverUrl ? (
+                                                <img src={editForm.coverUrl} alt="Cover" className="w-full h-full object-cover" />
+                                            ) : (
+                                                <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-500 group-hover:text-gold-500">
+                                                    <Upload size={24} />
+                                                    <span className="text-xs mt-1">Adicionar capa</span>
+                                                </div>
+                                            )}
+                                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                <Camera size={24} className="text-white" />
+                                            </div>
+                                        </div>
+                                        <p className="text-[10px] text-gray-500">Clique para alterar</p>
+                                    </div>
                                 </div>
                             </div>
 
