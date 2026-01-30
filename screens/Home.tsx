@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { Partner } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 import { useCMS } from '../contexts/CMSContext';
+import { supabase } from '../services/supabaseClient';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const Home: React.FC = () => {
 
   const [loaded, setLoaded] = useState(false);
   const [partners, setPartners] = useState<Partner[]>([]);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
   useEffect(() => {
     setLoaded(true);
@@ -21,9 +23,28 @@ const Home: React.FC = () => {
     fetchPartners().then(data => {
       setPartners(data);
     });
-  }, []);
+
+    // Fetch user avatar from database
+    const fetchAvatar = async () => {
+      if (!user?.id) return;
+      try {
+        const { data } = await supabase
+          .from('users')
+          .select('avatar_url')
+          .eq('id', user.id)
+          .single();
+        if (data?.avatar_url) {
+          setAvatarUrl(data.avatar_url);
+        }
+      } catch (err) {
+        console.error('Error fetching avatar:', err);
+      }
+    };
+    fetchAvatar();
+  }, [user?.id]);
 
   const featuredPartners = partners.slice(0, 5);
+  const displayAvatar = avatarUrl || `https://ui-avatars.com/api/?name=${user?.user_metadata?.name || 'User'}&background=D4AF37&color=000`;
 
   return (
     <div className="pb-32 bg-obsidian-950 min-h-screen font-sans selection:bg-signal-500 selection:text-white">
@@ -49,7 +70,7 @@ const Home: React.FC = () => {
             </span>
             <div className="h-10 w-10 md:h-12 md:w-12 rounded-sm border border-white/20 p-0.5 relative group-hover:border-signal-500 transition-colors">
               <img
-                src={user?.user_metadata?.avatar_url || `https://ui-avatars.com/api/?name=${user?.user_metadata?.name || 'User'}&background=D4AF37&color=000`}
+                src={displayAvatar}
                 alt="Profile"
                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
               />
