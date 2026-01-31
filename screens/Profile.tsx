@@ -144,25 +144,54 @@ const Profile: React.FC<ProfileProps> = ({ userRole }) => {
             <div className="space-y-1">
                <h3 className="text-gray-500 text-[10px] font-black tracking-[0.2em] uppercase pl-4 mb-2">Minha Conta</h3>
 
-               {[
-                  { icon: <User size={20} />, label: "Dados Pessoais" },
-                  { icon: <Ticket size={20} />, label: "Histórico de Cupons" },
-                  { icon: <LifeBuoy size={20} />, label: "Suporte WhatsApp", action: () => window.open('https://wa.me/', '_blank') },
-               ].map((item, idx) => (
+               {/* Dados Pessoais - All users */}
+               <div
+                  onClick={() => {/* TODO: Open personal data modal/page */ }}
+                  className="flex items-center justify-between p-4 rounded-xl hover:bg-white/5 cursor-pointer transition-colors group"
+               >
+                  <div className="flex items-center gap-4">
+                     <div className="h-10 w-10 rounded-xl bg-gray-900 border border-white/5 flex items-center justify-center text-gold-500 group-hover:scale-110 transition-transform">
+                        <User size={20} />
+                     </div>
+                     <div>
+                        <span className="text-white font-medium">Dados Pessoais</span>
+                        <p className="text-gray-500 text-xs">{userEmail}</p>
+                     </div>
+                  </div>
+                  <ChevronRight size={18} className="text-gray-600 group-hover:text-gold-500 transition-colors" />
+               </div>
+
+               {/* Histórico de Cupons - Only for non-admin */}
+               {userRole !== UserRole.ADMIN && (
                   <div
-                     key={idx}
-                     onClick={item.action}
+                     onClick={() => navigate('/benefits')}
                      className="flex items-center justify-between p-4 rounded-xl hover:bg-white/5 cursor-pointer transition-colors group"
                   >
                      <div className="flex items-center gap-4">
                         <div className="h-10 w-10 rounded-xl bg-gray-900 border border-white/5 flex items-center justify-center text-gold-500 group-hover:scale-110 transition-transform">
-                           {item.icon}
+                           <Ticket size={20} />
                         </div>
-                        <span className="text-white font-medium">{item.label}</span>
+                        <span className="text-white font-medium">Histórico de Cupons</span>
                      </div>
                      <ChevronRight size={18} className="text-gray-600 group-hover:text-gold-500 transition-colors" />
                   </div>
-               ))}
+               )}
+
+               {/* Suporte WhatsApp - Only for non-admin */}
+               {userRole !== UserRole.ADMIN && (
+                  <div
+                     onClick={() => window.open('https://wa.me/5511999999999?text=Olá! Preciso de suporte do Clube de Descontos Tavares Car.', '_blank')}
+                     className="flex items-center justify-between p-4 rounded-xl hover:bg-white/5 cursor-pointer transition-colors group"
+                  >
+                     <div className="flex items-center gap-4">
+                        <div className="h-10 w-10 rounded-xl bg-green-500/20 border border-green-500/30 flex items-center justify-center text-green-500 group-hover:scale-110 transition-transform">
+                           <LifeBuoy size={20} />
+                        </div>
+                        <span className="text-white font-medium">Suporte WhatsApp</span>
+                     </div>
+                     <ChevronRight size={18} className="text-gray-600 group-hover:text-green-500 transition-colors" />
+                  </div>
+               )}
 
                <div className="pt-4 px-4">
                   <div className="h-px w-full bg-gray-800" />
