@@ -46,8 +46,10 @@ const Profile: React.FC<ProfileProps> = ({ userRole }) => {
    }, [user?.id]);
 
    const handleLogout = async () => {
+      const isAdmin = userRole === UserRole.ADMIN;
       await signOut();
-      navigate('/login');
+      // Redirect admin to secret portal, others to normal login
+      navigate(isAdmin ? '/tc-portal-2024' : '/login');
    }
 
    const handleAvatarUpload = async (file: File) => {
