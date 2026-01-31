@@ -26,6 +26,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        // Check if URL contains recovery token - redirect immediately before auth processes
+        const hash = window.location.hash;
+        if (hash.includes('type=recovery') || hash.includes('type%3Drecovery')) {
+            // Extract the part after #/ and before any auth tokens
+            const isAlreadyOnResetPage = hash.includes('/reset-password');
+            if (!isAlreadyOnResetPage) {
+                // Redirect to reset password page with the tokens
+                const tokenPart = hash.split('#')[1] || '';
+                window.location.hash = '/reset-password' + (tokenPart.includes('access_token') ? '?' + tokenPart.split('?')[1] : '');
+                return;
+            }
+        }
+
         // 1. Check active session
         supabase.auth.getSession().then(({ data: { session } }) => {
             setSession(session);
@@ -38,7 +51,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         });
 
         // 2. Listen for changes
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+            console.log('Auth event:', event);
+
+            // Handle password recovery - redirect to reset page
+            if (event === 'PASSWORD_RECOVERY') {
+                console.log('Password recovery detected, redirecting to reset page');
+                window.location.hash = '/reset-password';
+                setLoading(false);
+                return;
+            }
+
             setSession(session);
             setUser(session?.user ?? null);
             if (session?.user) {
