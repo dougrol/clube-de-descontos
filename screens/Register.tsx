@@ -274,10 +274,8 @@ const Register: React.FC = () => {
                                 required
                             >
                                 <option value="" className="bg-obsidian-900">Selecione sua associação</option>
-                                <option value="ancore" className="bg-obsidian-900">Ancore</option>
-                                <option value="sudoeste" className="bg-obsidian-900">Sudoeste</option>
-                                <option value="prime" className="bg-obsidian-900">Prime</option>
-                                <option value="outra" className="bg-obsidian-900">Outra</option>
+                                <option value="eleva_mais" className="bg-obsidian-900">Eleva Mais</option>
+                                <option value="protebem" className="bg-obsidian-900">Protebem</option>
                             </select>
                         </div>
                     </div>
