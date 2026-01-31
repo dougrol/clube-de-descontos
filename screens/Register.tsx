@@ -125,20 +125,25 @@ const Register: React.FC = () => {
 
             if (error) throw error;
 
-            // Insert user record with CPF
+            // Insert/Update user record with CPF (upsert to handle auth trigger conflicts)
             const userId = data?.user?.id;
             if (userId) {
-                const { error: insertError } = await supabase.from('users').insert({
+                const { error: upsertError } = await supabase.from('users').upsert({
                     id: userId,
                     email: formData.email,
                     name: formData.name,
                     cpf: cleanCPF,
                     role: 'USER',
                     plan: 'Basic'
-                });
+                }, { onConflict: 'id' });
 
-                if (insertError) {
-                    console.warn('Could not insert user record:', insertError);
+                if (upsertError) {
+                    console.error('Could not upsert user record:', upsertError);
+                    // Try update as fallback
+                    await supabase.from('users').update({
+                        cpf: cleanCPF,
+                        name: formData.name
+                    }).eq('id', userId);
                 }
 
                 // Also add to associates table for future reference
