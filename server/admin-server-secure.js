@@ -346,6 +346,49 @@ const requestHandler = async (req, res) => {
       let body = '';
       for await (const chunk of req) body += chunk;
 
+      // DEV-only shortcut: allow local development to exercise full flow without DB credentials.
+      // Requirements to trigger:
+      //  - client MUST set header `x-dev-allow: 1`
+      //  - request MUST originate from a loopback/private interface
+      // In production this header is ignored and will be rejected.
+      const devHeader = String(req.headers['x-dev-allow'] || '') === '1';
+      if (devHeader) {
+        const ip = String(clientIp || '');
+        const localSocket = ip === '127.0.0.1' || ip === '::1' || ip.includes('::ffff:127.0.0.1');
+        const privateRange = /^192\.168\.|^10\.|^172\./.test(ip);
+
+        if (process.env.NODE_ENV === 'production') {
+          logger.warn(`DEV bypass attempted in production from ${ip}`);
+          res.writeHead(401, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'forbidden' }));
+          return;
+        }
+
+        if (!localSocket && !privateRange) {
+          logger.warn(`DEV bypass header present but request is not from a local/private IP: ${ip}`);
+        }
+
+        if (localSocket || privateRange) {
+          const { code, partner_id } = JSON.parse(body || '{}');
+          const devCoupon = {
+            id: `dev-${Date.now()}`,
+            code: (code || 'TRV-DEV').toUpperCase(),
+            user_id: 'dev-user',
+            partner_id: partner_id || 'p_demo_1',
+            partner_name: 'Parceiro Demo',
+            benefit: '10% OFF (DEV)',
+            status: 'used',
+            expires_at: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+            used_at: new Date().toISOString(),
+            created_at: new Date().toISOString()
+          };
+          logger.info(`DEV: simulated coupon validated: code=${devCoupon.code} ip=${clientIp}`);
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ valid: true, coupon: devCoupon }));
+          return;
+        }
+      }
+
       // Optional: verify HMAC signature when SIGNING_SECRET is set
       if (!verifyRequestSignature(req, body)) {
         logger.warn(`Invalid signature for /partner/validate from ${clientIp}`);

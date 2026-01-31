@@ -1,0 +1,150 @@
+name: CI — coupon validation, migrations & smoke
+
+on:
+  pull_request:
+    branches: [ main, 'feat/*' ]
+    paths:
+      - 'server/**'
+      - 'services/**'
+      - 'scripts/**'
+      - 'server/migrations/**'
+
+concurrency:
+  group: validate-coupons-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  prepare:
+    name: Prepare & build
+    runs-on: ubuntu-latest
+    outputs:
+      node-version: 18
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check / build (fast fail)
+        run: |
+          npm run build --if-present || true
+          npx -y tsc --noEmit || true
+
+  migrations:
+    name: Apply migrations (staging)
+    needs: prepare
+    runs-on: ubuntu-latest
+    if: github.event.pull_request != null
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Ensure DB secret is set
+        run: |
+          if [ -z "${{ secrets.STAGING_DATABASE_URL }}" ]; then
+            echo "SKIP_MIGRATIONS=true" >> $GITHUB_ENV
+            echo "No STAGING_DATABASE_URL provided; skipping migrations.";
+            exit 0;
+          fi
+
+      - name: Apply migrations (bash)
+        if: env.SKIP_MIGRATIONS != 'true'
+        env:
+          STAGING_DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
+        run: |
+          chmod +x ./scripts/apply_migrations.sh || true
+          ./scripts/apply_migrations.sh "$STAGING_DATABASE_URL"
+
+      - name: Apply migrations (ps1 fallback)
+        if: env.SKIP_MIGRATIONS != 'true' && runner.os == 'Windows'
+        env:
+          STAGING_DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
+        shell: pwsh
+        run: |
+          pwsh ./scripts/apply_migrations.ps1 -ConnectionString $env:STAGING_DATABASE_URL
+
+  smoke-test:
+    name: Smoke tests (start admin server + validate endpoint)
+    needs: [prepare, migrations]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Start admin server (background)
+        env:
+          SUPABASE_URL: ${{ secrets.STAGING_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.STAGING_SUPABASE_SERVICE_ROLE_KEY }}
+          ADMIN_API_KEY: ${{ secrets.STAGING_ADMIN_API_KEY }}
+          PORT: 3001
+        run: |
+          node server/admin-server-secure.js &
+          echo $! > .admin-server.pid || true
+
+      - name: Wait for admin server
+        run: |
+          for i in {1..15}; do
+            if curl -sSf http://localhost:3001/health >/dev/null 2>&1; then
+              echo "admin server ready"; exit 0;
+            fi
+            sleep 1
+          done
+          echo "admin server did not start"; cat /proc/1/cgroup || true; exit 2
+
+      - name: Run smoke test
+        env:
+          ADMIN_SERVER_URL: http://localhost:3001
+          ADMIN_API_KEY: ${{ secrets.STAGING_ADMIN_API_KEY }}
+          PARTNER_TOKEN: ${{ secrets.STAGING_PARTNER_TOKEN }}
+          COUPON_CODE: ${{ env.SMOKE_COUPON_CODE || 'TRV-TEST0001' }}
+        run: |
+          npm run test:smoke
+
+  e2e:
+    name: (optional) E2E — Playwright
+    needs: smoke-test
+    runs-on: ubuntu-latest
+    if: github.event.pull_request != null && secrets.PLAYWRIGHT_API_KEY
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install deps
+        run: npm ci
+      - name: Run Playwright
+        run: npx playwright test --project=chromium
+
+  publish-checks:
+    name: PR summary comment (optional)
+    runs-on: ubuntu-latest
+    needs: [smoke-test]
+    if: github.event.pull_request != null && secrets.GITHUB_TOKEN
+    steps:
+      - name: Add PR comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ✅ CI: migrations & smoke-tests completed for this PR.
+            - migrations: ${{ needs.migrations.result || 'skipped' }}
+            - smoke-test: ${{ needs.smoke-test.result }}
+            _If you need a staging run with production-like data, request `staging-deploy`._

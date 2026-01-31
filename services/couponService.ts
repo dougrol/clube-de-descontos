@@ -169,12 +169,15 @@ export const validateCouponServer = async (code: string): Promise<{ valid: boole
     }
 
     try {
+        const headers: Record<string, string> = {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            ...(import.meta.env.DEV && /localhost|127\.0\.0\.1/.test(adminUrl) ? { 'x-dev-allow': '1' } : {})
+        };
+
         const resp = await fetch(`${adminUrl}/partner/validate`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                ...(token ? { Authorization: `Bearer ${token}` } : {})
-            },
+            headers,
             body: JSON.stringify({ code })
         });
 

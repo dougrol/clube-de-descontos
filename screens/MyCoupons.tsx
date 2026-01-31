@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, Ticket, Clock, CheckCircle, XCircle, Store, RefreshCw } from 'lucide-react';
+import { ChevronLeft, Ticket, Clock, CheckCircle, XCircle, Store, RefreshCw, X, QrCode } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { getUserCoupons, getCouponRemainingTime, Coupon } from '../services/couponService';
+import { QRCodeDisplay } from '../components/ui';
 
 const MyCoupons: React.FC = () => {
     const navigate = useNavigate();
@@ -10,6 +11,9 @@ const MyCoupons: React.FC = () => {
     const [coupons, setCoupons] = useState<Coupon[]>([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState<'all' | 'active' | 'used' | 'expired'>('all');
+
+    // QR Code Modal State
+    const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null);
 
     const loadCoupons = async () => {
         if (!user?.id) return;
@@ -63,7 +67,7 @@ const MyCoupons: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-black animate-fade-in">
+        <div className="min-h-screen bg-black animate-fade-in relative">
             {/* Header */}
             <div className="sticky top-0 z-20 bg-black/90 backdrop-blur-lg border-b border-white/5">
                 <div className="flex items-center p-4">
@@ -125,49 +129,92 @@ const MyCoupons: React.FC = () => {
                         </button>
                     </div>
                 ) : (
-                    filteredCoupons.map(coupon => (
-                        <div
-                            key={coupon.id}
-                            className={`bg-obsidian-900 border rounded-2xl p-4 ${coupon.status === 'active' && new Date(coupon.expires_at) > new Date()
-                                    ? 'border-gold-500/30'
-                                    : 'border-white/5'
-                                }`}
-                        >
-                            {/* Header */}
-                            <div className="flex items-start justify-between mb-3">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-gold-500/10 rounded-xl flex items-center justify-center">
-                                        <Store size={20} className="text-gold-500" />
+                    filteredCoupons.map(coupon => {
+                        const isExpired = new Date(coupon.expires_at) < new Date();
+                        const canShowQR = coupon.status === 'active' && !isExpired;
+
+                        return (
+                            <div
+                                key={coupon.id}
+                                onClick={() => canShowQR && setSelectedCoupon(coupon)}
+                                className={`bg-obsidian-900 border rounded-2xl p-4 transition-all ${canShowQR ? 'cursor-pointer hover:border-gold-500/50 active:scale-[0.98]' : ''
+                                    } ${canShowQR ? 'border-gold-500/30' : 'border-white/5 opacity-70'
+                                    }`}
+                            >
+                                {/* Header */}
+                                <div className="flex items-start justify-between mb-3">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 bg-gold-500/10 rounded-xl flex items-center justify-center">
+                                            <Store size={20} className="text-gold-500" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-white font-semibold text-sm">{coupon.partner_name}</h3>
+                                            <p className="text-gray-500 text-xs">{coupon.benefit}</p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h3 className="text-white font-semibold text-sm">{coupon.partner_name}</h3>
-                                        <p className="text-gray-500 text-xs">{coupon.benefit}</p>
-                                    </div>
+                                    {getStatusBadge(coupon.status, coupon.expires_at)}
                                 </div>
-                                {getStatusBadge(coupon.status, coupon.expires_at)}
-                            </div>
 
-                            {/* Coupon Code */}
-                            <div className="bg-black/50 rounded-xl p-3 text-center border border-dashed border-white/10">
-                                <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Código do Cupom</p>
-                                <p className="text-gold-500 font-mono font-bold text-xl tracking-wider">{coupon.code}</p>
-                            </div>
+                                {/* Coupon Code */}
+                                <div className="bg-black/50 rounded-xl p-3 text-center border border-dashed border-white/10 flex flex-col items-center justify-center gap-2">
+                                    <div>
+                                        <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Código do Cupom</p>
+                                        <p className="text-gold-500 font-mono font-bold text-xl tracking-wider">{coupon.code}</p>
+                                    </div>
+                                    {canShowQR && (
+                                        <div className="text-[10px] text-gold-500 flex items-center gap-1 bg-gold-500/10 px-2 py-1 rounded">
+                                            <QrCode size={12} />
+                                            Toque para ver QR Code
+                                        </div>
+                                    )}
+                                </div>
 
-                            {/* Footer */}
-                            <div className="flex justify-between items-center mt-3 pt-3 border-t border-white/5">
-                                <p className="text-gray-600 text-[10px]">
-                                    Gerado em {new Date(coupon.created_at).toLocaleDateString('pt-BR')}
-                                </p>
-                                {coupon.used_at && (
+                                {/* Footer */}
+                                <div className="flex justify-between items-center mt-3 pt-3 border-t border-white/5">
                                     <p className="text-gray-600 text-[10px]">
-                                        Usado em {new Date(coupon.used_at).toLocaleDateString('pt-BR')}
+                                        Gerado em {new Date(coupon.created_at).toLocaleDateString('pt-BR')}
                                     </p>
-                                )}
+                                    {coupon.used_at && (
+                                        <p className="text-gray-600 text-[10px]">
+                                            Usado em {new Date(coupon.used_at).toLocaleDateString('pt-BR')}
+                                        </p>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    ))
+                        )
+                    })
                 )}
             </div>
+
+            {/* QR Code Modal */}
+            {selectedCoupon && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-sm p-6 animate-fade-in">
+                    <div className="bg-obsidian-900 w-full max-w-sm rounded-3xl border border-gold-500/30 p-8 text-center relative animate-scale-up shadow-[0_0_50px_rgba(212,175,55,0.1)]">
+                        <button
+                            onClick={() => setSelectedCoupon(null)}
+                            className="absolute top-4 right-4 p-2 bg-white/5 rounded-full text-gray-400 hover:text-white hover:bg-white/10"
+                        >
+                            <X size={20} />
+                        </button>
+
+                        <h3 className="text-xl font-bold text-white mb-1">{selectedCoupon.partner_name}</h3>
+                        <p className="text-gold-500 font-medium mb-6">{selectedCoupon.benefit}</p>
+
+                        <div className="mb-6 flex justify-center">
+                            <QRCodeDisplay
+                                code={selectedCoupon.code}
+                                expiresAt={selectedCoupon.expires_at}
+                                benefit={selectedCoupon.benefit}
+                                partnerName={selectedCoupon.partner_name}
+                            />
+                        </div>
+
+                        <p className="text-sm text-gray-400">
+                            Apresente este QR Code ao parceiro para validar seu desconto.
+                        </p>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
