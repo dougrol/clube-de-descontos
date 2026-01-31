@@ -180,7 +180,7 @@ const Profile: React.FC<ProfileProps> = ({ userRole }) => {
                {/* Suporte WhatsApp - Only for non-admin */}
                {userRole !== UserRole.ADMIN && (
                   <div
-                     onClick={() => window.open('https://wa.me/5511999999999?text=Olá! Preciso de suporte do Clube de Descontos Tavares Car.', '_blank')}
+                     onClick={() => window.open('https://wa.me/5562982553770?text=Olá! Preciso de suporte do Clube de Descontos Tavares Car.', '_blank')}
                      className="flex items-center justify-between p-4 rounded-xl hover:bg-white/5 cursor-pointer transition-colors group"
                   >
                      <div className="flex items-center gap-4">
