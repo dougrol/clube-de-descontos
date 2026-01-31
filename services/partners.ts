@@ -60,3 +60,21 @@ export const fetchPartnerById = async (id: string): Promise<Partner | null> => {
         coordinates: p.lat && p.lng ? { lat: p.lat, lng: p.lng } : undefined
     };
 };
+
+export const createPartner = async (partnerData: any): Promise<any> => {
+    const { data, error } = await supabase
+        .from('partners')
+        .insert([{
+            ...partnerData,
+            status: 'pending' // Default status for new partners
+        }])
+        .select()
+        .single();
+
+    if (error) {
+        console.error('Error creating partner:', error);
+        throw error;
+    }
+
+    return data;
+};

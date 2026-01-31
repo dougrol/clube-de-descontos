@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Building2, User, Phone, Mail, Lock, FileText, ArrowLeft, CheckCircle } from 'lucide-react';
-import { Button, Input, SectionTitle } from '../components/ui';
+import { Building2, User, Phone, Mail, Lock, FileText, ArrowLeft, CheckCircle, AlertCircle } from 'lucide-react';
+import { Button, Input } from '../components/ui';
 import { PartnerCategory } from '../types';
+import { supabase } from '../services/supabaseClient';
+import { createPartner } from '../services/partners';
 
 const RegisterPartner: React.FC = () => {
     const navigate = useNavigate();
     const [step, setStep] = useState(1); // 1: Form, 2: Success
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const [formData, setFormData] = useState({
         cnpj: '',
         companyName: '',
@@ -22,12 +26,65 @@ const RegisterPartner: React.FC = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Simulate API call
-        setTimeout(() => {
-            setStep(2);
-        }, 1000);
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            // 1. Create Auth User
+            const { data: authData, error: authError } = await supabase.auth.signUp({
+                email: formData.email,
+                password: formData.password,
+                options: {
+                    data: {
+                        name: formData.tradingName,
+                        role: 'PARTNER',
+                        cnpj: formData.cnpj
+                    }
+                }
+            });
+
+            if (authError) throw authError;
+
+            if (authData.user) {
+                // 2. Create Partner Record
+                const partnerData = {
+                    id: authData.user.id,
+                    cnpj: formData.cnpj,
+                    name: formData.tradingName, // Using trading name as display name
+                    company_name: formData.companyName,
+                    responsible_name: formData.responsibleName,
+                    phone: formData.phone,
+                    category: formData.category,
+                    email: formData.email,
+                    description: `Parceiro ${formData.category} - ${formData.tradingName}`,
+                    status: 'pending'
+                };
+
+                await createPartner(partnerData);
+
+                // 3. Update User Role in public.users to PARTNER
+                await supabase.from('users').upsert({
+                    id: authData.user.id,
+                    email: formData.email,
+                    name: formData.tradingName,
+                    role: 'PARTNER',
+                    created_at: new Date().toISOString()
+                });
+
+                setStep(2);
+            }
+        } catch (err: any) {
+            console.error('Registration error:', err);
+            if (err.message?.includes('already registered')) {
+                setError('Este e-mail já está cadastrado.');
+            } else {
+                setError(err.message || 'Erro ao realizar cadastro. Tente novamente.');
+            }
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -42,10 +99,10 @@ const RegisterPartner: React.FC = () => {
                         </div>
                         <h2 className="text-2xl font-bold font-serif mb-2">Solicitação Enviada!</h2>
                         <p className="text-gray-400 mb-8">
-                            Seu cadastro foi recebido com sucesso. Nossa equipe entrará em contato em breve para validar sua parceria.
+                            Seu cadastro foi recebido com sucesso. Verifique seu e-mail para confirmar a conta e aguarde a aprovação da nossa equipe.
                         </p>
                         <Button onClick={() => navigate('/login')} className="w-full">
-                            VOLTAR PARA O LOGIN
+                            IR PARA O LOGIN
                         </Button>
                     </div>
                 </div>
@@ -73,6 +130,13 @@ const RegisterPartner: React.FC = () => {
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6 bg-white/5 p-8 rounded-2xl border border-white/10">
+
+                    {error && (
+                        <div className="bg-red-500/10 border border-red-500/50 rounded-lg p-4 flex items-start gap-3">
+                            <AlertCircle size={20} className="text-red-500 shrink-0 mt-0.5" />
+                            <p className="text-red-200 text-sm">{error}</p>
+                        </div>
+                    )}
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <Input
@@ -161,15 +225,16 @@ const RegisterPartner: React.FC = () => {
                         label="Senha"
                         name="password"
                         type="password"
-                        placeholder="Crie uma senha segura"
+                        placeholder="Crie uma senha segura (mínimo 6 dígitos)"
                         icon={<Lock size={18} />}
                         value={formData.password}
                         onChange={handleChange}
                         required
+                        minLength={6}
                     />
 
                     <div className="pt-6">
-                        <Button type="submit" className="w-full py-4 text-base">
+                        <Button type="submit" isLoading={isLoading} className="w-full py-4 text-base">
                             SOLICITAR CADASTRO
                         </Button>
                         <p className="text-center text-xs text-gray-500 mt-4">

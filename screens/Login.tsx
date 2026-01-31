@@ -47,6 +47,7 @@ const Login: React.FC = () => {
     setCPF(formatCPF(e.target.value));
   };
 
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -64,11 +65,25 @@ const Login: React.FC = () => {
     try {
       if (selectedRole === 'partner') {
         // Partners login with email
-        const { error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabase.auth.signInWithPassword({
           email: cpf, // For partners, this field is actually email
           password,
         });
+
         if (error) throw error;
+
+        // Verify if user is actually a partner
+        const { data: userData } = await supabase
+          .from('users')
+          .select('role')
+          .eq('id', data.user.id)
+          .single();
+
+        if (userData && userData.role !== 'PARTNER' && userData.role !== 'ADMIN') {
+          await supabase.auth.signOut();
+          throw new Error('Esta conta não tem permissão de parceiro.');
+        }
+
         navigate('/partner-dashboard');
       } else {
         // Clients login with CPF
@@ -80,7 +95,7 @@ const Login: React.FC = () => {
           .single();
 
         if (userError || !userData) {
-          throw new Error('CPF não encontrado. Você já é um associado? Faça seu cadastro primeiro.');
+          throw new Error('CPF não encontrado. Se você é um associado, faça seu cadastro primeiro.');
         }
 
         // Login with the email associated with this CPF
@@ -96,7 +111,9 @@ const Login: React.FC = () => {
     } catch (err: any) {
       console.error('Login error:', err);
       if (err.message === 'Invalid login credentials') {
-        setError('Senha incorreta. Tente novamente.');
+        setError('Senha incorreta ou usuário não encontrado.');
+      } else if (err.message.includes('Email not confirmed')) {
+        setError('E-mail não confirmado. Verifique sua caixa de entrada.');
       } else {
         setError(err.message || 'Ocorreu um erro ao entrar. Tente novamente.');
       }
@@ -104,6 +121,7 @@ const Login: React.FC = () => {
       setIsLoading(false);
     }
   };
+
 
   return (
     <div className="min-h-screen bg-black flex flex-col justify-center px-6 relative overflow-hidden">
@@ -134,8 +152,8 @@ const Login: React.FC = () => {
           <button
             onClick={() => setSelectedRole('client')}
             className={`p-4 rounded-xl border-2 transition-all duration-300 flex flex-col items-center gap-2 ${selectedRole === 'client'
-                ? 'bg-gold-500 border-gold-500 text-black shadow-lg shadow-gold-500/20'
-                : 'bg-white/5 border-white/10 text-gray-400 hover:border-white/30'
+              ? 'bg-gold-500 border-gold-500 text-black shadow-lg shadow-gold-500/20'
+              : 'bg-white/5 border-white/10 text-gray-400 hover:border-white/30'
               }`}
           >
             <User size={24} />
@@ -147,8 +165,8 @@ const Login: React.FC = () => {
           <button
             onClick={() => setSelectedRole('partner')}
             className={`p-4 rounded-xl border-2 transition-all duration-300 flex flex-col items-center gap-2 relative overflow-hidden ${selectedRole === 'partner'
-                ? 'bg-gold-500 border-gold-500 text-black shadow-lg shadow-gold-500/20'
-                : 'bg-gradient-to-br from-signal-500/10 to-orange-500/10 border-signal-500/30 text-white hover:border-signal-500/60'
+              ? 'bg-gold-500 border-gold-500 text-black shadow-lg shadow-gold-500/20'
+              : 'bg-gradient-to-br from-signal-500/10 to-orange-500/10 border-signal-500/30 text-white hover:border-signal-500/60'
               }`}
           >
             {selectedRole !== 'partner' && (
