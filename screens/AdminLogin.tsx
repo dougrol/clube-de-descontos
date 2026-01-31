@@ -128,6 +128,17 @@ const AdminLogin: React.FC = () => {
                             </span>
                         </Button>
                     </form>
+
+                    {/* Forgot Password Link */}
+                    <div className="mt-4 text-center border-t border-white/5 pt-4">
+                        <button
+                            type="button"
+                            onClick={() => navigate('/admin-forgot-password')}
+                            className="text-gold-500 text-sm hover:text-gold-400 transition-colors"
+                        >
+                            Esqueci minha senha
+                        </button>
+                    </div>
                 </div>
 
                 {/* Footer */}

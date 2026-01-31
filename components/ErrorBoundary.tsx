@@ -1,16 +1,17 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React from 'react';
 
 interface Props {
-    children: ReactNode;
+    children: React.ReactNode;
 }
 
 interface State {
     hasError: boolean;
     error: Error | null;
-    errorInfo: ErrorInfo | null;
+    errorInfo: React.ErrorInfo | null;
 }
 
-class ErrorBoundary extends Component<Props, State> {
+// Using React.Component directly with full namespace to avoid TypeScript issues
+export default class ErrorBoundary extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -20,16 +21,16 @@ class ErrorBoundary extends Component<Props, State> {
         };
     }
 
-    static getDerivedStateFromError(error: Error): State {
-        return { hasError: true, error, errorInfo: null };
+    static getDerivedStateFromError(error: Error): Partial<State> {
+        return { hasError: true, error };
     }
 
-    componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
         console.error("Uncaught error:", error, errorInfo);
-        this.setState({ error, errorInfo });
+        this.setState({ errorInfo });
     }
 
-    render() {
+    render(): React.ReactNode {
         if (this.state.hasError) {
             return (
                 <div style={{ padding: '20px', backgroundColor: '#1a1a1a', color: 'white', height: '100vh', overflow: 'auto' }}>
@@ -57,5 +58,3 @@ class ErrorBoundary extends Component<Props, State> {
         return this.props.children;
     }
 }
-
-export default ErrorBoundary;

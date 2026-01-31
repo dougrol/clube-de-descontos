@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, Info, CheckCircle, QrCode, Globe, Copy } from 'lucide-react';
-import { Button, Card, Badge } from '../components/ui';
+import { ArrowLeft, MapPin, Info, CheckCircle, Globe, Copy } from 'lucide-react';
+import { Button, Card, Badge, QRCodeDisplay } from '../components/ui';
 import { fetchPartnerById } from '../services/partners';
 import { Partner } from '../types';
+import { generateCoupon, Coupon } from '../services/couponService';
+import { useAuth } from '../contexts/AuthContext';
 
 const PartnerDetail: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [showCoupon, setShowCoupon] = useState(false);
   const [partner, setPartner] = useState<Partner | null>(null);
   const [loading, setLoading] = useState(true);
+  const [coupon, setCoupon] = useState<Coupon | null>(null);
+  const [generatingCoupon, setGeneratingCoupon] = useState(false);
+  const [codeCopied, setCodeCopied] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -20,6 +26,38 @@ const PartnerDetail: React.FC = () => {
       });
     }
   }, [id]);
+
+  const handleRedeemCoupon = async () => {
+    if (!partner || !user) return;
+
+    setGeneratingCoupon(true);
+
+    const userName = user.user_metadata?.name || user.email || 'Cliente';
+    const newCoupon = await generateCoupon(
+      user.id,
+      userName,
+      partner.id,
+      partner.name,
+      partner.benefit
+    );
+
+    if (newCoupon) {
+      setCoupon(newCoupon);
+      setShowCoupon(true);
+    } else {
+      alert('Erro ao gerar cupom. Tente novamente.');
+    }
+
+    setGeneratingCoupon(false);
+  };
+
+  const handleCopyCode = () => {
+    if (coupon) {
+      navigator.clipboard.writeText(coupon.code);
+      setCodeCopied(true);
+      setTimeout(() => setCodeCopied(false), 2000);
+    }
+  };
 
   if (loading) return <div className="h-screen flex items-center justify-center bg-black text-gold-500">Carregando...</div>;
   if (!partner) return <div className="p-10 text-center text-white bg-black h-screen">Parceiro não encontrado</div>;
@@ -101,7 +139,7 @@ const PartnerDetail: React.FC = () => {
               <p className="text-gray-400 text-sm leading-relaxed mt-1">
                 {partner.isOnline
                   ? 'Clique em resgatar para gerar o código promocional e use no site do parceiro.'
-                  : 'Apresente o cupom gerado abaixo no momento do pagamento ou agendamento.'}
+                  : 'Apresente o QR Code gerado abaixo no momento do pagamento. O parceiro irá escanear para validar seu desconto.'}
               </p>
             </div>
           </div>
@@ -109,40 +147,47 @@ const PartnerDetail: React.FC = () => {
 
         <div className="pt-4">
           {!showCoupon ? (
-            <Button onClick={() => setShowCoupon(true)}>
+            <Button onClick={handleRedeemCoupon} isLoading={generatingCoupon}>
               RESGATAR BENEFÍCIO
             </Button>
-          ) : (
-            <div className="bg-white rounded-xl p-6 flex flex-col items-center justify-center animate-slide-up shadow-[0_0_30px_rgba(255,255,255,0.1)]">
-              <h3 className="text-black font-bold text-lg mb-2">
-                {partner.isOnline ? 'Código Promocional' : 'Cupom Ativo'}
-              </h3>
-
-              {partner.isOnline ? (
-                <div className="w-full bg-gray-100 p-4 rounded-lg flex items-center justify-between mb-4 border border-gray-300">
-                  <span className="font-mono text-xl font-bold text-black tracking-widest">TAVARES2024</span>
-                  <Copy size={20} className="text-gray-500" />
+          ) : coupon ? (
+            partner.isOnline ? (
+              // Online Partner - Show promotional code
+              <div className="bg-white rounded-xl p-6 flex flex-col items-center justify-center animate-slide-up shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+                <h3 className="text-black font-bold text-lg mb-2">
+                  Código Promocional
+                </h3>
+                <div
+                  className="w-full bg-gray-100 p-4 rounded-lg flex items-center justify-between mb-4 border border-gray-300 cursor-pointer hover:bg-gray-200 transition-colors"
+                  onClick={handleCopyCode}
+                >
+                  <span className="font-mono text-xl font-bold text-black tracking-widest">{coupon.code}</span>
+                  <Copy size={20} className={codeCopied ? 'text-green-500' : 'text-gray-500'} />
                 </div>
-              ) : (
-                <>
-                  <div className="border-2 border-dashed border-gray-300 p-2 rounded-lg mb-4">
-                    <QrCode size={150} className="text-black" />
-                  </div>
-                  <p className="font-mono text-2xl font-bold text-black tracking-widest">TAVARES-{Math.floor(Math.random() * 9999)}</p>
-                </>
-              )}
-
-              <p className="text-gray-500 text-xs mt-2 text-center">
-                {partner.isOnline
-                  ? 'Copie o código e aplique no carrinho de compras.'
-                  : 'Apresente este QR Code no caixa. Válido por 2 horas.'}
-              </p>
-
-              {partner.isOnline && partner.website && (
-                <Button variant="primary" className="mt-4 h-12" onClick={() => window.open(partner.website, '_blank')}>
-                  IR PARA O SITE
-                </Button>
-              )}
+                {codeCopied && (
+                  <p className="text-green-600 text-sm font-medium mb-2">Código copiado!</p>
+                )}
+                <p className="text-gray-500 text-xs text-center">
+                  Copie o código e aplique no carrinho de compras.
+                </p>
+                {partner.website && (
+                  <Button variant="primary" className="mt-4 h-12" onClick={() => window.open(partner.website, '_blank')}>
+                    IR PARA O SITE
+                  </Button>
+                )}
+              </div>
+            ) : (
+              // Physical Partner - Show QR Code
+              <QRCodeDisplay
+                code={coupon.code}
+                expiresAt={coupon.expires_at}
+                benefit={partner.benefit}
+                partnerName={partner.name}
+              />
+            )
+          ) : (
+            <div className="text-center text-red-500 p-4">
+              Erro ao gerar cupom. Tente novamente.
             </div>
           )}
         </div>

@@ -4,6 +4,7 @@ import Layout from './components/Layout';
 import Splash from './screens/Splash';
 import Login from './screens/Login';
 import AdminLogin from './screens/AdminLogin';
+import AdminForgotPassword from './screens/AdminForgotPassword';
 import Register from './screens/Register';
 import Home from './screens/Home';
 import Benefits from './screens/Benefits';
@@ -49,6 +50,10 @@ const AppRoutes: React.FC<{ onFinishSplash: () => void }> = ({ onFinishSplash })
         <Route
           path="/admin-login"
           element={!isAuthenticated ? <AdminLogin /> : <Navigate to={role === UserRole.ADMIN ? "/admin" : "/home"} />}
+        />
+        <Route
+          path="/admin-forgot-password"
+          element={<AdminForgotPassword />}
         />
         <Route
           path="/register-partner"
