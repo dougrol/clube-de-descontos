@@ -146,7 +146,7 @@ const Profile: React.FC<ProfileProps> = ({ userRole }) => {
 
                {/* Dados Pessoais - All users */}
                <div
-                  onClick={() => {/* TODO: Open personal data modal/page */ }}
+                  onClick={() => navigate('/personal-data')}
                   className="flex items-center justify-between p-4 rounded-xl hover:bg-white/5 cursor-pointer transition-colors group"
                >
                   <div className="flex items-center gap-4">
@@ -164,7 +164,7 @@ const Profile: React.FC<ProfileProps> = ({ userRole }) => {
                {/* Histórico de Cupons - Only for non-admin */}
                {userRole !== UserRole.ADMIN && (
                   <div
-                     onClick={() => navigate('/benefits')}
+                     onClick={() => navigate('/my-coupons')}
                      className="flex items-center justify-between p-4 rounded-xl hover:bg-white/5 cursor-pointer transition-colors group"
                   >
                      <div className="flex items-center gap-4">

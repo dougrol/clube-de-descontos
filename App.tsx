@@ -12,6 +12,8 @@ import Benefits from './screens/Benefits';
 import PartnerDetail from './screens/PartnerDetail';
 import Social from './screens/Social';
 import Profile from './screens/Profile';
+import PersonalData from './screens/PersonalData';
+import MyCoupons from './screens/MyCoupons';
 import Admin from './screens/Admin';
 import Protection from './screens/VehicleProtection';
 import SalesConsultancy from './screens/SalesConsultancy';
@@ -114,6 +116,18 @@ const AppRoutes: React.FC<{ onFinishSplash: () => void }> = ({ onFinishSplash })
         <Route
           path="/about"
           element={isAuthenticated ? <About /> : <Navigate to="/login" />}
+        />
+
+        {/* Personal Data Route */}
+        <Route
+          path="/personal-data"
+          element={isAuthenticated ? <PersonalData userRole={role} /> : <Navigate to="/login" />}
+        />
+
+        {/* My Coupons Route */}
+        <Route
+          path="/my-coupons"
+          element={isAuthenticated ? <MyCoupons /> : <Navigate to="/login" />}
         />
 
         {/* Partner Routes */}

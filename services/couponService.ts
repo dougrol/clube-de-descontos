@@ -202,9 +202,6 @@ const markLocalCouponAsUsed = (couponId: string): boolean => {
     return true;
 };
 
-/**
- * Get remaining time for coupon in formatted string
- */
 export const getCouponRemainingTime = (expiresAt: string): string => {
     const diff = new Date(expiresAt).getTime() - Date.now();
 
@@ -218,4 +215,55 @@ export const getCouponRemainingTime = (expiresAt: string): string => {
         return `${hours}h ${minutes}min`;
     }
     return `${minutes}min ${seconds}s`;
+};
+
+/**
+ * Get all coupons for a specific user
+ */
+export const getUserCoupons = async (userId: string): Promise<Coupon[]> => {
+    try {
+        const { data, error } = await supabase
+            .from('coupons')
+            .select('*')
+            .eq('user_id', userId)
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.error('Error fetching user coupons:', error);
+            // Fallback to localStorage
+            return getLocalUserCoupons(userId);
+        }
+
+        // Update expired status
+        const now = new Date();
+        const updatedCoupons = (data as Coupon[]).map(coupon => {
+            if (coupon.status === 'active' && new Date(coupon.expires_at) < now) {
+                return { ...coupon, status: 'expired' as const };
+            }
+            return coupon;
+        });
+
+        return updatedCoupons;
+    } catch (err) {
+        console.error('Error getting user coupons:', err);
+        return getLocalUserCoupons(userId);
+    }
+};
+
+/**
+ * Get local coupons for a user
+ */
+const getLocalUserCoupons = (userId: string): Coupon[] => {
+    const storedCoupons: Coupon[] = JSON.parse(localStorage.getItem('coupons') || '[]');
+    const now = new Date();
+
+    return storedCoupons
+        .filter(c => c.user_id === userId)
+        .map(coupon => {
+            if (coupon.status === 'active' && new Date(coupon.expires_at) < now) {
+                return { ...coupon, status: 'expired' as const };
+            }
+            return coupon;
+        })
+        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 };
