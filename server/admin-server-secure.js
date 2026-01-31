@@ -1,8 +1,13 @@
-const http = require('http');
-const https = require('https');
-const crypto = require('crypto');
-const fs = require('fs');
-const path = require('path');
+import http from 'http';
+import https from 'https';
+import crypto from 'crypto';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// ESM __dirname shim
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // ===== Environment Variables =====
 const SUPABASE_URL = process.env.SUPABASE_URL || '';
@@ -329,6 +334,142 @@ const requestHandler = async (req, res) => {
       res.end(data);
     } catch (err) {
       logger.error(`/create-user error: ${err.message}`);
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'internal_error' }));
+    }
+    return;
+  }
+
+  // Partner coupon validation (server-side, atomic)
+  if (req.method === 'POST' && req.url === '/partner/validate') {
+    try {
+      let body = '';
+      for await (const chunk of req) body += chunk;
+
+      // Optional: verify HMAC signature when SIGNING_SECRET is set
+      if (!verifyRequestSignature(req, body)) {
+        logger.warn(`Invalid signature for /partner/validate from ${clientIp}`);
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'invalid_signature' }));
+        return;
+      }
+
+      const { code } = JSON.parse(body || '{}');
+      if (!code || typeof code !== 'string') {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'missing_code' }));
+        return;
+      }
+
+      const authHeader = req.headers['authorization'];
+      const adminApiKeyHeader = req.headers['x-admin-api-key'];
+
+      let partnerId = null;
+      let authMethod = null;
+
+      // Admin API key (management scripts) — must provide partner_id in body
+      if (ADMIN_API_KEY && adminApiKeyHeader === ADMIN_API_KEY) {
+        const payload = JSON.parse(body || '{}');
+        partnerId = payload.partner_id || null;
+        if (!partnerId) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'missing_partner_id' }));
+          return;
+        }
+        authMethod = 'admin_api_key';
+
+      // Partner JWT (recommended): validate token and ensure role=PARTNER
+      } else if (authHeader && authHeader.startsWith('Bearer ')) {
+        const token = authHeader.split(' ')[1];
+        try {
+          const userResp = await fetch(`${SUPABASE_URL.replace(/\/+$/, '')}/auth/v1/user`, {
+            method: 'GET',
+            headers: { Authorization: `Bearer ${token}`, apikey: SERVICE_ROLE_KEY }
+          });
+
+          if (!userResp.ok) {
+            res.writeHead(401, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'invalid_token' }));
+            return;
+          }
+
+          const userJson = await userResp.json();
+          const userId = userJson?.id;
+
+          // Fetch role and partner_id using service role key
+          const roleResp = await fetch(`${SUPABASE_URL.replace(/\/+$/, '')}/rest/v1/users?select=role,partner_id&id=eq.${userId}`, {
+            method: 'GET',
+            headers: { ...supabaseHeaders }
+          });
+
+          const roleData = await roleResp.json();
+          const roleRec = Array.isArray(roleData) ? roleData[0] : null;
+
+          if (!roleRec || String(roleRec.role).toUpperCase() !== 'PARTNER' || !roleRec.partner_id) {
+            res.writeHead(403, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'forbidden' }));
+            return;
+          }
+
+          partnerId = roleRec.partner_id;
+          authMethod = 'partner_jwt';
+        } catch (vErr) {
+          logger.error(`Token validation error: ${vErr.message}`);
+          res.writeHead(401, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'invalid_token' }));
+          return;
+        }
+      } else {
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'unauthorized' }));
+        return;
+      }
+
+      // Atomically mark coupon as used only if it belongs to this partner and is active
+      const couponsUrl = `${SUPABASE_URL.replace(/\/+$/, '')}/rest/v1/coupons?code=eq.${encodeURIComponent(code.toUpperCase())}&partner_id=eq.${encodeURIComponent(partnerId)}&status=eq.active`;
+      const nowIso = new Date().toISOString();
+      const updateResp = await fetch(couponsUrl, {
+        method: 'PATCH',
+        headers: {
+          ...supabaseHeaders,
+          Prefer: 'return=representation'
+        },
+        body: JSON.stringify({ status: 'used', used_at: nowIso, validated_by: partnerId })
+      });
+
+      const updated = await updateResp.json();
+
+      // If nothing updated, try to return a meaningful error (exists but invalid vs not found)
+      if (!updateResp.ok || !Array.isArray(updated) || updated.length === 0) {
+        // Does the coupon exist at all?
+        const existsResp = await fetch(`${SUPABASE_URL.replace(/\/+$/, '')}/rest/v1/coupons?code=eq.${encodeURIComponent(code.toUpperCase())}`, {
+          method: 'GET',
+          headers: { ...supabaseHeaders }
+        });
+        const exists = await existsResp.json();
+
+        if (Array.isArray(exists) && exists.length > 0) {
+          // Coupon exists but either belongs to another partner, already used or expired
+          logger.warn(`Coupon validation failed (exists but not valid): code=${code} partner=${partnerId} auth=${authMethod} ip=${clientIp}`);
+          res.writeHead(409, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ valid: false, error: 'not_valid_for_partner_or_already_used' }));
+          return;
+        }
+
+        // Not found
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ valid: false, error: 'not_found' }));
+        return;
+      }
+
+      const coupon = updated[0];
+      logger.info(`Coupon validated: code=${coupon.code} by partner=${partnerId} auth=${authMethod} ip=${clientIp}`);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ valid: true, coupon }));
+      return;
+
+    } catch (err) {
+      logger.error(`/partner/validate error: ${err.message}`);
       res.writeHead(500, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: 'internal_error' }));
     }

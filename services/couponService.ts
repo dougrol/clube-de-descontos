@@ -1,14 +1,22 @@
 import { supabase } from './supabaseClient';
 
-// Generate unique coupon code
+// Generate unique coupon code — higher entropy (production-safe)
 const generateCouponCode = (): string => {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    const prefix = 'TRV';
-    let code = '';
-    for (let i = 0; i < 6; i++) {
-        code += chars.charAt(Math.floor(Math.random() * chars.length));
+    // Use crypto.randomUUID() and a short base36 slice to increase entropy
+    // Example output: TRV-5F3A8C9D2
+    try {
+        const raw = crypto.randomUUID().replace(/-/g, '').slice(0, 12).toUpperCase();
+        return `TRV-${raw}`;
+    } catch (err) {
+        // Fallback to previous method if crypto.randomUUID() isn't available
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        const prefix = 'TRV';
+        let code = '';
+        for (let i = 0; i < 10; i++) {
+            code += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return `${prefix}-${code}`;
     }
-    return `${prefix}-${code}`;
 };
 
 export interface Coupon {
@@ -72,6 +80,7 @@ export const generateCoupon = async (
 
 /**
  * Create a local coupon (fallback when DB not available)
+ * NOTE: disabled in production to avoid client-side forgery
  */
 const createLocalCoupon = (
     code: string,
@@ -82,6 +91,11 @@ const createLocalCoupon = (
     benefit: string,
     expiresAt: Date
 ): Coupon => {
+    if (import.meta.env.PROD) {
+        console.error('createLocalCoupon blocked: local fallback is disabled in production');
+        throw new Error('local_fallback_disabled_in_production');
+    }
+
     const coupon: Coupon = {
         id: crypto.randomUUID(),
         code,
@@ -95,7 +109,7 @@ const createLocalCoupon = (
         created_at: new Date().toISOString()
     };
 
-    // Store in localStorage as backup
+    // Store in localStorage as backup (dev only)
     const storedCoupons = JSON.parse(localStorage.getItem('coupons') || '[]');
     storedCoupons.push(coupon);
     localStorage.setItem('coupons', JSON.stringify(storedCoupons));
@@ -140,9 +154,55 @@ export const validateCoupon = async (code: string): Promise<{ valid: boolean; co
 };
 
 /**
- * Validate coupon from localStorage
+ * Server-side validation (partners should call this endpoint). Performs an authenticated, atomic "validate + consume" on the server.
+ */
+export const validateCouponServer = async (code: string): Promise<{ valid: boolean; coupon?: Coupon; error?: string }> => {
+    const adminUrl = (import.meta.env.VITE_ADMIN_SERVER_URL || 'http://localhost:3001').replace(/\/+$/, '');
+
+    // Try to get an authenticated session token (if available)
+    let token = '';
+    try {
+        const { data } = await supabase.auth.getSession();
+        token = data.session?.access_token ?? '';
+    } catch (err) {
+        // ignore - call may still be allowed with API key
+    }
+
+    try {
+        const resp = await fetch(`${adminUrl}/partner/validate`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token ? { Authorization: `Bearer ${token}` } : {})
+            },
+            body: JSON.stringify({ code })
+        });
+
+        const json = await resp.json().catch(() => ({}));
+
+        if (resp.status === 200 && json.valid) {
+            return { valid: true, coupon: json.coupon as Coupon };
+        }
+
+        if (resp.status === 409) return { valid: false, error: json.error || 'already_used_or_invalid' };
+        if (resp.status === 404) return { valid: false, error: 'not_found' };
+
+        return { valid: false, error: json.error || 'validation_failed' };
+    } catch (err) {
+        console.error('validateCouponServer error:', err);
+        return { valid: false, error: 'network_error' };
+    }
+};
+
+/**
+ * Validate coupon from localStorage (DEV only)
  */
 const validateLocalCoupon = (code: string): { valid: boolean; coupon?: Coupon; error?: string } => {
+    if (import.meta.env.PROD) {
+        // In production we must not trust client-side storage
+        return { valid: false, error: 'local_validation_disabled_in_production' };
+    }
+
     const storedCoupons: Coupon[] = JSON.parse(localStorage.getItem('coupons') || '[]');
     const coupon = storedCoupons.find(c => c.code.toUpperCase() === code.toUpperCase());
 
@@ -187,9 +247,14 @@ export const markCouponAsUsed = async (couponId: string): Promise<boolean> => {
 };
 
 /**
- * Mark local coupon as used
+ * Mark local coupon as used (DEV only)
  */
 const markLocalCouponAsUsed = (couponId: string): boolean => {
+    if (import.meta.env.PROD) {
+        console.error('markLocalCouponAsUsed blocked in production');
+        return false;
+    }
+
     const storedCoupons: Coupon[] = JSON.parse(localStorage.getItem('coupons') || '[]');
     const couponIndex = storedCoupons.findIndex(c => c.id === couponId);
 
@@ -254,6 +319,8 @@ export const getUserCoupons = async (userId: string): Promise<Coupon[]> => {
  * Get local coupons for a user
  */
 const getLocalUserCoupons = (userId: string): Coupon[] => {
+    if (import.meta.env.PROD) return [];
+
     const storedCoupons: Coupon[] = JSON.parse(localStorage.getItem('coupons') || '[]');
     const now = new Date();
 

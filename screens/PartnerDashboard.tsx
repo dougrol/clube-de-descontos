@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { BarChart3, Users, QrCode, Ticket, Settings, LogOut, Save, X, Edit3, Image as ImageIcon, CheckCircle, MapPin, Camera, Upload } from 'lucide-react';
 import { Card, SectionTitle, Badge, Button, Input, AvatarUpload } from '../components/ui';
 import { getStoredUser, logoutUser, getPartners, updatePartner } from '../services/storage';
+import { validateCouponServer, validateCoupon } from '../services/couponService';
 import { Partner, UserRole } from '../types';
 import { uploadPartnerImage, updatePartnerImage } from '../services/avatarService';
 
@@ -15,6 +16,9 @@ const PartnerDashboard: React.FC = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [isValidating, setIsValidating] = useState(false);
     const [validationStep, setValidationStep] = useState(0); // 0: Scan, 1: Success
+    const [couponCodeInput, setCouponCodeInput] = useState('');
+    const [validationMessage, setValidationMessage] = useState<string | null>(null);
+    const [isValidatingLoading, setIsValidatingLoading] = useState(false);
 
     // Form State
     const [editForm, setEditForm] = useState<Partner | null>(null);
@@ -82,11 +86,54 @@ const PartnerDashboard: React.FC = () => {
         }
     };
 
-    const simulateValidation = () => {
-        setValidationStep(1); // Scanning...
-        setTimeout(() => {
-            setValidationStep(2); // Success
-        }, 2000);
+    const validateCodeWithServer = async (code?: string) => {
+        setValidationMessage(null);
+        setIsValidatingLoading(true);
+        setValidationStep(1); // scanning
+        const toValidate = code ?? couponCodeInput;
+        try {
+            const res = await validateCouponServer(toValidate);
+
+            // If admin-server is unreachable in DEV, fall back to client validation for local dev flows
+            if (!res.valid && res.error === 'network_error' && import.meta.env.DEV) {
+                const fallback = await validateCoupon(toValidate);
+                if (fallback.valid && fallback.coupon) {
+                    setValidationStep(2);
+                    setValidationMessage(`(DEV) Cupom válido — ${fallback.coupon.code} · ${fallback.coupon.benefit}`);
+                } else {
+                    setValidationStep(0);
+                    setValidationMessage(fallback.error || 'Cupom inválido (DEV)');
+                }
+                return;
+            }
+
+            if (res.valid && res.coupon) {
+                setValidationStep(2); // success
+                setValidationMessage(`Cupom válido — ${res.coupon.code} · ${res.coupon.benefit}`);
+            } else {
+                setValidationStep(0);
+                setValidationMessage(res.error || 'Cupom inválido');
+            }
+        } catch (err: any) {
+            console.error('Validation error:', err);
+
+            // Network errors in DEV -> attempt local fallback
+            if (import.meta.env.DEV) {
+                const fallback = await validateCoupon(toValidate);
+                if (fallback.valid && fallback.coupon) {
+                    setValidationStep(2);
+                    setValidationMessage(`(DEV) Cupom válido — ${fallback.coupon.code} · ${fallback.coupon.benefit}`);
+                } else {
+                    setValidationStep(0);
+                    setValidationMessage(fallback.error || 'Erro ao validar. Tente novamente');
+                }
+            } else {
+                setValidationMessage('Erro ao validar. Tente novamente');
+                setValidationStep(0);
+            }
+        } finally {
+            setIsValidatingLoading(false);
+        }
     };
 
     if (loading) return <div className="min-h-screen bg-black flex items-center justify-center text-white">Carregando painel...</div>;
@@ -396,8 +443,16 @@ const PartnerDashboard: React.FC = () => {
                                     <div className="absolute top-0 left-0 w-full h-1 bg-gold-500 shadow-[0_0_20px_#D4AF37] animate-[scan_2s_linear_infinite]"></div>
                                 </div>
                                 <h3 className="text-xl font-bold mb-2">Escaneando...</h3>
-                                <p className="text-gray-400 text-sm mb-6">Aponte a câmera para o QR Code do cliente</p>
-                                <Button onClick={simulateValidation} className="w-full">SIMULAR LEITURA</Button>
+                                <p className="text-gray-400 text-sm mb-3">Aponte a câmera para o QR Code do cliente ou digite o código manualmente</p>
+
+                                <div className="flex gap-2 mb-3">
+                                    <Input value={couponCodeInput} onChange={(e) => setCouponCodeInput((e.target as HTMLInputElement).value)} placeholder="TRV-XXXXXX" />
+                                    <Button onClick={() => validateCodeWithServer()} isLoading={isValidatingLoading}>VALIDAR</Button>
+                                </div>
+
+                                {validationMessage && (
+                                    <p className="text-sm mt-2 text-gray-200">{validationMessage}</p>
+                                )}
                             </div>
                         )}
 
