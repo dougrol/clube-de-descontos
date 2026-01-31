@@ -25,11 +25,16 @@ const AdminLogin: React.FC = () => {
             if (error) throw error;
 
             // Check if user is actually an admin
-            const { data: userData } = await supabase
+            const { data: userData, error: userError } = await supabase
                 .from('users')
                 .select('role')
                 .eq('id', data.user?.id)
                 .single();
+
+            if (userError) {
+                console.error('Error fetching user role:', userError);
+                throw new Error('Erro ao verificar permissões. Tente novamente.');
+            }
 
             console.log('Admin login - User role from DB:', userData?.role);
 
@@ -40,11 +45,12 @@ const AdminLogin: React.FC = () => {
                 throw new Error('Acesso não autorizado. Esta área é restrita a administradores.');
             }
 
-            // Wait for AuthContext to sync the auth state
-            await new Promise(resolve => setTimeout(resolve, 500));
+            // Wait longer for AuthContext to sync the auth state
+            await new Promise(resolve => setTimeout(resolve, 800));
 
-            // Force navigation to admin panel
-            window.location.hash = '#/admin';
+            // Force full page reload to admin panel for clean state
+            window.location.href = window.location.origin + window.location.pathname + '#/admin';
+            window.location.reload();
 
         } catch (err: any) {
             console.error('Admin login error:', err);
