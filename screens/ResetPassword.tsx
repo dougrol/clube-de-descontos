@@ -16,45 +16,86 @@ const ResetPassword: React.FC = () => {
     const [checkingSession, setCheckingSession] = useState(true);
 
     useEffect(() => {
-        // Check if we have a valid recovery session
-        const checkSession = async () => {
+        const initializeSession = async () => {
             try {
-                const { data: { session } } = await supabase.auth.getSession();
+                // Get the full hash (everything after #)
+                const fullHash = window.location.hash;
+                console.log('Full hash:', fullHash);
 
-                // Check URL for access_token (Supabase sends this in the recovery link)
-                const hashParams = new URLSearchParams(window.location.hash.substring(1));
-                const accessToken = hashParams.get('access_token');
-                const type = hashParams.get('type');
+                // Parse tokens from URL - Supabase sends them after the hash
+                // Format can be: #/reset-password#access_token=...&type=recovery
+                // Or: #access_token=...&type=recovery
+                let tokenString = '';
 
-                if (type === 'recovery' && accessToken) {
-                    // Set the session from the recovery token
-                    const { error } = await supabase.auth.setSession({
-                        access_token: accessToken,
-                        refresh_token: hashParams.get('refresh_token') || '',
-                    });
+                if (fullHash.includes('access_token=')) {
+                    // Extract the token part
+                    const tokenStart = fullHash.indexOf('access_token=');
+                    tokenString = fullHash.substring(tokenStart);
+                } else if (fullHash.includes('#', 1)) {
+                    // Check if there's a second # (e.g., #/reset-password#access_token=...)
+                    const secondHashIndex = fullHash.indexOf('#', 1);
+                    tokenString = fullHash.substring(secondHashIndex + 1);
+                }
 
-                    if (!error) {
-                        setIsValidSession(true);
+                console.log('Token string:', tokenString);
+
+                if (tokenString) {
+                    const params = new URLSearchParams(tokenString);
+                    const accessToken = params.get('access_token');
+                    const refreshToken = params.get('refresh_token') || '';
+                    const type = params.get('type');
+
+                    console.log('Parsed - Type:', type, 'Has access token:', !!accessToken);
+
+                    if (type === 'recovery' && accessToken) {
+                        // Set session with recovery tokens
+                        const { data, error } = await supabase.auth.setSession({
+                            access_token: accessToken,
+                            refresh_token: refreshToken,
+                        });
+
+                        console.log('Set session result:', { data, error });
+
+                        if (!error && data.session) {
+                            setIsValidSession(true);
+                            setCheckingSession(false);
+                            return;
+                        }
                     }
-                } else if (session) {
+                }
+
+                // Check if there's already a valid session (from PASSWORD_RECOVERY event)
+                const { data: { session } } = await supabase.auth.getSession();
+                console.log('Existing session:', session);
+
+                if (session) {
                     setIsValidSession(true);
                 }
+
             } catch (err) {
-                console.error('Session check error:', err);
+                console.error('Session initialization error:', err);
             } finally {
                 setCheckingSession(false);
             }
         };
 
-        // Listen for password recovery event
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+        // Listen for PASSWORD_RECOVERY event
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+            console.log('Auth state change:', event, session);
             if (event === 'PASSWORD_RECOVERY') {
+                setIsValidSession(true);
+                setCheckingSession(false);
+            } else if (event === 'SIGNED_IN' && session) {
+                // Also accept SIGNED_IN with a valid session (in case recovery already authenticated)
                 setIsValidSession(true);
                 setCheckingSession(false);
             }
         });
 
-        checkSession();
+        // Short delay to let Supabase process the hash
+        setTimeout(() => {
+            initializeSession();
+        }, 500);
 
         return () => subscription.unsubscribe();
     }, []);
@@ -63,7 +104,6 @@ const ResetPassword: React.FC = () => {
         e.preventDefault();
         setError(null);
 
-        // Validation
         if (password.length < 6) {
             setError('A senha deve ter pelo menos 6 caracteres.');
             return;
@@ -102,7 +142,10 @@ const ResetPassword: React.FC = () => {
     if (checkingSession) {
         return (
             <div className="min-h-screen bg-obsidian-950 flex items-center justify-center">
-                <div className="text-gold-500">Verificando sessão...</div>
+                <div className="text-gold-500 flex flex-col items-center gap-4">
+                    <div className="w-8 h-8 border-2 border-gold-500 border-t-transparent rounded-full animate-spin"></div>
+                    <span>Verificando sessão...</span>
+                </div>
             </div>
         );
     }

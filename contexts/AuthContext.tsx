@@ -26,17 +26,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Check if URL contains recovery token - redirect immediately before auth processes
-        const hash = window.location.hash;
-        if (hash.includes('type=recovery') || hash.includes('type%3Drecovery')) {
-            // Extract the part after #/ and before any auth tokens
-            const isAlreadyOnResetPage = hash.includes('/reset-password');
-            if (!isAlreadyOnResetPage) {
-                // Redirect to reset password page with the tokens
-                const tokenPart = hash.split('#')[1] || '';
-                window.location.hash = '/reset-password' + (tokenPart.includes('access_token') ? '?' + tokenPart.split('?')[1] : '');
-                return;
+        // Check if URL contains recovery token - redirect to reset-password page
+        const fullHash = window.location.hash;
+
+        // Detect recovery tokens in various URL formats
+        const hasRecoveryToken = fullHash.includes('type=recovery') ||
+            fullHash.includes('type%3Drecovery') ||
+            fullHash.includes('access_token=');
+
+        const isOnResetPage = fullHash.includes('/reset-password');
+
+        if (hasRecoveryToken && !isOnResetPage) {
+            console.log('Recovery token detected, redirecting to reset-password');
+            // Preserve the full hash with tokens - just prepend the route
+            // The tokens are in the hash, we need to restructure it
+
+            // Find where the tokens start
+            const tokenStart = fullHash.indexOf('access_token=');
+            if (tokenStart !== -1) {
+                const tokens = fullHash.substring(tokenStart);
+                window.location.hash = '/reset-password#' + tokens;
+            } else {
+                window.location.hash = '/reset-password';
             }
+            return;
         }
 
         // 1. Check active session
