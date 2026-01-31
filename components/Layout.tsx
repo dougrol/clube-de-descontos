@@ -19,7 +19,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }, [location.pathname]);
 
   // Hide nav on auth/onboarding pages only - admin can navigate the full app
-  const hideNav = ['/', '/login', '/splash', '/register-partner', '/admin-login', '/register', '/forgot-password', '/admin-forgot-password', '/reset-password'].includes(location.pathname);
+  const hideNav = ['/', '/login', '/splash', '/register-partner', '/admin-login', '/register', '/forgot-password', '/admin-forgot-password', '/reset-password', '/tc-portal-2024'].includes(location.pathname);
 
   // Base nav items for all users
   const baseNavItems = [
@@ -54,12 +54,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   key={item.path}
                   onClick={() => navigate(item.path)}
                   className={`relative group flex flex-col items-center justify-center w-12 h-12 rounded-full transition-all duration-300 ${isActive
-                      ? isAdminButton
-                        ? 'bg-gold-500 text-obsidian-950 shadow-[0_0_20px_rgba(212,175,55,0.4)] scale-110'
-                        : 'bg-signal-500 text-white shadow-[0_0_20px_rgba(255,69,0,0.4)] scale-110'
-                      : isAdminButton
-                        ? 'text-gold-500 hover:text-gold-400 hover:bg-gold-500/10'
-                        : 'text-gray-400 hover:text-white hover:bg-white/5'
+                    ? isAdminButton
+                      ? 'bg-gold-500 text-obsidian-950 shadow-[0_0_20px_rgba(212,175,55,0.4)] scale-110'
+                      : 'bg-signal-500 text-white shadow-[0_0_20px_rgba(255,69,0,0.4)] scale-110'
+                    : isAdminButton
+                      ? 'text-gold-500 hover:text-gold-400 hover:bg-gold-500/10'
+                      : 'text-gray-400 hover:text-white hover:bg-white/5'
                     }`}
                 >
                   {item.icon}

@@ -52,6 +52,11 @@ const AppRoutes: React.FC<{ onFinishSplash: () => void }> = ({ onFinishSplash })
           path="/admin-login"
           element={!isAuthenticated ? <AdminLogin /> : <Navigate to={role === UserRole.ADMIN ? "/admin" : "/home"} />}
         />
+        {/* Secret admin login route */}
+        <Route
+          path="/tc-portal-2024"
+          element={!isAuthenticated ? <AdminLogin /> : <Navigate to={role === UserRole.ADMIN ? "/admin" : "/home"} />}
+        />
         <Route
           path="/admin-forgot-password"
           element={<AdminForgotPassword />}
