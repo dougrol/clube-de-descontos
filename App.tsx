@@ -5,6 +5,7 @@ import Splash from './screens/Splash';
 import Login from './screens/Login';
 import AdminLogin from './screens/AdminLogin';
 import AdminForgotPassword from './screens/AdminForgotPassword';
+import ResetPassword from './screens/ResetPassword';
 import Register from './screens/Register';
 import Home from './screens/Home';
 import Benefits from './screens/Benefits';
@@ -54,6 +55,10 @@ const AppRoutes: React.FC<{ onFinishSplash: () => void }> = ({ onFinishSplash })
         <Route
           path="/admin-forgot-password"
           element={<AdminForgotPassword />}
+        />
+        <Route
+          path="/reset-password"
+          element={<ResetPassword />}
         />
         <Route
           path="/register-partner"

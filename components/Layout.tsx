@@ -16,7 +16,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }, [location.pathname]);
 
   // Check if we should hide the navigation bar
-  const hideNav = ['/', '/login', '/splash', '/register-partner', '/admin-login', '/admin', '/register', '/forgot-password', '/admin-forgot-password'].includes(location.pathname);
+  const hideNav = ['/', '/login', '/splash', '/register-partner', '/admin-login', '/admin', '/register', '/forgot-password', '/admin-forgot-password', '/reset-password'].includes(location.pathname);
 
   // Define nav items
   const navItems = [
