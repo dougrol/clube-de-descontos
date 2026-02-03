@@ -19,3 +19,4 @@ Todas as verificações de lint passaram e o build de produção foi gerado com 
 - [x] Corrigir erro "Erro ao gerar cupom" (Criar tabela `coupons` e aplicar RLS) <!-- id: 9 -->
 - [x] Corrigir erro de coluna 'cnpj' faltante na tabela `partners` <!-- id: 10 -->
 - [x] Corrigir erro de RLS ao cadastrar parceiro (Permitir INSERT auth.uid() = id) <!-- id: 11 -->
+- [x] Corrigir erro de "Acesso Negado" no Painel do Parceiro (Migrar de localStorage para Supabase) <!-- id: 12 -->
