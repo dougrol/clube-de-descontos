@@ -7,7 +7,7 @@ const generateCouponCode = (): string => {
     try {
         const raw = crypto.randomUUID().replace(/-/g, '').slice(0, 12).toUpperCase();
         return `TRV-${raw}`;
-    } catch (err) {
+    } catch {
         // Fallback to previous method if crypto.randomUUID() isn't available
         const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         const prefix = 'TRV';
@@ -72,7 +72,7 @@ export const generateCoupon = async (
         }
 
         return data as Coupon;
-    } catch (err) {
+    } catch (err: unknown) {
         console.error('Error generating coupon:', err);
         return null;
     }
@@ -147,7 +147,7 @@ export const validateCoupon = async (code: string): Promise<{ valid: boolean; co
         }
 
         return { valid: true, coupon };
-    } catch (err) {
+    } catch (err: unknown) {
         console.error('Error validating coupon:', err);
         return validateLocalCoupon(code);
     }
@@ -164,7 +164,7 @@ export const validateCouponServer = async (code: string): Promise<{ valid: boole
     try {
         const { data } = await supabase.auth.getSession();
         token = data.session?.access_token ?? '';
-    } catch (err) {
+    } catch {
         // ignore - call may still be allowed with API key
     }
 

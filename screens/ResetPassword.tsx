@@ -131,9 +131,10 @@ const ResetPassword: React.FC = () => {
                 navigate('/admin-login');
             }, 3000);
 
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Reset password error:', err);
-            setError(err.message || 'Erro ao redefinir senha. Tente novamente.');
+            const errorMessage = err instanceof Error ? err.message : 'Erro ao redefinir senha. Tente novamente.';
+            setError(errorMessage);
         } finally {
             setIsLoading(false);
         }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { UserRole } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 import { Button, AvatarUpload } from '../components/ui';
-import { Settings, LogOut, ChevronRight, User, Ticket, LifeBuoy, Crown, CheckCircle2 } from 'lucide-react';
+import { LogOut, ChevronRight, User, Ticket, LifeBuoy, Crown, CheckCircle2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { uploadAvatar, updateUserAvatar } from '../services/avatarService';
 import { supabase } from '../services/supabaseClient';
@@ -15,18 +15,16 @@ const Profile: React.FC<ProfileProps> = ({ userRole }) => {
    const navigate = useNavigate();
    const { user, signOut } = useAuth();
    const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
-   const [loading, setLoading] = useState(true);
 
    // Fetch avatar from database on mount
    useEffect(() => {
       const fetchAvatar = async () => {
          if (!user?.id) {
-            setLoading(false);
             return;
          }
 
          try {
-            const { data, error } = await supabase
+            const { data } = await supabase
                .from('users')
                .select('avatar_url')
                .eq('id', user.id)
@@ -38,7 +36,7 @@ const Profile: React.FC<ProfileProps> = ({ userRole }) => {
          } catch (err) {
             console.error('Error fetching avatar:', err);
          } finally {
-            setLoading(false);
+            // loaded
          }
       };
 
@@ -62,7 +60,7 @@ const Profile: React.FC<ProfileProps> = ({ userRole }) => {
          const newUrl = await uploadAvatar(user.id, file);
          await updateUserAvatar(user.id, newUrl);
          setAvatarUrl(newUrl);
-      } catch (error: any) {
+      } catch (error: unknown) {
          console.error('Avatar upload failed:', error);
          throw error; // Re-throw to show error in component
       }

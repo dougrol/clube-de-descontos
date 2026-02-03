@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '../services/supabaseClient';
@@ -103,8 +104,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
             console.log('DEBUG: Role fetched from DB:', data); // LOG HERE
 
-            if (data && (data as any).role) {
-                const dbRole = (data as any).role;
+            if (data && data.role) {
+                const dbRole = data.role;
                 // Case-insensitive check
                 if (dbRole.toUpperCase() === 'ADMIN') {
                     setRole(UserRole.ADMIN);

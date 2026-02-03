@@ -40,7 +40,7 @@ const Admin: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   // CMS State
-  const { rawContent, updateContent, refreshContent } = useCMS();
+  const { rawContent, updateContent } = useCMS();
   const [editableContent, setEditableContent] = useState<SiteContent[]>([]);
 
   // Edit Modal State
@@ -122,7 +122,7 @@ const Admin: React.FC = () => {
   };
 
   // --- Partner Logic ---
-  const handleUpdateStatus = async (id: string, newStatus: string) => {
+  const handleUpdateStatus = async (id: string, newStatus: ExtendedPartner['status']) => {
     try {
       const { error } = await supabase
         .from('partners')
@@ -130,7 +130,7 @@ const Admin: React.FC = () => {
         .eq('id', id);
 
       if (error) throw error;
-      setPartners(prev => prev.map(p => p.id === id ? { ...p, status: newStatus as any } : p));
+      setPartners(prev => prev.map(p => p.id === id ? { ...p, status: newStatus } : p));
       if (newStatus === 'active') setActivePartnersCount(prev => prev + 1);
       if (newStatus === 'suspended' || newStatus === 'pending') fetchDashboardData();
     } catch (error) {
@@ -445,7 +445,7 @@ const Admin: React.FC = () => {
             <label className="block text-sm text-gray-400 mb-1">Status</label>
             <select
               value={formData.status || 'pending'}
-              onChange={e => setFormData({ ...formData, status: e.target.value as any })}
+              onChange={e => setFormData({ ...formData, status: e.target.value as ExtendedPartner['status'] })}
               className="w-full bg-black border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
             >
               <option value="pending">Pendente</option>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Instagram, Heart, MessageCircle } from 'lucide-react';
+import { Instagram, Heart } from 'lucide-react';
 import { INSTAGRAM_POSTS, SOCIAL_LINKS } from '../constants';
 import { Button } from '../components/ui';
 

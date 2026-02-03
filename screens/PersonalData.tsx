@@ -51,7 +51,11 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
                         phone: data.phone,
                         cpf: data.cpf,
                         created_at: data.created_at || user.created_at || new Date().toISOString(),
-                        association_name: (data.association as any)?.name,
+                        association_name: (() => {
+                            const assoc = data.association as { name: string } | { name: string }[] | null;
+                            if (Array.isArray(assoc)) return assoc[0]?.name;
+                            return assoc?.name;
+                        })(),
                         role: data.role || 'USER'
                     });
                 } else {
@@ -77,6 +81,7 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
         };
 
         fetchUserData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user?.id, userRole]);
 
     const getRoleBadge = (role: string) => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, Ticket, Clock, CheckCircle, XCircle, Store, RefreshCw, X, QrCode } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
@@ -15,7 +15,7 @@ const MyCoupons: React.FC = () => {
     // QR Code Modal State
     const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null);
 
-    const loadCoupons = async () => {
+    const loadCoupons = useCallback(async () => {
         if (!user?.id) return;
         setLoading(true);
         try {
@@ -26,11 +26,11 @@ const MyCoupons: React.FC = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [user?.id]); // Dependency for useCallback
 
     useEffect(() => {
         loadCoupons();
-    }, [user?.id]);
+    }, [loadCoupons]);
 
     const filteredCoupons = coupons.filter(c => {
         if (filter === 'all') return true;
@@ -92,8 +92,8 @@ const MyCoupons: React.FC = () => {
                             key={tab.key}
                             onClick={() => setFilter(tab.key as typeof filter)}
                             className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all ${filter === tab.key
-                                    ? 'bg-gold-500 text-black'
-                                    : 'bg-white/5 text-gray-400 hover:bg-white/10'
+                                ? 'bg-gold-500 text-black'
+                                : 'bg-white/5 text-gray-400 hover:bg-white/10'
                                 }`}
                         >
                             {tab.label}

@@ -52,12 +52,13 @@ const AdminLogin: React.FC = () => {
             window.location.href = window.location.origin + window.location.pathname + '#/admin';
             window.location.reload();
 
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Admin login error:', err);
+            const errorMessage = err instanceof Error ? err.message : 'Erro ao entrar. Tente novamente.';
             setError(
-                err.message === 'Invalid login credentials'
+                errorMessage === 'Invalid login credentials'
                     ? 'Credenciais inválidas.'
-                    : err.message || 'Erro ao entrar. Tente novamente.'
+                    : errorMessage
             );
         } finally {
             setIsLoading(false);

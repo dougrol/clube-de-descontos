@@ -75,12 +75,13 @@ const RegisterPartner: React.FC = () => {
 
                 setStep(2);
             }
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Registration error:', err);
-            if (err.message?.includes('already registered')) {
+            const message = err instanceof Error ? err.message : 'Erro ao realizar cadastro';
+            if (message?.includes('already registered')) {
                 setError('Este e-mail já está cadastrado.');
             } else {
-                setError(err.message || 'Erro ao realizar cadastro. Tente novamente.');
+                setError(message);
             }
         } finally {
             setIsLoading(false);

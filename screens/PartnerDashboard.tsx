@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BarChart3, Users, QrCode, Ticket, Settings, LogOut, Save, X, Edit3, Image as ImageIcon, CheckCircle, MapPin, Camera, Upload } from 'lucide-react';
+import { BarChart3, Users, QrCode, Ticket, Settings, LogOut, Save, X, Edit3, CheckCircle, MapPin, Camera, Upload } from 'lucide-react';
 import { Card, SectionTitle, Badge, Button, Input, AvatarUpload } from '../components/ui';
-import { getStoredUser, logoutUser, getPartners, updatePartner } from '../services/storage';
 import { validateCouponServer, validateCoupon } from '../services/couponService';
-import { Partner, UserRole } from '../types';
-import { uploadPartnerImage, updatePartnerImage } from '../services/avatarService';
+import { Partner } from '../types';
+import { uploadPartnerImage } from '../services/avatarService';
+import { useAuth } from '../contexts/AuthContext';
+import { fetchPartnerById, updatePartner as updatePartnerSupabase } from '../services/partners';
 
 const PartnerDashboard: React.FC = () => {
     const navigate = useNavigate();
+    const { user, signOut, loading: authLoading } = useAuth();
     const [partner, setPartner] = useState<Partner | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -24,63 +26,69 @@ const PartnerDashboard: React.FC = () => {
     const [editForm, setEditForm] = useState<Partner | null>(null);
 
     useEffect(() => {
-        console.log('PartnerDashboard: useEffect started');
-        // 1. Get Logged User
-        const { user, isAuthenticated } = getStoredUser();
-        console.log('PartnerDashboard: User auth state:', { user, isAuthenticated });
+        const loadPartnerData = async () => {
+            if (authLoading) return;
 
-        if (!isAuthenticated || user.role !== UserRole.PARTNER) {
-            console.error('PartnerDashboard: Auth mismatch.', { appAuth: isAuthenticated, userRole: user.role });
-            // Stop infinite loop: Don't navigate, just show error
-            // navigate('/login'); 
-            setLoading(false);
-            return;
-        }
-
-        // 2. Find Associated Partner
-        const partners = getPartners();
-        console.log('PartnerDashboard: Partners found:', partners.length);
-
-        // Logic to find the correct partner for this user
-        let foundPartner = null;
-        if (user.partnerId) {
-            console.log('PartnerDashboard: Searching by partnerId:', user.partnerId);
-            foundPartner = partners.find(p => p.id === user.partnerId);
-        } else {
-            console.log('PartnerDashboard: No partnerId, trying fallbacks');
-            // Fallback for the demo partner user
-            if (user.email === 'parceiro@teste.com') {
-                foundPartner = partners.find(p => p.id === 'p_demo_1');
+            if (!user) {
+                navigate('/login');
+                return;
             }
-            // General Fallback
-            if (!foundPartner) {
-                console.log('PartnerDashboard: Using general fallback (first partner)');
-                foundPartner = partners[0];
+
+            // Check if user is partner (optional strict check, relies on metadata or DB)
+            // For now, proceed to try fetching partner profile.
+
+            try {
+                console.log('PartnerDashboard: Fetching partner for user:', user.id);
+                // 1. Try fetching by User ID (New Flow)
+                let foundPartner = await fetchPartnerById(user.id);
+                console.log('PartnerDashboard: Search result:', foundPartner);
+
+                // 2. Fallback for Demo User (Legacy Flow)
+                if (!foundPartner && user.email === 'parceiro@teste.com') {
+                    foundPartner = await fetchPartnerById('p_demo_1');
+                }
+
+                if (foundPartner) {
+                    setPartner(foundPartner);
+                    setEditForm(foundPartner);
+                } else {
+                    console.error('PartnerDashboard: Partner profile not found for ID:', user.id);
+                }
+            } catch (error) {
+                console.error('Error loading partner profile:', error);
+            } finally {
+                setLoading(false);
             }
-        }
+        };
 
-        console.log('PartnerDashboard: Final found partner:', foundPartner);
-        setPartner(foundPartner || null);
-        setEditForm(foundPartner || null);
-        console.log('PartnerDashboard: Setting loading to false');
-        setLoading(false);
-    }, []);
+        loadPartnerData();
+    }, [user, authLoading, navigate]);
 
-    const handleLogout = () => {
-        logoutUser();
+    const handleLogout = async () => {
+        await signOut();
         navigate('/login');
     };
 
-    const handleSaveProfile = (e: React.FormEvent) => {
+    const handleSaveProfile = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (editForm && updatePartner(editForm)) {
-            setPartner(editForm);
-            setIsEditing(false);
-            alert("Perfil atualizado com sucesso!");
+        if (editForm && partner) {
+            try {
+                const updated = await updatePartnerSupabase(partner.id, editForm);
+                if (updated) {
+                    setPartner(updated);
+                    setIsEditing(false);
+                    alert("Perfil atualizado com sucesso!");
+                } else {
+                    alert("Erro ao atualizar: resposta vazia.");
+                }
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                alert("Erro ao atualizar perfil.");
+            }
         }
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         if (editForm) {
             setEditForm({ ...editForm, [e.target.name]: e.target.value });
         }
@@ -90,7 +98,22 @@ const PartnerDashboard: React.FC = () => {
         setValidationMessage(null);
         setIsValidatingLoading(true);
         setValidationStep(1); // scanning
-        const toValidate = code ?? couponCodeInput;
+
+        let toValidate = code ?? couponCodeInput;
+
+        // Tentativa de limpar o input caso seja um JSON escaneado do QR Code
+        try {
+            if (toValidate.trim().startsWith('{')) {
+                const parsed = JSON.parse(toValidate);
+                if (parsed.code) {
+                    toValidate = parsed.code;
+                }
+            }
+        } catch (_) {
+            // Se falhar o parse, assume que é apenas o código em texto plano
+            console.log('Input não é JSON, usando como texto plano');
+        }
+
         try {
             const res = await validateCouponServer(toValidate);
 
@@ -114,7 +137,7 @@ const PartnerDashboard: React.FC = () => {
                 setValidationStep(0);
                 setValidationMessage(res.error || 'Cupom inválido');
             }
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Validation error:', err);
 
             // Network errors in DEV -> attempt local fallback
@@ -283,7 +306,7 @@ const PartnerDashboard: React.FC = () => {
                                     <textarea
                                         name="description"
                                         value={editForm.description}
-                                        onChange={handleChange as any}
+                                        onChange={handleChange}
                                         className="w-full bg-white/5 border border-white/10 rounded-sm px-4 py-3 text-sm text-white focus:border-gold-500 focus:bg-obsidian-900 outline-none transition-all min-h-[80px]"
                                     />
                                 </div>
@@ -293,7 +316,7 @@ const PartnerDashboard: React.FC = () => {
                                     <textarea
                                         name="fullRules"
                                         value={editForm.fullRules}
-                                        onChange={handleChange as any}
+                                        onChange={handleChange}
                                         className="w-full bg-white/5 border border-white/10 rounded-sm px-4 py-3 text-sm text-white focus:border-gold-500 focus:bg-obsidian-900 outline-none transition-all min-h-[80px]"
                                     />
                                 </div>
@@ -334,8 +357,9 @@ const PartnerDashboard: React.FC = () => {
                                                         try {
                                                             const url = await uploadPartnerImage(partner.id, file, 'cover');
                                                             setEditForm(prev => prev ? { ...prev, coverUrl: url } : null);
-                                                        } catch (err: any) {
-                                                            alert(err.message || 'Erro no upload');
+                                                        } catch (err: unknown) {
+                                                            const message = err instanceof Error ? err.message : 'Erro no upload';
+                                                            alert(message);
                                                         }
                                                     }
                                                 };
@@ -376,7 +400,10 @@ const PartnerDashboard: React.FC = () => {
                                                         }
                                                     }) : null);
                                                     alert("Coordenadas GPS atualizadas!");
-                                                }, (err) => alert("Erro ao obter localização."));
+                                                }, (err) => {
+                                                    console.error(err);
+                                                    alert("Erro ao obter localização.");
+                                                });
                                             } else {
                                                 alert("Geolocalização não suportada.");
                                             }

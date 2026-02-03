@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Target, Shield, Instagram, Search, Key, Handshake } from 'lucide-react';
-import { Button, Card, Badge } from '../components/ui';
+import { ArrowLeft, Target, Shield, Search, Handshake } from 'lucide-react';
+import { Button, Card } from '../components/ui';
 
 const CorporateConsultancy: React.FC = () => {
     const navigate = useNavigate();

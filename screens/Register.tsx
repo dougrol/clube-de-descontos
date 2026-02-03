@@ -163,12 +163,13 @@ const Register: React.FC = () => {
                 setSuccess(true);
             }
 
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Registration error:', err);
-            if (err.message?.includes('already registered')) {
+            const message = err instanceof Error ? err.message : 'Erro ao criar conta';
+            if (message?.includes('already registered')) {
                 setError('Este e-mail já está cadastrado.');
             } else {
-                setError(err.message || 'Erro ao criar conta. Tente novamente.');
+                setError(message);
             }
         } finally {
             setIsLoading(false);

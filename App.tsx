@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import Splash from './screens/Splash';
 import Login from './screens/Login';
@@ -28,7 +28,7 @@ import { CMSProvider } from './contexts/CMSContext';
 import ErrorBoundary from './components/ErrorBoundary';
 
 // Separate component for Routes to use the hook
-const AppRoutes: React.FC<{ onFinishSplash: () => void }> = ({ onFinishSplash }) => {
+const AppRoutes: React.FC = () => {
   const { session, role, loading } = useAuth();
   const [showSplash, setShowSplash] = useState(true);
 
@@ -163,7 +163,7 @@ const App: React.FC = () => {
       <AuthProvider>
         <CMSProvider>
           <HashRouter>
-            <AppRoutes onFinishSplash={() => { }} />
+            <AppRoutes />
           </HashRouter>
         </CMSProvider>
       </AuthProvider>

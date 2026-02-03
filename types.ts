@@ -67,3 +67,21 @@ export interface Coupon {
   expiresAt: string;
   isUsed: boolean;
 }
+
+export interface PartnerDB {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  benefit?: string;
+  full_rules?: string;
+  logo_url?: string;
+  cover_url?: string;
+  city?: string;
+  address?: string;
+  is_online?: boolean;
+  website?: string;
+  lat?: number;
+  lng?: number;
+  status?: string;
+}

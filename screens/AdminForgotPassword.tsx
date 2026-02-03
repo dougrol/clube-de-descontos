@@ -23,9 +23,10 @@ const AdminForgotPassword: React.FC = () => {
 
             if (error) throw error;
             setSuccess(true);
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Reset password error:', err);
-            setError(err.message || 'Erro ao enviar email de redefinição.');
+            const errorMessage = err instanceof Error ? err.message : 'Erro ao enviar email de redefinição.';
+            setError(errorMessage);
         } finally {
             setIsLoading(false);
         }

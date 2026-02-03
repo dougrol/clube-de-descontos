@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Search, Key, Banknote, Handshake, Landmark, Percent, Car } from 'lucide-react';
-import { Button, Card, Badge } from '../components/ui';
+import { ArrowLeft, Banknote, Landmark, Percent, Car } from 'lucide-react';
+import { Button } from '../components/ui';
 
 const SalesConsultancy: React.FC = () => {
    const navigate = useNavigate();

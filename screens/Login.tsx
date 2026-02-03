@@ -108,14 +108,15 @@ const Login: React.FC = () => {
         navigate('/home');
       }
 
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Login error:', err);
-      if (err.message === 'Invalid login credentials') {
+      const message = err instanceof Error ? err.message : 'Erro no login';
+      if (message === 'Invalid login credentials') {
         setError('Senha incorreta ou usuário não encontrado.');
-      } else if (err.message.includes('Email not confirmed')) {
+      } else if (message.includes('Email not confirmed')) {
         setError('E-mail não confirmado. Verifique sua caixa de entrada.');
       } else {
-        setError(err.message || 'Ocorreu um erro ao entrar. Tente novamente.');
+        setError(message || 'Ocorreu um erro ao entrar. Tente novamente.');
       }
     } finally {
       setIsLoading(false);

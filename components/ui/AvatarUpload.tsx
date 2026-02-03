@@ -70,8 +70,9 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
         setIsUploading(true);
         try {
             await onUpload(file);
-        } catch (err: any) {
-            setError(err.message || 'Erro no upload');
+        } catch (err: unknown) {
+            const errorMessage = err instanceof Error ? err.message : 'Erro no upload';
+            setError(errorMessage);
             setPreviewUrl(null);
         } finally {
             setIsUploading(false);

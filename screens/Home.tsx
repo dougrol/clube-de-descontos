@@ -13,12 +13,10 @@ const Home: React.FC = () => {
   const { user } = useAuth();
   const { getContent } = useCMS();
 
-  const [loaded, setLoaded] = useState(false);
   const [partners, setPartners] = useState<Partner[]>([]);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    setLoaded(true);
     // Load partners from Supabase
     fetchPartners().then(data => {
       setPartners(data);
