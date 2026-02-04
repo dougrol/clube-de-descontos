@@ -8,7 +8,7 @@
     - [x] Habilitar `"strict": true` no `tsconfig.json` <!-- id: 4 -->
     - [x] Executar `tsc` e identificar erros <!-- id: 5 -->
     - [x] Corrigir erros de tipagem críticos <!-- id: 6 -->
-- [ ] Verificação Final
+- [x] Verificação Final
     - [x] Executar `checklist.py` com sucesso <!-- id: 7 -->
     - [x] Garantir build limpo (`npm run build`) <!-- id: 8 -->
 

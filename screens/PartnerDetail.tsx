@@ -62,6 +62,9 @@ const PartnerDetail: React.FC = () => {
   if (loading) return <div className="h-screen flex items-center justify-center bg-black text-gold-500">Carregando...</div>;
   if (!partner) return <div className="p-10 text-center text-white bg-black h-screen">Parceiro não encontrado</div>;
 
+  const defaultCover = 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1920&auto=format&fit=crop';
+  const defaultLogo = `https://ui-avatars.com/api/?name=${encodeURIComponent(partner.name || 'P')}&background=F59E0B&color=000000`;
+
   return (
     <div className="min-h-screen bg-black pb-24 relative animate-fade-in">
       {/* Header Image */}
@@ -74,12 +77,28 @@ const PartnerDetail: React.FC = () => {
             <ArrowLeft size={20} />
           </button>
         </div>
-        <img src={partner.coverUrl} className="w-full h-full object-cover" alt="Cover" />
+        <img
+          src={partner.coverUrl || defaultCover}
+          className="w-full h-full object-cover"
+          alt="Cover"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = defaultCover;
+          }}
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
 
         {/* Logo Overlay */}
         <div className="absolute -bottom-10 left-5 h-24 w-24 bg-white rounded-2xl p-2 shadow-xl border-4 border-black">
-          <img src={partner.logoUrl} className="w-full h-full object-contain" alt="Logo" />
+          <img
+            src={partner.logoUrl || defaultLogo}
+            className="w-full h-full object-contain"
+            alt="Logo"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.src = defaultLogo;
+            }}
+          />
         </div>
       </div>
 
@@ -98,7 +117,7 @@ const PartnerDetail: React.FC = () => {
           ) : (
             <div className="flex flex-col gap-2 mt-1">
               <div className="flex items-center text-gray-400 text-sm gap-1">
-                <MapPin size={14} className="text-gold-500" /> {partner.address || partner.city}
+                <MapPin size={14} className="text-gold-500" /> {partner.address ? `${partner.address} - ${partner.city}` : 'Localização a definir'}
               </div>
               <Button
                 variant="outline"
@@ -106,8 +125,12 @@ const PartnerDetail: React.FC = () => {
                 onClick={() => {
                   const destination = partner.coordinates
                     ? `${partner.coordinates.lat},${partner.coordinates.lng}`
-                    : `${partner.address}, ${partner.city}`;
-                  window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}`, '_blank');
+                    : `${partner.address || ''}, ${partner.city || ''}`;
+                  if (destination && destination !== ', ') {
+                    window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}`, '_blank');
+                  } else {
+                    alert('Endereço não disponível para rota.');
+                  }
                 }}
               >
                 TRAÇAR ROTA
@@ -119,7 +142,7 @@ const PartnerDetail: React.FC = () => {
         <Card className="bg-gradient-to-r from-obsidian-900 to-obsidian-800 border-gold-500/30">
           <div className="text-center p-2">
             <p className="text-gray-400 text-xs uppercase tracking-wider mb-1">Benefício Exclusivo</p>
-            <p className="text-3xl font-bold text-gold-500">{partner.benefit}</p>
+            <p className="text-3xl font-bold text-gold-500">{partner.benefit || 'Consulte condições'}</p>
           </div>
         </Card>
 
@@ -128,12 +151,12 @@ const PartnerDetail: React.FC = () => {
             <Info className="text-gray-500 flex-shrink-0 mt-1" size={18} />
             <div>
               <h3 className="font-semibold text-white text-sm">Regras de Uso</h3>
-              <p className="text-gray-400 text-sm leading-relaxed mt-1">{partner.fullRules}</p>
+              <p className="text-gray-400 text-sm leading-relaxed mt-1">{partner.fullRules || 'Válido mediante apresentação do cupom/QR Code.'}</p>
             </div>
           </div>
 
           <div className="flex gap-3">
-            <CheckCircle className="text-gray-500 flex-shrink-0 mt-1" size={18} />
+            <Info className="text-gray-500 flex-shrink-0 mt-1" size={18} />
             <div>
               <h3 className="font-semibold text-white text-sm">Como usar</h3>
               <p className="text-gray-400 text-sm leading-relaxed mt-1">
