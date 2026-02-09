@@ -63,7 +63,7 @@ const AppRoutes: React.FC = () => {
         />
         <Route
           path="/forgot-password"
-          element={<ForgotPassword />}
+          element={!isAuthenticated ? <ForgotPassword /> : <Navigate to="/home" />}
         />
         {/* Helper redirect for old admin route */}
         <Route
@@ -72,15 +72,15 @@ const AppRoutes: React.FC = () => {
         />
         <Route
           path="/reset-password"
-          element={<ResetPassword />}
+          element={!isAuthenticated ? <ResetPassword /> : <Navigate to="/home" />}
         />
         <Route
           path="/register-partner"
-          element={<RegisterPartner />}
+          element={!isAuthenticated ? <RegisterPartner /> : <Navigate to={role === UserRole.PARTNER ? "/partner-dashboard" : "/home"} />}
         />
         <Route
           path="/register"
-          element={<Register />}
+          element={!isAuthenticated ? <Register /> : <Navigate to="/home" />}
         />
 
         {/* Protected Routes */}

@@ -92,9 +92,9 @@ const Login: React.FC = () => {
         }
 
         if (userData.role === 'ADMIN') {
-          navigate('/admin');
+          // navigate('/admin'); // Handled by AppRoutes
         } else {
-          navigate('/partner-dashboard');
+          // navigate('/partner-dashboard'); // Handled by AppRoutes
         }
       } else {
         // Clients login with CPF
@@ -116,7 +116,7 @@ const Login: React.FC = () => {
         });
 
         if (error) throw error;
-        navigate('/home');
+        // navigate('/home'); // Handled by AppRoutes
       }
 
     } catch (err: unknown) {
@@ -129,9 +129,9 @@ const Login: React.FC = () => {
       } else {
         setError(message || 'Ocorreu um erro ao entrar. Tente novamente.');
       }
-    } finally {
       setIsLoading(false);
     }
+    // Finally block removed to keep loading state on success until redirect happens
   };
 
 

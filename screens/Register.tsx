@@ -150,7 +150,7 @@ const Register: React.FC = () => {
             }
 
             if (data?.session) {
-                navigate('/home');
+                // navigate('/home'); // Handled by AppRoutes
             } else {
                 setSuccess(true);
             }
