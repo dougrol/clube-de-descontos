@@ -70,6 +70,7 @@ const RegisterPartner: React.FC = () => {
                     email: formData.email,
                     name: formData.tradingName,
                     role: 'PARTNER',
+                    partner_id: authData.user.id,
                     created_at: new Date().toISOString()
                 });
 

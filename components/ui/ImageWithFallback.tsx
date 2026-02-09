@@ -20,6 +20,10 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
     const [currentSrc, setCurrentSrc] = useState<string | undefined>(src);
 
     useEffect(() => {
+        if (!src) {
+            setStatus('error');
+            return;
+        }
         setStatus('loading');
         setCurrentSrc(src);
     }, [src]);
@@ -61,6 +65,7 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
             <img
                 src={currentSrc}
                 alt={alt}
+                loading="lazy"
                 className={`w-full h-full object-cover transition-opacity duration-300 ${status === 'loading' ? 'opacity-0' : 'opacity-100'}`}
                 onError={handleError}
                 onLoad={handleLoad}

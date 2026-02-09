@@ -24,11 +24,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   // Base nav items for all users
   const baseNavItems = [
-    { icon: <Home size={22} />, label: 'Home', path: '/home' },
-    { icon: <Grid size={22} />, label: 'Clube', path: '/benefits' },
-    { icon: <ShoppingBag size={22} />, label: 'Loja', path: '/loja' },
-    { icon: <Instagram size={22} />, label: 'Social', path: '/social' },
-    { icon: <User size={22} />, label: 'Perfil', path: '/profile' },
+    { icon: <Home size={20} />, label: 'Home', path: '/home' },
+    { icon: <Grid size={20} />, label: 'Clube', path: '/benefits' },
+    { icon: <ShoppingBag size={20} />, label: 'Loja', path: '/loja' },
+    { icon: <ShieldCheck size={20} />, label: 'Proteção', path: '/protection' },
+    { icon: <User size={20} />, label: 'Perfil', path: '/profile' },
   ];
 
   // Add admin panel link for admin users
@@ -42,32 +42,38 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         {children}
       </main>
 
-      {/* Floating Dock Navigation - Only show if not hidden */}
+      {/* Mobile Fixed Bottom Bar - Only show if not hidden */}
       {!hideNav && (
-        <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
-          <div className="flex items-center gap-2 px-2 py-2 bg-obsidian-900/80 backdrop-blur-xl border border-white/10 rounded-full shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] ring-1 ring-white/5">
+        <nav className="fixed bottom-0 left-0 right-0 z-50 bg-obsidian-950/90 backdrop-blur-xl border-t border-white/5 pb-safe safe-area-bottom">
+          <div className="flex items-center justify-around px-2 py-3">
             {navItems.map((item) => {
-              const isActive = location.pathname === item.path ||
-                (item.path !== '/home' && location.pathname.startsWith(item.path));
+              // Exact match for home, startsWith for others to catch sub-routes
+              const isActive = item.path === '/home'
+                ? location.pathname === '/home'
+                : location.pathname.startsWith(item.path);
+
               const isAdminButton = item.path === '/admin';
 
               return (
                 <button
                   key={item.path}
                   onClick={() => navigate(item.path)}
-                  className={`relative group flex flex-col items-center justify-center w-12 h-12 rounded-full transition-all duration-300 ${isActive
-                    ? isAdminButton
-                      ? 'bg-gold-500 text-obsidian-950 shadow-[0_0_20px_rgba(212,175,55,0.4)] scale-110'
-                      : 'bg-signal-500 text-white shadow-[0_0_20px_rgba(255,69,0,0.4)] scale-110'
-                    : isAdminButton
-                      ? 'text-gold-500 hover:text-gold-400 hover:bg-gold-500/10'
-                      : 'text-gray-400 hover:text-white hover:bg-white/5'
+                  className={`relative flex flex-col items-center justify-center w-full gap-1 transition-all duration-300 ${isActive ? 'text-gold-500' : 'text-gray-500 hover:text-gray-300'
                     }`}
                 >
-                  {item.icon}
+                  {/* Indicator Line for Active State (Top) */}
+                  {isActive && (
+                    <motion.div
+                      layoutId="bottomBarIndicator"
+                      className="absolute -top-3 w-10 h-0.5 bg-gold-500 shadow-[0_0_10px_#D4AF37]"
+                    />
+                  )}
 
-                  {/* Tooltip for Desktop */}
-                  <span className="absolute -top-10 scale-0 group-hover:scale-100 transition-transform bg-obsidian-800 text-white text-[10px] px-2 py-1 rounded border border-white/10 whitespace-nowrap hidden md:block">
+                  <div className={`transition-transform duration-200 ${isActive ? '-translate-y-1' : ''}`}>
+                    {item.icon}
+                  </div>
+
+                  <span className={`text-[10px] font-medium tracking-wide transition-opacity duration-200 ${isActive ? 'opacity-100 font-bold' : 'opacity-70'}`}>
                     {item.label}
                   </span>
                 </button>

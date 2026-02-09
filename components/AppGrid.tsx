@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingBag, ShieldCheck, Gem, Users, Wallet, Headphones, Tag, ChevronRight } from 'lucide-react';
+import { ShoppingBag, ShieldCheck, Briefcase, Handshake, Ticket, User, ChevronRight } from 'lucide-react';
 
 interface GridItemProps {
     icon: React.ElementType;
@@ -44,19 +44,60 @@ const GridItem: React.FC<GridItemProps> = ({ icon: Icon, label, path, color = "t
 
 export const AppGrid: React.FC = () => {
     const items = [
-        { icon: ShoppingBag, label: "Loja", path: "/loja", color: "text-white" }, // White for primary action
-        { icon: ShieldCheck, label: "Proteção", path: "/protection" },
-        { icon: Tag, label: "Clube", path: "/benefits" },
-        { icon: Wallet, label: "Financeiro", path: "/partnership" },
-        { icon: Gem, label: "Consultoria", path: "/consultancy" },
-        { icon: Users, label: "Quem Somos", path: "/about" },
-        { icon: Headphones, label: "Ajuda", path: "/social" }, // Using social as support/contact for now
+        {
+            id: 'consultancy',
+            title: 'Consultoria',
+            icon: Briefcase,
+            path: '/consultancy',
+            color: 'text-purple-400',
+            description: 'Gestão e Treinamentos'
+        },
+        {
+            id: 'protection',
+            title: 'Proteção',
+            icon: ShieldCheck,
+            path: '/protection',
+            color: 'text-blue-400',
+            description: 'Simule seu plano'
+        },
+        {
+            id: 'store',
+            title: 'Loja',
+            icon: ShoppingBag,
+            path: '/loja',
+            color: 'text-emerald-400',
+            description: 'Produtos e Serviços'
+        },
+        {
+            id: 'partners',
+            title: 'Parcerias',
+            icon: Handshake,
+            path: '/partnership',
+            color: 'text-gold-400',
+            description: 'Seja um parceiro'
+        },
+        {
+            id: 'my-coupons',
+            title: 'Cupons',
+            icon: Ticket,
+            path: '/my-coupons',
+            color: 'text-orange-400',
+            description: 'Meus resgates'
+        },
+        {
+            id: 'personal',
+            title: 'Dados',
+            icon: User,
+            path: '/personal-data',
+            color: 'text-gray-400',
+            description: 'Minhas informações'
+        }
     ];
 
     return (
         <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-y-8 gap-x-2 w-full px-2">
             {items.map((item, idx) => (
-                <GridItem key={idx} {...item} />
+                <GridItem key={idx} icon={item.icon} label={item.title} path={item.path} color={item.color} />
             ))}
         </div>
     );

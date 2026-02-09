@@ -10,6 +10,7 @@ interface AuthContextType {
     role: UserRole;
     loading: boolean;
     signOut: () => Promise<void>;
+    refreshSession: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -18,6 +19,7 @@ const AuthContext = createContext<AuthContextType>({
     role: UserRole.USER,
     loading: true,
     signOut: async () => { },
+    refreshSession: async () => { },
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -74,6 +76,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 window.location.hash = '/reset-password';
                 setLoading(false);
                 return;
+            }
+
+            if (event === 'SIGNED_IN') {
+                setLoading(true);
             }
 
             setSession(session);
@@ -136,12 +142,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return () => clearTimeout(timer);
     }, [loading]);
 
+    const refreshSession = async () => {
+        setLoading(true);
+        const { data: { session } } = await supabase.auth.getSession();
+        setSession(session);
+        setUser(session?.user ?? null);
+        if (session?.user) {
+            await fetchUserRole(session.user.id);
+        } else {
+            setLoading(false);
+        }
+    };
+
     const signOut = async () => {
         await supabase.auth.signOut();
     };
 
     return (
-        <AuthContext.Provider value={{ session, user, role, loading, signOut }}>
+        <AuthContext.Provider value={{ session, user, role, loading, signOut, refreshSession }}>
             {children}
         </AuthContext.Provider>
     );

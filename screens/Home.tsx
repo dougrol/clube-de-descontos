@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Tag, ArrowRight } from 'lucide-react';
+import { Bell, Search, Menu, ShoppingBag, ShieldCheck, Gem, LogOut, X, ArrowRight, Tag } from 'lucide-react';
 import { Card, SectionTitle, Button, ImageWithFallback } from '../components/ui';
 import { fetchPartners } from '../services/partners';
 import { useNavigate } from 'react-router-dom';
@@ -118,6 +118,27 @@ const Home: React.FC = () => {
               <svg className="absolute bottom-0 right-0 w-full h-full opacity-10 text-obsidian-900" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                 <path fill="currentColor" d="M45.7,-76.3C58.9,-69.3,69.1,-59.1,76.3,-47.2C83.5,-35.3,87.6,-21.7,85.8,-8.9C84,3.9,76.3,15.9,68.4,27.3C60.5,38.7,52.3,49.5,42.1,58.3C31.9,67.1,19.7,73.9,6.7,76.1C-6.3,78.3,-20.1,75.9,-32.4,69.5C-44.7,63.1,-55.5,52.7,-64.3,40.8C-73.1,28.9,-79.9,15.5,-80.6,1.8C-81.3,-11.9,-75.9,-25.9,-67.2,-37.9C-58.5,-49.9,-46.5,-59.9,-34.2,-67.3C-21.9,-74.7,-9.3,-79.5,2.1,-82.9C13.5,-86.3,27,-88.3,45.7,-76.3Z" transform="translate(100 100)" />
               </svg>
+            </div>
+          </div>
+        </div>
+
+        {/* 3.5 Consultancy Highlight (New) */}
+        <div className="mb-8 animate-slide-up" style={{ animationDelay: '0.15s' }}>
+          <div onClick={() => navigate('/consultancy')} className="bg-gradient-to-r from-purple-900 to-obsidian-900 rounded-2xl p-5 border border-purple-500/20 relative overflow-hidden group cursor-pointer shadow-lg shadow-purple-900/10">
+            <div className="absolute right-0 top-0 w-32 h-32 bg-purple-600/20 rounded-full blur-3xl -translate-y-10 translate-x-10"></div>
+
+            <div className="relative z-10 flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-purple-400 mb-1 block flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse"></span>
+                  Área do Aluno
+                </span>
+                <h3 className="text-lg font-bold text-white mb-1">Escola de Negócios</h3>
+                <p className="text-gray-400 text-xs max-w-[180px] leading-relaxed">Treinamentos exclusivos para alta performance em vendas.</p>
+              </div>
+              <div className="w-10 h-10 bg-purple-600/20 rounded-full flex items-center justify-center border border-purple-500/30 group-hover:bg-purple-600 group-hover:text-white transition-all">
+                <ArrowRight size={18} />
+              </div>
             </div>
           </div>
         </div>

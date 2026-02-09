@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Button, Input, ImageWithFallback } from '../components/ui';
 import { StaggerContainer, StaggerItem } from '../components/motion';
 import { supabase } from '../services/supabaseClient';
+import { useAuth } from '../contexts/AuthContext';
 
 // CPF formatting helper
 const formatCPF = (value: string): string => {
@@ -39,6 +40,7 @@ const isValidCPF = (cpf: string): boolean => {
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const { refreshSession } = useAuth();
   const [cpf, setCPF] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -91,10 +93,13 @@ const Login: React.FC = () => {
           throw new Error('Usuário não encontrado.');
         }
 
+        // Force refresh session to ensure AuthContext has the latest role
+        await refreshSession();
+
         if (userData.role === 'ADMIN') {
-          // navigate('/admin'); // Handled by AppRoutes
+          navigate('/admin');
         } else {
-          // navigate('/partner-dashboard'); // Handled by AppRoutes
+          navigate('/partner-dashboard');
         }
       } else {
         // Clients login with CPF
@@ -116,7 +121,11 @@ const Login: React.FC = () => {
         });
 
         if (error) throw error;
-        // navigate('/home'); // Handled by AppRoutes
+
+        // Force refresh session to ensure AuthContext has the latest role
+        await refreshSession();
+
+        navigate('/home');
       }
 
     } catch (err: unknown) {
@@ -153,30 +162,10 @@ const Login: React.FC = () => {
         {/* Logo */}
         <StaggerItem>
           <div className="mb-8 flex flex-col items-center">
-            <motion.div
-              className="mb-4 relative"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-            >
-              <div className="absolute inset-0 bg-gold-500 blur-2xl opacity-20 rounded-full"></div>
-              <ImageWithFallback
-                src="/logo.png"
-                alt="Tavares Car Logo"
-                className="w-20 h-20 object-contain drop-shadow-xl relative z-10"
-                showSkeleton={false}
-                fallbackComponent={
-                  <svg width="80" height="80" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="relative z-10 drop-shadow-xl">
-                    <path d="M100 10 L180 40 V90 C180 145 100 190 100 190 C100 190 20 145 20 90 V40 L100 10 Z" stroke="#D4AF37" strokeWidth="6" fill="black" />
-                    <text x="100" y="135" textAnchor="middle" fill="#D4AF37" fontFamily="'Playfair Display', serif" fontSize="100" fontWeight="bold">TC</text>
-                  </svg>
-                }
-              />
-            </motion.div>
-
             <h2 className="text-2xl font-serif font-bold text-white mb-1">
               TAVARES <span className="text-gold-500">CAR</span>
             </h2>
-            <p className="text-gold-500/80 text-[10px] tracking-[0.3em] uppercase font-medium">Clube de Vantagens</p>
+            <p className="text-gold-500/80 text-[10px] tracking-[0.3em] uppercase font-medium">Clube de Descontos</p>
           </div>
         </StaggerItem>
 
