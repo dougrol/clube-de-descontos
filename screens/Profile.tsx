@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { UserRole } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 import { Button, AvatarUpload } from '../components/ui';
-import { LogOut, ChevronRight, User, Ticket, LifeBuoy, Crown, CheckCircle2 } from 'lucide-react';
+import { LogOut, ChevronRight, User, Ticket, LifeBuoy, Crown, CheckCircle2, Key } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { uploadAvatar, updateUserAvatar } from '../services/avatarService';
 import { supabase } from '../services/supabaseClient';
@@ -154,6 +154,23 @@ const Profile: React.FC<ProfileProps> = ({ userRole }) => {
                      <div>
                         <span className="text-white font-medium">Dados Pessoais</span>
                         <p className="text-gray-500 text-xs">{userEmail}</p>
+                     </div>
+                  </div>
+                  <ChevronRight size={18} className="text-gray-600 group-hover:text-gold-500 transition-colors" />
+               </div>
+
+               {/* Alterar Senha - All users */}
+               <div
+                  onClick={() => navigate('/forgot-password')}
+                  className="flex items-center justify-between p-4 rounded-xl hover:bg-white/5 cursor-pointer transition-colors group"
+               >
+                  <div className="flex items-center gap-4">
+                     <div className="h-10 w-10 rounded-xl bg-gray-900 border border-white/5 flex items-center justify-center text-gold-500 group-hover:scale-110 transition-transform">
+                        <Key size={20} />
+                     </div>
+                     <div>
+                        <span className="text-white font-medium">Alterar Senha</span>
+                        <p className="text-gray-500 text-xs">Redefina sua senha de acesso</p>
                      </div>
                   </div>
                   <ChevronRight size={18} className="text-gray-600 group-hover:text-gold-500 transition-colors" />

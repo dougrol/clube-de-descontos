@@ -18,13 +18,24 @@ const GridItem: React.FC<GridItemProps> = ({ icon: Icon, label, path, color = "t
             onClick={() => navigate(path)}
             className="flex flex-col items-center gap-3 cursor-pointer group w-full"
         >
-            <div className="w-16 h-16 md:w-20 md:h-20 rounded-3xl bg-obsidian-900 border border-white/5 shadow-lg flex items-center justify-center group-hover:border-gold-500/50 group-hover:shadow-gold-500/10 group-hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
-                {/* Gradient Overlay on Hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-gold-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            {/* Circular Icon with Gradient Border */}
+            <div className="relative">
+                {/* Animated glow on hover */}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-gold-400 to-gold-600 opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500 scale-75 group-hover:scale-100"></div>
 
-                <Icon className={`w-7 h-7 md:w-9 md:h-9 ${color} relative z-10 group-hover:scale-110 transition-transform duration-300`} />
+                {/* Outer gradient ring */}
+                <div className="relative w-[72px] h-[72px] md:w-20 md:h-20 p-[2px] rounded-full bg-gradient-to-br from-white/20 via-gold-500/30 to-white/5 group-hover:from-gold-400 group-hover:via-gold-500 group-hover:to-gold-600 transition-all duration-300">
+                    {/* Inner circle with icon */}
+                    <div className="w-full h-full rounded-full bg-obsidian-900 flex items-center justify-center group-hover:bg-obsidian-800 transition-all duration-300 relative overflow-hidden">
+                        {/* Shine effect on hover */}
+                        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-700"></div>
+
+                        <Icon className={`w-7 h-7 md:w-8 md:h-8 ${color} relative z-10 group-hover:scale-110 group-active:scale-95 transition-transform duration-300`} />
+                    </div>
+                </div>
             </div>
-            <span className="text-xs md:text-sm font-medium text-gray-300 group-hover:text-white text-center leading-tight max-w-[80px]">
+
+            <span className="text-xs md:text-sm font-medium text-gray-400 group-hover:text-white text-center leading-tight max-w-[80px] transition-colors duration-300">
                 {label}
             </span>
         </div>

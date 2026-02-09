@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BarChart3, Users, QrCode, Ticket, Settings, LogOut, Save, X, Edit3, CheckCircle, MapPin, Camera, Upload } from 'lucide-react';
-import { Card, SectionTitle, Badge, Button, Input, AvatarUpload } from '../components/ui';
+import { Card, SectionTitle, Badge, Button, Input, AvatarUpload, ImageWithFallback } from '../components/ui';
 import { validateCouponServer, validateCoupon } from '../services/couponService';
 import { Partner } from '../types';
 import { uploadPartnerImage } from '../services/avatarService';
@@ -369,7 +369,12 @@ const PartnerDashboard: React.FC = () => {
                                             }}
                                         >
                                             {editForm.coverUrl ? (
-                                                <img src={editForm.coverUrl} alt="Cover" className="w-full h-full object-cover" />
+                                                <ImageWithFallback
+                                                    src={editForm.coverUrl}
+                                                    alt="Cover"
+                                                    className="w-full h-full object-cover"
+                                                    fallbackSrc="https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=800&q=80"
+                                                />
                                             ) : (
                                                 <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-500 group-hover:text-gold-500">
                                                     <Upload size={24} />

@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Camera, Loader2, X } from 'lucide-react';
+import { ImageWithFallback } from './ImageWithFallback';
 
 interface AvatarUploadProps {
     currentImageUrl?: string;
@@ -114,10 +115,12 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
                     ${isUploading ? 'animate-pulse' : ''}
                 `}
             >
-                <img
+                <ImageWithFallback
                     src={displayUrl}
                     alt="Avatar"
                     className="w-full h-full object-cover"
+                    fallbackSrc={`https://ui-avatars.com/api/?name=U&background=333&color=D4AF37`}
+                    showSkeleton={false}
                 />
 
                 {/* Overlay on hover */}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Tag, ArrowRight } from 'lucide-react';
-import { Card, SectionTitle, Button } from '../components/ui';
+import { Card, SectionTitle, Button, ImageWithFallback } from '../components/ui';
 import { fetchPartners } from '../services/partners';
 import { useNavigate } from 'react-router-dom';
 import { Partner } from '../types';
@@ -67,10 +67,11 @@ const Home: React.FC = () => {
 
           <div onClick={() => navigate('/profile')} className="relative cursor-pointer group">
             <div className="w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-white/10 p-1 group-hover:border-gold-500 transition-colors duration-300">
-              <img
+              <ImageWithFallback
                 src={displayAvatar}
                 alt="Profile"
                 className="w-full h-full object-cover rounded-full"
+                fallbackSrc={`https://ui-avatars.com/api/?name=${user?.user_metadata?.name || 'User'}&background=D4AF37&color=000`}
               />
             </div>
           </div>
@@ -145,7 +146,12 @@ const Home: React.FC = () => {
                     className="h-[320px] p-0 border-0 bg-obsidian-900 rounded-3xl overflow-hidden group hover:scale-[1.02] transition-transform duration-300 shadow-xl shadow-black/50"
                   >
                     <div className="h-[65%] relative">
-                      <img src={partner.coverUrl} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" alt={partner.name} />
+                      <ImageWithFallback
+                        src={partner.coverUrl}
+                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                        alt={partner.name}
+                        fallbackSrc="https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=800&q=80" // Generic business image
+                      />
                       <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900 to-transparent opacity-80"></div>
                       <div className="absolute bottom-4 left-4 right-4">
                         <h4 className="text-xl font-bold text-white leading-tight mb-1">{partner.name}</h4>

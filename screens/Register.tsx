@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, User, ChevronRight, ArrowLeft, CheckCircle, CreditCard, Phone, Building2, Eye, EyeOff } from 'lucide-react';
+import { Mail, User, ChevronRight, ArrowLeft, CheckCircle, CreditCard, Phone, Building2, Info } from 'lucide-react';
 import { Button, Input } from '../components/ui';
 import { supabase } from '../services/supabaseClient';
 import { useToast } from '../contexts/ToastContext';
@@ -51,12 +51,9 @@ const Register: React.FC = () => {
         cpf: '',
         phone: '',
         email: '',
-        association: '',
-        password: '',
-        confirmPassword: ''
+        association: ''
     });
     const [isLoading, setIsLoading] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
 
@@ -82,17 +79,7 @@ const Register: React.FC = () => {
             return;
         }
 
-        if (formData.password !== formData.confirmPassword) {
-            setError('As senhas não coincidem.');
-            setIsLoading(false);
-            return;
-        }
-
-        if (formData.password.length < 6) {
-            setError('A senha deve ter pelo menos 6 caracteres.');
-            setIsLoading(false);
-            return;
-        }
+        // CPF será usado como senha padrão (11 dígitos)
 
         if (!formData.association) {
             setError('Informe a associação de origem.');
@@ -113,9 +100,10 @@ const Register: React.FC = () => {
             }
 
             // Create auth user
+            // Usa o CPF (11 dígitos) como senha padrão
             const { data, error } = await supabase.auth.signUp({
                 email: formData.email,
-                password: formData.password,
+                password: cleanCPF,
                 options: {
                     data: {
                         name: formData.name,
@@ -189,9 +177,15 @@ const Register: React.FC = () => {
                     <CheckCircle size={64} className="text-gold-500" />
                 </div>
                 <h2 className="text-2xl font-bold text-white mb-2">Conta Criada!</h2>
-                <p className="text-gray-400 mb-8 max-w-xs mx-auto">
+                <p className="text-gray-400 mb-6 max-w-xs mx-auto">
                     Enviamos um link de confirmação para <b>{formData.email}</b>. Verifique sua caixa de entrada para ativar sua conta.
                 </p>
+                <div className="bg-gold-500/10 border border-gold-500/30 rounded-xl p-4 mb-6 max-w-xs mx-auto">
+                    <p className="text-gold-400 text-sm flex items-center justify-center gap-2">
+                        <Info size={16} />
+                        <span>Sua senha é o seu <b>CPF</b> (apenas números)</span>
+                    </p>
+                </div>
                 <Button onClick={() => navigate('/login')} variant="outline">
                     VOLTAR PARA O LOGIN
                 </Button>
@@ -288,39 +282,13 @@ const Register: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="pt-2 border-t border-white/10">
-                        <p className="text-[10px] text-gray-500 mb-3 uppercase tracking-wider">Defina sua senha de acesso</p>
+                    {/* Informação sobre a senha */}
+                    <div className="bg-gold-500/10 border border-gold-500/30 rounded-xl p-4">
+                        <p className="text-gold-400 text-sm flex items-center gap-2">
+                            <Info size={16} className="shrink-0" />
+                            <span>Sua senha será seu <b>CPF</b> (apenas os números). Você poderá alterá-la depois.</span>
+                        </p>
                     </div>
-
-                    <div className="relative">
-                        <Input
-                            icon={<Lock size={18} />}
-                            type={showPassword ? 'text' : 'password'}
-                            label="Senha"
-                            placeholder="Mínimo 6 caracteres"
-                            value={formData.password}
-                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                            required
-                        />
-                        <button
-                            type="button"
-                            onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-3 top-9 text-gray-400 hover:text-gray-300 transition-colors"
-                            aria-label={showPassword ? 'Esconder senha' : 'Mostrar senha'}
-                        >
-                            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                        </button>
-                    </div>
-
-                    <Input
-                        icon={<Lock size={18} />}
-                        type={showPassword ? 'text' : 'password'}
-                        label="Confirmar Senha"
-                        placeholder="Repita a senha"
-                        value={formData.confirmPassword}
-                        onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                        required
-                    />
 
                     <Button type="submit" isLoading={isLoading} className="mt-4">
                         <span className="flex items-center">
