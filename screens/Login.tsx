@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, ChevronRight, AlertCircle, Store, User, Sparkles, CreditCard, Eye, EyeOff } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Button, Input } from '../components/ui';
+import { Button, Input, ImageWithFallback } from '../components/ui';
 import { StaggerContainer, StaggerItem } from '../components/motion';
 import { supabase } from '../services/supabaseClient';
 
@@ -159,10 +159,18 @@ const Login: React.FC = () => {
               transition={{ type: 'spring', stiffness: 300 }}
             >
               <div className="absolute inset-0 bg-gold-500 blur-2xl opacity-20 rounded-full"></div>
-              <svg width="80" height="80" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="relative z-10 drop-shadow-xl">
-                <path d="M100 10 L180 40 V90 C180 145 100 190 100 190 C100 190 20 145 20 90 V40 L100 10 Z" stroke="#D4AF37" strokeWidth="6" fill="black" />
-                <text x="100" y="135" textAnchor="middle" fill="#D4AF37" fontFamily="'Playfair Display', serif" fontSize="100" fontWeight="bold">TC</text>
-              </svg>
+              <ImageWithFallback
+                src="/logo.png"
+                alt="Tavares Car Logo"
+                className="w-20 h-20 object-contain drop-shadow-xl relative z-10"
+                showSkeleton={false}
+                fallbackComponent={
+                  <svg width="80" height="80" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="relative z-10 drop-shadow-xl">
+                    <path d="M100 10 L180 40 V90 C180 145 100 190 100 190 C100 190 20 145 20 90 V40 L100 10 Z" stroke="#D4AF37" strokeWidth="6" fill="black" />
+                    <text x="100" y="135" textAnchor="middle" fill="#D4AF37" fontFamily="'Playfair Display', serif" fontSize="100" fontWeight="bold">TC</text>
+                  </svg>
+                }
+              />
             </motion.div>
 
             <h2 className="text-2xl font-serif font-bold text-white mb-1">
