@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="8"/>
+      <feOffset dx="4" dy="8" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Deep Blue Gradient -->
+    <linearGradient id="blueGrad" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#4338ca"/>
+      <stop offset="100%" stop-color="#312e81"/>
+    </linearGradient>
+    
+    <!-- Bright Green Gradient -->
+    <linearGradient id="greenGrad" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#22c55e"/>
+      <stop offset="100%" stop-color="#15803d"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Icon Background -->
+  <rect width="512" height="512" rx="120" fill="white"/>
+  
+  <g transform="translate(56, 56) scale(0.78)" filter="url(#shadow)">
+    <!-- Green Ribbon (Top Right to Bottom Left) - Bottom Segment -->
+    <path d="M116 412 L256 256" stroke="url(#greenGrad)" stroke-width="90" stroke-linecap="round"/>
+    
+    <!-- Blue Ribbon (Top Left to Bottom Right) - Full -->
+    <path d="M116 100 L396 412" stroke="url(#blueGrad)" stroke-width="90" stroke-linecap="round"/>
+    
+    <!-- Green Ribbon (Top Right to Bottom Left) - Top Segment (Overlapping) -->
+    <path d="M396 100 L256 256" stroke="url(#greenGrad)" stroke-width="90" stroke-linecap="round"/>
+    
+    <!-- Small patch to simulate weaving if needed, but the break above creates overlap -->
+    <!-- The blue is continuous below. The top green segment ends at center. The bottom green segment starts at center. -->
+    <!-- This makes Green look like it's BEHIND Blue at the center intersection? No, Blue is drawing ON TOP of the gap. -->
+    <!-- Wait, I drew Blue AFTER bottom Green, so Blue is ON TOP of bottom Green. -->
+    <!-- Then I drew Top Green AFTER Blue, so Top Green is ON TOP of Blue. -->
+    <!-- Result: Top Green > Blue > Bottom Green. This creates the weave effect! -->
+  </g>
+</svg>

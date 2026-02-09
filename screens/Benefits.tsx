@@ -107,7 +107,7 @@ const Benefits: React.FC = () => {
   }
 
   return (
-    <div className="p-5 pb-24 min-h-screen bg-black animate-fade-in relative">
+    <div className="pb-24 min-h-screen bg-black animate-fade-in relative selection:bg-gold-500/30">
 
       {/* Radar Scanning Overlay */}
       {isScanning && (
@@ -128,112 +128,156 @@ const Benefits: React.FC = () => {
         </div>
       )}
 
-      <h1 className="text-2xl font-bold text-white mb-6">Clube de Vantagens</h1>
+      {/* --- HERO SECTION --- */}
+      <div className="relative h-[250px] md:h-[320px] w-full overflow-hidden mb-8 group">
+        <div className="absolute inset-0 bg-obsidian-950/50 z-10"></div>
 
-      {/* Search & Filter */}
-      <div className="sticky top-0 bg-black/95 backdrop-blur-md z-10 py-2 -mx-5 px-5 space-y-4 mb-6 border-b border-white/5">
-        <Input
-          placeholder="Buscar parceiro ou cidade..."
-          icon={<Search size={18} />}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="bg-obsidian-900 border-obsidian-700"
+        {/* Premium Cover Image */}
+        <img
+          src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=3000&auto=format&fit=crop"
+          alt="Clube de Vantagens Luxo"
+          loading="lazy"
+          className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-1000 ease-in-out"
         />
 
-        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide items-center">
-          {/* Radar Button (Replaces simple Near Me) */}
-          <button
-            onClick={handleRadarClick}
-            disabled={isLoadingLocation}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all border ${isNearMeActive
-              ? 'bg-gold-500 text-black border-gold-500 shadow-[0_0_20px_rgba(212,175,55,0.4)]'
-              : 'bg-obsidian-800 text-gold-500 border-gold-500/30 hover:bg-gold-500/10 hover:border-gold-500'
-              }`}
-          >
-            {isLoadingLocation ? (
-              <Loader2 size={16} className="animate-spin" />
-            ) : (
-              <Radar
-                size={16}
-                className={`transition-all ${isNearMeActive ? "animate-[spin_3s_linear_infinite]" : ""}`}
-              />
-            )}
-            {isNearMeActive ? "Radar Ativo" : "Radar de Ofertas"}
-          </button>
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-20"></div>
 
-          <div className="w-px h-6 bg-gray-800 mx-1 flex-shrink-0" />
-
-          {/* Categories */}
-          {categories.map(cat => (
-            <button
-              key={cat}
-              onClick={() => {
-                setSelectedCategory(cat);
-              }}
-              className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-300 ${selectedCategory === cat
-                ? 'bg-gold-500 text-black border border-gold-500 shadow-[0_0_15px_rgba(212,175,55,0.4)]'
-                : 'bg-obsidian-800 text-gray-400 border border-obsidian-700 hover:border-gold-500/50 hover:text-white'
-                }`}
-            >
-              {cat}
-            </button>
-          ))}
+        {/* Hero Content */}
+        <div className="absolute bottom-6 left-6 right-6 z-30">
+          <div className="flex items-center gap-2 mb-2 opacity-0 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+            <span className="bg-gold-500/20 text-gold-500 border border-gold-500/30 px-3 py-1 rounded text-[10px] font-bold tracking-widest uppercase backdrop-blur-sm">
+              Exclusive Member
+            </span>
+          </div>
+          <h1 className="text-3xl md:text-5xl font-serif font-black text-white leading-tight opacity-0 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+            CLUBE DE <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-600">VANTAGENS</span>
+          </h1>
+          <p className="text-gray-300 text-sm md:text-base mt-2 max-w-lg opacity-0 animate-slide-up" style={{ animationDelay: '0.3s' }}>
+            Descontos exclusivos em parceiros selecionados. Viva a experiência Tavares Car.
+          </p>
         </div>
       </div>
 
-      {/* List */}
-      <div className="space-y-4">
-        {loading ? (
-          <div className="flex justify-center py-20 text-gold-500">
-            <Loader2 className="animate-spin" size={32} />
-          </div>
-        ) : filteredList.length === 0 ? (
-          <div className="text-center py-20 text-gray-500">
-            <p>Nenhum parceiro encontrado.</p>
-          </div>
-        ) : (
-          filteredList.map((partner) => {
-            // Calculate distance for display if active
-            let distanceDisplay = null;
-            if (isNearMeActive && userLocation && partner.coordinates) {
-              const dist = calculateDistance(userLocation.lat, userLocation.lng, partner.coordinates.lat, partner.coordinates.lng);
-              distanceDisplay = dist < 1 ? `${(dist * 1000).toFixed(0)}m` : `${dist.toFixed(1)}km`;
-            }
+      <div className="px-5">
 
-            return (
-              <Card key={partner.id} onClick={() => navigate(`/benefits/${partner.id}`)} className="flex gap-4 p-3 group border-l-4 border-l-transparent hover:border-l-gold-500 transition-all">
-                <div className="w-24 h-24 bg-gray-800 rounded-lg overflow-hidden flex-shrink-0 relative">
-                  <img src={partner.logoUrl} alt={partner.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                  {distanceDisplay && (
-                    <div className="absolute bottom-0 left-0 right-0 bg-gold-500 text-black text-[10px] text-center py-1 font-bold shadow-md">
-                      {distanceDisplay}
-                    </div>
-                  )}
-                </div>
-                <div className="flex-1 flex flex-col justify-between py-1">
-                  <div>
-                    <div className="flex justify-between items-start">
-                      <h3 className="font-bold text-white text-base leading-tight mb-1">{partner.name}</h3>
-                      {/* Highlight Best Conditions */}
-                      {(partner.benefit.includes("Grátis") || partner.benefit.includes("30%") || partner.benefit.includes("0,15")) && (
-                        <Zap size={14} className="text-gold-500 fill-gold-500 animate-pulse" />
-                      )}
-                    </div>
-                    <div className="flex items-center text-gray-500 text-xs gap-1 mb-2">
-                      <MapPin size={12} /> {partner.city}
-                    </div>
-                    <p className="text-xs text-gray-400 line-clamp-2">{partner.description}</p>
+        {/* Search & Filter */}
+        <div className="sticky top-4 bg-black/80 backdrop-blur-md z-40 py-3 px-3 -mx-2 rounded-xl border border-white/10 shadow-2xl mb-8">
+          <div className="space-y-4">
+            <Input
+              placeholder="Buscar parceiro ou cidade..."
+              icon={<Search size={18} />}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="bg-obsidian-900 border-obsidian-700 focus:border-gold-500 transition-colors"
+            />
+
+            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide items-center">
+              {/* Radar Button */}
+              <button
+                onClick={handleRadarClick}
+                disabled={isLoadingLocation}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all border ${isNearMeActive
+                  ? 'bg-gold-500 text-black border-gold-500 shadow-[0_0_20px_rgba(212,175,55,0.4)]'
+                  : 'bg-obsidian-800 text-gold-500 border-gold-500/30 hover:bg-gold-500/10 hover:border-gold-500'
+                  }`}
+              >
+                {isLoadingLocation ? (
+                  <Loader2 size={16} className="animate-spin" />
+                ) : (
+                  <Radar
+                    size={16}
+                    className={`transition-all ${isNearMeActive ? "animate-[spin_3s_linear_infinite]" : ""}`}
+                  />
+                )}
+                {isNearMeActive ? "Radar Ativo" : "Radar de Ofertas"}
+              </button>
+
+              <div className="w-px h-6 bg-gray-800 mx-1 flex-shrink-0" />
+
+              {/* Categories */}
+              {categories.map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => {
+                    setSelectedCategory(cat);
+                  }}
+                  className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-300 ${selectedCategory === cat
+                    ? 'bg-gold-500 text-black border border-gold-500 shadow-[0_0_15px_rgba(212,175,55,0.4)]'
+                    : 'bg-obsidian-800 text-gray-400 border border-obsidian-700 hover:border-gold-500/50 hover:text-white'
+                    }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* List */}
+        <div className="space-y-4">
+          {loading ? (
+            <div className="flex justify-center py-20 text-gold-500">
+              <Loader2 className="animate-spin" size={32} />
+            </div>
+          ) : filteredList.length === 0 ? (
+            <div className="text-center py-20 text-gray-500">
+              <p>Nenhum parceiro encontrado.</p>
+            </div>
+          ) : (
+            filteredList.map((partner) => {
+              // Calculate distance for display if active
+              let distanceDisplay = null;
+              if (isNearMeActive && userLocation && partner.coordinates) {
+                const dist = calculateDistance(userLocation.lat, userLocation.lng, partner.coordinates.lat, partner.coordinates.lng);
+                distanceDisplay = dist < 1 ? `${(dist * 1000).toFixed(0)}m` : `${dist.toFixed(1)}km`;
+              }
+
+              return (
+                <Card key={partner.id} onClick={() => navigate(`/benefits/${partner.id}`)} className="flex gap-4 p-3 group border-l-4 border-l-transparent hover:border-l-gold-500 transition-all bg-obsidian-900/50 hover:bg-obsidian-900 border-y border-y-transparent hover:border-y-white/5 cursor-pointer">
+                  <div className="w-24 h-24 bg-gray-800 rounded-lg overflow-hidden flex-shrink-0 relative">
+                    <img
+                      src={partner.logoUrl || 'https://placehold.co/200x200/1a1a1a/d4af37?text=TC'}
+                      alt={partner.name}
+                      loading="lazy"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.onerror = null;
+                        target.src = 'https://placehold.co/200x200/1a1a1a/d4af37?text=TC';
+                      }}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    {distanceDisplay && (
+                      <div className="absolute bottom-0 left-0 right-0 bg-gold-500 text-black text-[10px] text-center py-1 font-bold shadow-md">
+                        {distanceDisplay}
+                      </div>
+                    )}
                   </div>
-                  <div className="mt-2 flex items-center justify-between">
-                    <div className="text-gold-500 text-xs font-bold bg-gold-500/10 px-2 py-1 rounded flex items-center gap-1">
-                      <Tag size={12} /> {partner.benefit}
+                  <div className="flex-1 flex flex-col justify-between py-1">
+                    <div>
+                      <div className="flex justify-between items-start">
+                        <h3 className="font-bold text-white text-base leading-tight mb-1">{partner.name}</h3>
+                        {/* Highlight Best Conditions */}
+                        {(partner.benefit.includes("Grátis") || partner.benefit.includes("30%") || partner.benefit.includes("0,15")) && (
+                          <Zap size={14} className="text-gold-500 fill-gold-500 animate-pulse" />
+                        )}
+                      </div>
+                      <div className="flex items-center text-gray-500 text-xs gap-1 mb-2">
+                        <MapPin size={12} /> {partner.city}
+                      </div>
+                      <p className="text-xs text-gray-400 line-clamp-2">{partner.description}</p>
+                    </div>
+                    <div className="mt-2 flex items-center justify-between">
+                      <div className="text-gold-500 text-xs font-bold bg-gold-500/10 px-2 py-1 rounded flex items-center gap-1 border border-gold-500/20">
+                        <Tag size={12} /> {partner.benefit}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Card>
-            );
-          })
-        )}
+                </Card>
+              );
+            })
+          )}
+        </div>
       </div>
     </div>
   );

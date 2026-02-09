@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Tag, ShieldCheck, Instagram, ArrowRight, Key, Megaphone, Gem } from 'lucide-react';
+import { Tag, ArrowRight } from 'lucide-react';
 import { Card, SectionTitle, Button } from '../components/ui';
 import { fetchPartners } from '../services/partners';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,8 @@ import { Partner } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 import { useCMS } from '../contexts/CMSContext';
 import { supabase } from '../services/supabaseClient';
+import { WaveBackground } from '../components/WaveBackground';
+import { AppGrid } from '../components/AppGrid';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -43,203 +45,140 @@ const Home: React.FC = () => {
 
   const featuredPartners = partners.slice(0, 5);
   const displayAvatar = avatarUrl || `https://ui-avatars.com/api/?name=${user?.user_metadata?.name || 'User'}&background=D4AF37&color=000`;
+  const firstName = user?.user_metadata?.name?.split(' ')[0] || 'Membro';
 
   return (
-    <div className="pb-32 bg-obsidian-950 min-h-screen font-sans selection:bg-signal-500 selection:text-white">
+    <div className="relative min-h-screen bg-obsidian-950 font-sans text-white overflow-hidden pb-32">
 
-      {/* --- HERO SECTION --- */}
-      <section className="relative min-h-[85vh] flex flex-col justify-between p-6 md:p-12 overflow-hidden">
-        {/* Background Noise & Gradient */}
-        <div className="absolute inset-0 bg-noise opacity-20 pointer-events-none"></div>
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gold-500/10 rounded-full blur-[120px] pointer-events-none animate-pulse-slow"></div>
+      {/* 1. Dynamic Wave Background */}
+      <WaveBackground />
 
-        {/* Top Bar */}
-        <header className="relative z-20 flex justify-between items-start animate-fade-in delay-100">
+      {/* Main Content Container */}
+      <div className="relative z-10 px-6 pt-8 md:pt-12 max-w-md mx-auto md:max-w-4xl lg:max-w-6xl">
+
+        {/* 2. Header */}
+        <header className="flex items-center justify-between mb-8 animate-fade-in">
           <div>
-            <span className="block text-xs md:text-sm font-bold tracking-[0.3em] text-gray-400 mb-2">
-              {getContent('home_intro_est', 'EST. 2024')}
-            </span>
-            <h3 className="text-xl font-serif text-white">TAVARES <span className="text-gold-500">CAR</span></h3>
+            <h1 className="font-serif text-2xl md:text-3xl text-white">
+              Olá, <span className="text-gold-500 font-bold">{firstName}</span>
+            </h1>
+            <p className="text-gray-400 text-xs md:text-sm">Bem-vindo ao seu Clube Exclusive</p>
           </div>
 
-          <div onClick={() => navigate('/profile')} className="group flex items-center gap-3 cursor-pointer">
-            <span className="text-sm font-medium text-gray-400 group-hover:text-white transition-colors hidden md:block">
-              Bem-vindo, {user?.user_metadata?.name?.split(' ')[0] || 'Membro'}
-            </span>
-            <div className="h-10 w-10 md:h-12 md:w-12 rounded-sm border border-white/20 p-0.5 relative group-hover:border-signal-500 transition-colors">
+          <div onClick={() => navigate('/profile')} className="relative cursor-pointer group">
+            <div className="w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-white/10 p-1 group-hover:border-gold-500 transition-colors duration-300">
               <img
                 src={displayAvatar}
                 alt="Profile"
-                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                className="w-full h-full object-cover rounded-full"
               />
-              <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-signal-500 border-2 border-black"></div>
             </div>
           </div>
         </header>
 
-        {/* MASSIVE TYPOGRAPHY HERO */}
-        <div className="relative z-10 flex-1 flex flex-col justify-center">
-          <h1 className="text-[10vw] leading-[0.85] font-serif font-black text-white mix-blend-difference opacity-0 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-            {getContent('home_hero_title_1', 'CLUBE DE')} <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-700">
-              {getContent('home_hero_title_2', 'VANTAGENS')}
-            </span>
-          </h1>
-          <div className="mt-8 flex flex-col md:flex-row gap-6 md:items-center opacity-0 animate-slide-up" style={{ animationDelay: '0.4s' }}>
-            <p className="text-gray-400 max-w-md text-sm md:text-lg leading-relaxed border-l border-signal-500 pl-4">
-              {getContent('home_hero_subtitle', 'Experiência exclusiva em proteção veicular e benefícios de alto padrão. Redefinindo o conceito de clube.')}
-            </p>
-            <Button onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })} variant="signal" className="w-[180px] md:w-[220px]">
-              EXPLORAR
-              <ArrowRight size={18} className="ml-2" />
-            </Button>
+        {/* 3. Hero Card (Super App Style) */}
+        <div className="mb-10 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+          <div className="relative w-full bg-gradient-to-br from-white to-gray-100 rounded-[2.5rem] p-8 md:p-12 overflow-hidden shadow-2xl shadow-white/5">
+
+            {/* Card Content */}
+            <div className="relative z-10">
+              <span className="inline-block px-3 py-1 bg-black/5 rounded-full text-[10px] font-bold tracking-widest text-gray-500 mb-4 uppercase">
+                Tavares Car
+              </span>
+              <h2 className="text-3xl md:text-5xl font-serif font-bold text-obsidian-950 leading-[0.9] mb-4">
+                O seu <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-600 to-gold-400">
+                  Super App
+                </span> <br />
+                de benefícios!
+              </h2>
+              <p className="text-gray-500 text-sm max-w-[200px] mb-6 leading-tight">
+                Proteção, descontos e serviços exclusivos em um só lugar.
+              </p>
+
+              <Button
+                onClick={() => navigate('/loja')}
+                variant="signal"
+                className="rounded-full px-6 shadow-lg shadow-signal-500/20 hover:shadow-signal-500/40 transition-all font-bold text-xs"
+              >
+                ACESSAR LOJA <ArrowRight size={14} className="ml-1" />
+              </Button>
+            </div>
+
+            {/* Decorative Elements inside Card */}
+            <div className="absolute right-0 bottom-0 w-[60%] h-full pointer-events-none">
+              <div className="absolute bottom-[-10%] right-[-10%] w-[120%] h-[120%] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+              {/* Abstract Shapes resembling the logo/waves */}
+              <div className="absolute bottom-0 right-0 w-64 h-64 bg-gold-400/20 rounded-full blur-3xl transform translate-x-12 translate-y-12"></div>
+              <div className="absolute top-10 right-10 w-32 h-32 bg-signal-400/10 rounded-full blur-2xl"></div>
+
+              {/* Optional: Add a phone mockup or shield image here if we had one */}
+              {/* For now, just abstract luxury waves */}
+              <svg className="absolute bottom-0 right-0 w-full h-full opacity-10 text-obsidian-900" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <path fill="currentColor" d="M45.7,-76.3C58.9,-69.3,69.1,-59.1,76.3,-47.2C83.5,-35.3,87.6,-21.7,85.8,-8.9C84,3.9,76.3,15.9,68.4,27.3C60.5,38.7,52.3,49.5,42.1,58.3C31.9,67.1,19.7,73.9,6.7,76.1C-6.3,78.3,-20.1,75.9,-32.4,69.5C-44.7,63.1,-55.5,52.7,-64.3,40.8C-73.1,28.9,-79.9,15.5,-80.6,1.8C-81.3,-11.9,-75.9,-25.9,-67.2,-37.9C-58.5,-49.9,-46.5,-59.9,-34.2,-67.3C-21.9,-74.7,-9.3,-79.5,2.1,-82.9C13.5,-86.3,27,-88.3,45.7,-76.3Z" transform="translate(100 100)" />
+              </svg>
+            </div>
           </div>
         </div>
 
-        {/* Scroll Indicator */}
-        <div className="hidden md:flex items-center gap-4 animate-bounce">
-          <span className="h-px w-12 bg-gray-700"></span>
-          <span className="text-xs uppercase tracking-widest text-gray-500">Scroll</span>
+        {/* 4. Feature Grid (Replaces Bento) */}
+        <div className="mb-12 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+          <div className="flex items-center justify-between mb-6 px-2">
+            <h3 className="font-bold text-white text-lg">O que você precisa?</h3>
+          </div>
+          <AppGrid />
         </div>
-      </section>
 
-      <div id="services" className="px-6 md:px-12 py-20 space-y-24 max-w-[1600px] mx-auto">
-
-        {/* --- BENTO GRID SERVICES --- */}
-        <section>
-          <SectionTitle title="Nossos Pilares" subtitle="Soluções completas para seu estilo de vida" />
-
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-
-            {/* Quem Somos (About) */}
-            <div
-              onClick={() => navigate('/about')}
-              className="col-span-1 md:col-span-1 bg-obsidian-900 border border-white/5 p-6 group cursor-pointer hover:bg-gold-500 hover:text-black transition-all duration-300 rounded-sm min-h-[250px] flex flex-col justify-between"
-            >
-              <div className="bg-white/10 w-12 h-12 rounded-full flex items-center justify-center group-hover:bg-black/10 transition-colors">
-                <Gem size={24} className="text-gold-500 group-hover:text-black transition-colors" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold mb-2">Quem Somos</h3>
-                <p className="text-sm text-gray-500 group-hover:text-black/70">Nossa história, missão e liderança.</p>
-              </div>
-            </div>
-
-            {/* Proteção Veicular (Main Feature - Span 2) */}
-            <div
-              onClick={() => navigate('/protection')}
-              className="col-span-1 md:col-span-2 lg:col-span-2 row-span-2 bg-obsidian-900 border border-white/5 p-8 md:p-12 relative group cursor-pointer overflow-hidden rounded-sm hover:border-gold-500/30 transition-all duration-500"
-            >
-              <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center opacity-20 group-hover:opacity-30 group-hover:scale-105 transition-all duration-700"></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-950/80 to-transparent"></div>
-
-              <div className="relative z-10 h-full flex flex-col justify-end">
-                <div className="bg-gold-500 w-12 h-12 flex items-center justify-center mb-6 text-black">
-                  <ShieldCheck size={28} />
-                </div>
-                <h3 className="text-3xl md:text-5xl font-serif font-bold text-white mb-2">Proteção <br /> Veicular</h3>
-                <p className="text-gray-400 max-w-sm mb-6">Cobertura premium 24h, rastreamento via satélite e assistência completa para seu patrimônio.</p>
-                <div className="flex items-center text-gold-500 font-bold tracking-widest text-xs uppercase group-hover:translate-x-2 transition-transform">
-                  Ver Detalhes <ArrowRight size={14} className="ml-2" />
-                </div>
-              </div>
-            </div>
-
-            {/* Consultoria */}
-            <div
-              onClick={() => navigate('/consultancy')}
-              className="bg-obsidian-900 border border-white/5 p-6 group cursor-pointer hover:bg-gold-500 hover:text-black transition-all duration-300 rounded-sm min-h-[250px] flex flex-col justify-between"
-            >
-              <Key size={32} className="text-gray-600 group-hover:text-black transition-colors" />
-              <div>
-                <h3 className="text-xl font-bold mb-2">Consultoria</h3>
-                <p className="text-sm text-gray-500 group-hover:text-black/70">Gestão para Associações e Treinamentos.</p>
-              </div>
-            </div>
-
-            {/* Financeiro / Parcerias */}
-            <div
-              onClick={() => navigate('/partnership')}
-              className="bg-obsidian-900 border border-white/5 p-6 group cursor-pointer hover:bg-signal-500 hover:text-white transition-all duration-300 rounded-sm min-h-[250px] flex flex-col justify-between"
-            >
-              <Megaphone size={32} className="text-gray-600 group-hover:text-white transition-colors" />
-              <div>
-                <h3 className="text-xl font-bold mb-2">Parcerias & Financeiro</h3>
-                <p className="text-sm text-gray-500 group-hover:text-white/80">Soluções de crédito e consórcios (TL+).</p>
-              </div>
-            </div>
-
-            {/* Social CTA */}
-            <div
-              onClick={() => navigate('/social')}
-              className="col-span-1 md:col-span-2 lg:col-span-2 bg-gradient-to-r from-purple-900/20 to-pink-900/20 border border-white/5 p-6 flex items-center justify-between group cursor-pointer hover:border-white/20 transition-all rounded-sm"
-            >
-              <div className="flex items-center gap-6">
-                <div className="h-16 w-16 bg-gradient-to-tr from-yellow-400 to-purple-600 p-[2px] rounded-full">
-                  <div className="bg-black w-full h-full rounded-full flex items-center justify-center">
-                    <Instagram size={32} className="text-white" />
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-2xl font-bold text-white">@tavarescar</h3>
-                  <p className="text-gray-400">Acompanhe nosso lifestyle.</p>
-                </div>
-              </div>
-              <div className="h-12 w-12 border border-white/20 rounded-full flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
-                <ArrowRight size={20} />
-              </div>
-            </div>
-
-          </div>
-        </section>
-
-        {/* --- CLUBE SECTION (Ticker Style) --- */}
-        <section className="relative border-t border-white/5 pt-20">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-12">
-            <SectionTitle
-              title={getContent('home_partners_title', 'Exclusive Club')}
-              subtitle={getContent('home_partners_subtitle', 'Parceiros selecionados')}
-            />
-            <Button onClick={() => navigate('/benefits')} variant="outline" className="w-auto px-8 py-3 mb-8 md:mb-0">
-              VER TODOS OS PARCEIROS
-            </Button>
+        {/* 5. Partners Carousel */}
+        <div className="animate-slide-up" style={{ animationDelay: '0.3s' }}>
+          <div className="flex items-center justify-between mb-6 px-2">
+            <h3 className="font-bold text-white text-lg">Clube de Vantagens</h3>
+            <button onClick={() => navigate('/benefits')} className="text-gold-500 text-xs font-bold tracking-widest uppercase hover:text-white transition-colors">Ver Todos</button>
           </div>
 
-          <div className="relative w-full overflow-hidden">
-            {/* Gradient Masks */}
-            <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-obsidian-950 to-transparent z-10"></div>
-            <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-obsidian-950 to-transparent z-10"></div>
-
-            {/* Carousel */}
-            <div className="flex gap-6 animate-marquee w-max hover:[animation-play-state:paused]">
-              {[...featuredPartners, ...featuredPartners].map((partner, idx) => (
-                <div key={`${partner.id}-${idx}`} className="w-[300px] md:w-[350px] shrink-0">
-                  <Card onClick={() => navigate(`/benefits/${partner.id}`)} className="h-[400px] p-0 group bg-transparent border-white/5">
-                    <div className="h-[60%] relative overflow-hidden">
-                      <img src={partner.coverUrl} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110" alt={partner.name} />
-                      <div className="absolute top-4 right-4 bg-black/50 backdrop-blur text-white text-xs font-bold px-3 py-1 border border-white/10 uppercase tracking-wider">
-                        {partner.category}
+          <div className="relative w-full overflow-hidden -mx-6 px-6 md:mx-0 md:px-0">
+            <div className="flex gap-4 overflow-x-auto pb-8 scrollbar-hide snap-x">
+              {featuredPartners.map((partner, idx) => (
+                <div key={idx} className="snap-start shrink-0 w-[260px]">
+                  <Card
+                    onClick={() => navigate(`/benefits/${partner.id}`)}
+                    className="h-[320px] p-0 border-0 bg-obsidian-900 rounded-3xl overflow-hidden group hover:scale-[1.02] transition-transform duration-300 shadow-xl shadow-black/50"
+                  >
+                    <div className="h-[65%] relative">
+                      <img src={partner.coverUrl} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" alt={partner.name} />
+                      <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900 to-transparent opacity-80"></div>
+                      <div className="absolute bottom-4 left-4 right-4">
+                        <h4 className="text-xl font-bold text-white leading-tight mb-1">{partner.name}</h4>
+                        <span className="text-[10px] uppercase tracking-wider text-gold-500 font-bold bg-black/30 backdrop-blur px-2 py-1 rounded-full">
+                          {partner.category}
+                        </span>
                       </div>
                     </div>
-                    <div className="h-[40%] p-6 bg-obsidian-900 border-t border-white/5 flex flex-col justify-between group-hover:bg-obsidian-800 transition-colors">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <h4 className="text-xl font-bold text-white mb-2">{partner.name}</h4>
-                          <p className="text-xs text-gray-500 line-clamp-2">{partner.description}</p>
-                        </div>
-                        <img src={partner.logoUrl} className="w-10 h-10 object-contain brightness-0 invert opacity-50" />
+                    <div className="h-[35%] p-5 bg-obsidian-900 relative">
+                      <div className="flex items-center gap-2 text-gray-400 text-xs mb-3">
+                        <Tag size={12} className="text-gold-500" />
+                        <span className="line-clamp-1">{partner.benefit}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-signal-500 text-sm font-bold">
-                        <Tag size={14} />
-                        {partner.benefit}
-                      </div>
+                      <button className="w-full py-2 rounded-xl bg-white/5 text-white text-xs font-bold hover:bg-gold-500 hover:text-black transition-colors">
+                        USAR DESCONTO
+                      </button>
                     </div>
                   </Card>
                 </div>
               ))}
+
+              {/* View All Card */}
+              <div className="snap-start shrink-0 w-[100px] flex items-center justify-center">
+                <button
+                  onClick={() => navigate('/benefits')}
+                  className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-gold-500 hover:text-black transition-colors"
+                >
+                  <ArrowRight size={20} />
+                </button>
+              </div>
             </div>
           </div>
-        </section>
+        </div>
 
       </div>
     </div>

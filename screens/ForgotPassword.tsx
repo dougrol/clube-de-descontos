@@ -3,30 +3,31 @@ import { useNavigate } from 'react-router-dom';
 import { Mail, ShieldAlert, ChevronLeft, CheckCircle, AlertCircle } from 'lucide-react';
 import { Button, Input } from '../components/ui';
 import { supabase } from '../services/supabaseClient';
+import { useToast } from '../contexts/ToastContext';
 
-const AdminForgotPassword: React.FC = () => {
+const ForgotPassword: React.FC = () => {
     const navigate = useNavigate();
+    const { showToast } = useToast();
     const [email, setEmail] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
-        setError(null);
 
         try {
             const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: `${window.location.origin}${window.location.pathname}#/reset-password`,
+                redirectTo: `${window.location.origin}/#/reset-password`,
             });
 
             if (error) throw error;
             setSuccess(true);
+            showToast('Email de recuperação enviado com sucesso!', 'success');
         } catch (err: unknown) {
             console.error('Reset password error:', err);
             const errorMessage = err instanceof Error ? err.message : 'Erro ao enviar email de redefinição.';
-            setError(errorMessage);
+            showToast(errorMessage, 'error');
         } finally {
             setIsLoading(false);
         }
@@ -56,7 +57,7 @@ const AdminForgotPassword: React.FC = () => {
                         Redefinir Senha
                     </h1>
                     <p className="text-gray-500 text-sm">
-                        Digite seu email administrativo para receber o link de redefinição
+                        Digite seu email cadastrado para receber o link de redefinição
                     </p>
                 </div>
 
@@ -71,24 +72,17 @@ const AdminForgotPassword: React.FC = () => {
                             <p className="text-gray-400 text-sm mb-6">
                                 Verifique sua caixa de entrada e spam. Clique no link para redefinir sua senha.
                             </p>
-                            <Button onClick={() => navigate('/admin-login')} className="w-full">
+                            <Button onClick={() => navigate('/login')} className="w-full">
                                 Voltar ao Login
                             </Button>
                         </div>
                     ) : (
                         <form onSubmit={handleSubmit} className="space-y-6">
-                            {error && (
-                                <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 flex items-start gap-3">
-                                    <AlertCircle size={18} className="text-red-500 shrink-0 mt-0.5" />
-                                    <p className="text-red-300 text-sm">{error}</p>
-                                </div>
-                            )}
-
                             <Input
                                 icon={<Mail size={18} />}
                                 type="email"
-                                placeholder="admin@tavarescar.com"
-                                label="E-mail Administrativo"
+                                placeholder="seu@email.com"
+                                label="E-mail"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
@@ -104,7 +98,7 @@ const AdminForgotPassword: React.FC = () => {
                 {/* Footer */}
                 <div className="mt-8 text-center">
                     <button
-                        onClick={() => navigate('/admin-login')}
+                        onClick={() => navigate('/login')}
                         className="text-gray-500 text-sm hover:text-gray-300 transition-colors flex items-center justify-center gap-1 mx-auto"
                     >
                         <ChevronLeft size={16} /> Voltar para login
@@ -122,4 +116,4 @@ const AdminForgotPassword: React.FC = () => {
     );
 };
 
-export default AdminForgotPassword;
+export default ForgotPassword;

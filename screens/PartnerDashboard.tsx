@@ -6,11 +6,13 @@ import { validateCouponServer, validateCoupon } from '../services/couponService'
 import { Partner } from '../types';
 import { uploadPartnerImage } from '../services/avatarService';
 import { useAuth } from '../contexts/AuthContext';
+import { useToast } from '../contexts/ToastContext';
 import { fetchPartnerById, updatePartner as updatePartnerSupabase } from '../services/partners';
 
 const PartnerDashboard: React.FC = () => {
     const navigate = useNavigate();
     const { user, signOut, loading: authLoading } = useAuth();
+    const { showToast } = useToast();
     const [partner, setPartner] = useState<Partner | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -77,13 +79,13 @@ const PartnerDashboard: React.FC = () => {
                 if (updated) {
                     setPartner(updated);
                     setIsEditing(false);
-                    alert("Perfil atualizado com sucesso!");
+                    showToast("Perfil atualizado com sucesso!", "success");
                 } else {
-                    alert("Erro ao atualizar: resposta vazia.");
+                    showToast("Erro ao atualizar: resposta vazia.", "error");
                 }
             } catch (error) {
                 console.error('Error updating profile:', error);
-                alert("Erro ao atualizar perfil.");
+                showToast("Erro ao atualizar perfil.", "error");
             }
         }
     };
@@ -359,7 +361,7 @@ const PartnerDashboard: React.FC = () => {
                                                             setEditForm(prev => prev ? { ...prev, coverUrl: url } : null);
                                                         } catch (err: unknown) {
                                                             const message = err instanceof Error ? err.message : 'Erro no upload';
-                                                            alert(message);
+                                                            showToast(message, "error");
                                                         }
                                                     }
                                                 };
@@ -399,16 +401,17 @@ const PartnerDashboard: React.FC = () => {
                                                             lng: pos.coords.longitude
                                                         }
                                                     }) : null);
-                                                    alert("Coordenadas GPS atualizadas!");
+                                                    showToast("Coordenadas GPS atualizadas!", "success");
                                                 }, (err) => {
                                                     console.error(err);
-                                                    alert("Erro ao obter localização.");
+                                                    showToast("Erro ao obter localização.", "error");
                                                 });
                                             } else {
-                                                alert("Geolocalização não suportada.");
+                                                showToast("Geolocalização não suportada.", "error");
                                             }
                                         }}
                                         className="text-[10px] bg-gold-500/10 text-gold-500 border border-gold-500/50 px-3 py-1.5 rounded hover:bg-gold-500 hover:text-black transition-colors font-bold uppercase tracking-wider flex items-center gap-1"
+                                        aria-label="Obter localização atual"
                                     >
                                         <MapPin size={12} /> Pegar Minha Localização
                                     </button>

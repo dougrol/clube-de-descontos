@@ -1,0 +1,28 @@
+--- Starting User Creation ---
+Creating USER (associado@teste.com)...
+User exists. Signing in to get ID...
+Ô£à Retrieved ID: 49d1cc9d-be46-43d7-a95c-fd2dc1153d20
+
+--- SQL TO RUN IN SUPABASE DASHBOARD ---
+UPDATE public.users SET role = 'USER' WHERE id = '49d1cc9d-be46-43d7-a95c-fd2dc1153d20';
+----------------------------------------
+
+Creating PARTNER (parceiro@teste.com)...
+User exists. Signing in to get ID...
+Ô£à Retrieved ID: 4f263e9c-efb0-4f9d-802f-4591bfbe4e50
+
+--- SQL TO RUN IN SUPABASE DASHBOARD ---
+UPDATE public.users SET role = 'PARTNER' WHERE id = '4f263e9c-efb0-4f9d-802f-4591bfbe4e50';
+INSERT INTO public.partners (id, name, category, description, benefit, full_rules, logo_url, cover_url, city, status) 
+                       VALUES ('4f263e9c-efb0-4f9d-802f-4591bfbe4e50', 'Parceiro Teste', 'Automotivo', 'Descri├º├úo teste', '10% OFF', 'Regras teste', '', '', 'S├úo Paulo', 'active')
+                       ON CONFLICT (id) DO NOTHING;
+----------------------------------------
+
+Creating ADMIN (admin@teste.com)...
+User exists. Signing in to get ID...
+Ô£à Retrieved ID: 96829f8a-9c2f-41b7-bf88-5214625296f7
+
+--- SQL TO RUN IN SUPABASE DASHBOARD ---
+UPDATE public.users SET role = 'ADMIN' WHERE id = '96829f8a-9c2f-41b7-bf88-5214625296f7';
+----------------------------------------
+

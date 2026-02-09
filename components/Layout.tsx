@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Home, Grid, User, Instagram, ShieldCheck } from 'lucide-react';
+import { Home, Grid, User, Instagram, ShieldCheck, ShoppingBag } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { UserRole } from '../types';
 
@@ -25,6 +26,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const baseNavItems = [
     { icon: <Home size={22} />, label: 'Home', path: '/home' },
     { icon: <Grid size={22} />, label: 'Clube', path: '/benefits' },
+    { icon: <ShoppingBag size={22} />, label: 'Loja', path: '/loja' },
     { icon: <Instagram size={22} />, label: 'Social', path: '/social' },
     { icon: <User size={22} />, label: 'Perfil', path: '/profile' },
   ];
@@ -35,7 +37,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     : baseNavItems;
 
   return (
-    <div className="bg-obsidian-950 min-h-screen text-white font-sans w-full relative overflow-x-hidden selection:bg-signal-500/30 selection:text-signal-500">
+    <div className="bg-transparent min-h-screen text-white font-sans w-full relative overflow-x-hidden selection:bg-signal-500/30 selection:text-signal-500">
       <main className="min-h-screen w-full">
         {children}
       </main>

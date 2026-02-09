@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, User, ChevronRight, ArrowLeft, CheckCircle, CreditCard, Phone, Building2 } from 'lucide-react';
+import { Mail, Lock, User, ChevronRight, ArrowLeft, CheckCircle, CreditCard, Phone, Building2, Eye, EyeOff } from 'lucide-react';
 import { Button, Input } from '../components/ui';
 import { supabase } from '../services/supabaseClient';
+import { useToast } from '../contexts/ToastContext';
 
 // CPF formatting helper
 const formatCPF = (value: string): string => {
@@ -44,6 +45,7 @@ const isValidCPF = (cpf: string): boolean => {
 
 const Register: React.FC = () => {
     const navigate = useNavigate();
+    const { showToast } = useToast();
     const [formData, setFormData] = useState({
         name: '',
         cpf: '',
@@ -54,6 +56,7 @@ const Register: React.FC = () => {
         confirmPassword: ''
     });
     const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
 
@@ -139,6 +142,7 @@ const Register: React.FC = () => {
 
                 if (upsertError) {
                     console.error('Could not upsert user record:', upsertError);
+                    showToast("Erro ao salvar dados complementares. Entre em contato.", "error");
                     // Try update as fallback
                     await supabase.from('users').update({
                         cpf: cleanCPF,
@@ -168,8 +172,10 @@ const Register: React.FC = () => {
             const message = err instanceof Error ? err.message : 'Erro ao criar conta';
             if (message?.includes('already registered')) {
                 setError('Este e-mail já está cadastrado.');
+                showToast("Email já cadastrado!", "error");
             } else {
                 setError(message);
+                showToast(message, "error");
             }
         } finally {
             setIsLoading(false);
@@ -275,6 +281,7 @@ const Register: React.FC = () => {
                                 required
                             >
                                 <option value="" className="bg-obsidian-900">Selecione sua associação</option>
+                                <option value="auto_vale" className="bg-obsidian-900">Auto Vale Proteção Veicular</option>
                                 <option value="eleva_mais" className="bg-obsidian-900">Eleva Mais</option>
                                 <option value="protebem" className="bg-obsidian-900">Protebem</option>
                             </select>
@@ -285,19 +292,29 @@ const Register: React.FC = () => {
                         <p className="text-[10px] text-gray-500 mb-3 uppercase tracking-wider">Defina sua senha de acesso</p>
                     </div>
 
-                    <Input
-                        icon={<Lock size={18} />}
-                        type="password"
-                        label="Senha"
-                        placeholder="Mínimo 6 caracteres"
-                        value={formData.password}
-                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                        required
-                    />
+                    <div className="relative">
+                        <Input
+                            icon={<Lock size={18} />}
+                            type={showPassword ? 'text' : 'password'}
+                            label="Senha"
+                            placeholder="Mínimo 6 caracteres"
+                            value={formData.password}
+                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                            required
+                        />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-3 top-9 text-gray-400 hover:text-gray-300 transition-colors"
+                            aria-label={showPassword ? 'Esconder senha' : 'Mostrar senha'}
+                        >
+                            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
+                    </div>
 
                     <Input
                         icon={<Lock size={18} />}
-                        type="password"
+                        type={showPassword ? 'text' : 'password'}
                         label="Confirmar Senha"
                         placeholder="Repita a senha"
                         value={formData.confirmPassword}

@@ -4,7 +4,7 @@ import Layout from './components/Layout';
 import Splash from './screens/Splash';
 import Login from './screens/Login';
 import AdminLogin from './screens/AdminLogin';
-import AdminForgotPassword from './screens/AdminForgotPassword';
+import ForgotPassword from './screens/ForgotPassword';
 import ResetPassword from './screens/ResetPassword';
 import Register from './screens/Register';
 import Home from './screens/Home';
@@ -22,9 +22,11 @@ import CorporateConsultancy from './screens/CorporateConsultancy';
 import About from './screens/About';
 import RegisterPartner from './screens/RegisterPartner';
 import PartnerDashboard from './screens/PartnerDashboard';
+import { StorePage, ProductDetail, Checkout, MyOrders } from './screens/store';
 import { UserRole } from './types';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { CMSProvider } from './contexts/CMSContext';
+import { ToastProvider } from './contexts/ToastContext';
 import ErrorBoundary from './components/ErrorBoundary';
 
 // Separate component for Routes to use the hook
@@ -60,8 +62,13 @@ const AppRoutes: React.FC = () => {
           element={!isAuthenticated ? <AdminLogin /> : <Navigate to={role === UserRole.ADMIN ? "/admin" : "/home"} />}
         />
         <Route
+          path="/forgot-password"
+          element={<ForgotPassword />}
+        />
+        {/* Helper redirect for old admin route */}
+        <Route
           path="/admin-forgot-password"
-          element={<AdminForgotPassword />}
+          element={<Navigate to="/forgot-password" replace />}
         />
         <Route
           path="/reset-password"
@@ -130,6 +137,24 @@ const AppRoutes: React.FC = () => {
           element={isAuthenticated ? <MyCoupons /> : <Navigate to="/login" />}
         />
 
+        {/* Store Routes */}
+        <Route
+          path="/loja"
+          element={isAuthenticated ? <StorePage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/loja/produto/:id"
+          element={isAuthenticated ? <ProductDetail /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/checkout/:productId"
+          element={isAuthenticated ? <Checkout /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/meus-pedidos"
+          element={isAuthenticated ? <MyOrders /> : <Navigate to="/login" />}
+        />
+
         {/* Partner Routes */}
         <Route
           path="/partner-dashboard"
@@ -162,9 +187,11 @@ const App: React.FC = () => {
     <ErrorBoundary>
       <AuthProvider>
         <CMSProvider>
-          <HashRouter>
-            <AppRoutes />
-          </HashRouter>
+          <ToastProvider>
+            <HashRouter>
+              <AppRoutes />
+            </HashRouter>
+          </ToastProvider>
         </CMSProvider>
       </AuthProvider>
     </ErrorBoundary>

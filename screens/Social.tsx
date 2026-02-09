@@ -1,42 +1,48 @@
 import React from 'react';
-import { Instagram, Heart } from 'lucide-react';
-import { INSTAGRAM_POSTS, SOCIAL_LINKS } from '../constants';
+import { Instagram, ArrowRight, ExternalLink } from 'lucide-react';
+import { SOCIAL_LINKS } from '../constants';
 import { Button } from '../components/ui';
+import { WaveBackground } from '../components/WaveBackground';
 
 const Social: React.FC = () => {
   return (
-    <div className="pb-24 animate-fade-in bg-black min-h-screen">
-      <div className="sticky top-0 bg-black/90 backdrop-blur-md z-10 p-5 border-b border-white/10 flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-white">Social</h1>
-        <Instagram className="text-gold-500" />
-      </div>
+    <div className="relative min-h-screen bg-obsidian-950 flex flex-col items-center justify-center p-6 overflow-hidden">
+      <WaveBackground />
 
-      <div className="p-5 text-center">
-        <div className="inline-block p-1 rounded-full bg-gradient-to-tr from-yellow-400 to-yellow-700 mb-3">
-          <div className="h-20 w-20 bg-black rounded-full p-1">
-            <img src="https://picsum.photos/200" className="rounded-full w-full h-full object-cover" alt="Profile" />
-          </div>
-        </div>
-        <h2 className="text-xl font-bold text-white">{SOCIAL_LINKS.instagramHandle}</h2>
-        <p className="text-gray-400 text-sm mb-4">Acompanhe nossas novidades e eventos exclusivos.</p>
-        <Button
-          onClick={() => window.open(SOCIAL_LINKS.instagram, '_blank')}
-          variant="outline"
-          className="h-10 py-0 text-sm max-w-[200px] mx-auto"
-        >
-          Seguir no Instagram
-        </Button>
-      </div>
-
-      <div className="grid grid-cols-3 gap-1 px-1">
-        {INSTAGRAM_POSTS.map((post) => (
-          <div key={post.id} className="relative aspect-square bg-gray-900 group overflow-hidden">
-            <img src={post.url} alt="Post" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
-            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center transition-opacity text-white text-xs gap-1">
-              <span className="flex items-center gap-1"><Heart size={12} fill="white" /> {post.likes}</span>
+      <div className="relative z-10 w-full max-w-sm text-center animate-slide-up">
+        {/* Instagram Icon Glow */}
+        <div className="relative mx-auto mb-8 w-24 h-24">
+          <div className="absolute inset-0 bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 rounded-[2rem] blur-xl opacity-50 animate-pulse-slow"></div>
+          <div className="relative w-full h-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 rounded-[2rem] flex items-center justify-center p-1 shadow-2xl">
+            <div className="bg-black w-full h-full rounded-[1.8rem] flex items-center justify-center">
+              <Instagram size={48} className="text-white" />
             </div>
           </div>
-        ))}
+        </div>
+
+        <h1 className="text-3xl md:text-4xl font-serif font-bold text-white mb-2">
+          Siga a <span className="text-gold-500">Tavares Car</span>
+        </h1>
+
+        <p className="text-gray-400 mb-10 leading-relaxed">
+          Acompanhe nossos stories, novidades e o dia a dia da consultoria automotiva líder de mercado.
+        </p>
+
+        <div className="space-y-4">
+          <Button
+            onClick={() => window.open(SOCIAL_LINKS.instagram, '_blank')}
+            variant="signal"
+            className="w-full h-14 rounded-xl text-lg font-bold shadow-lg shadow-signal-500/20 hover:scale-105 transition-transform"
+          >
+            <Instagram className="mr-2" size={24} />
+            ACESSAR INSTAGRAM
+            <ExternalLink className="ml-2 opacity-70" size={16} />
+          </Button>
+
+          <p className="text-xs text-gray-500 uppercase tracking-widest mt-8">
+            @tavares_car_oficial_
+          </p>
+        </div>
       </div>
     </div>
   );

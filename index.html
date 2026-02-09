@@ -5,10 +5,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="theme-color" content="#050505" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <!-- SEO & Security -->
+  <meta name="description"
+    content="Clube de Vantagens Tavares Car - Descontos exclusivos para associados em restaurantes, lojas, serviços e muito mais." />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Tavares Car Consultoria" />
   <title>Clube de Vantagens Tavares Car</title>
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,28 +57,33 @@
             }
           },
           animation: {
-            'fade-in': 'fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-            'slide-up': 'slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-            'float': 'float 6s ease-in-out infinite',
-            'marquee': 'marquee 25s linear infinite',
+            'fade-in': 'fadeIn 0.4s cubic-bezier(0.2, 0, 0, 1) forwards',
+            'slide-up': 'slideUp 0.4s cubic-bezier(0.2, 0, 0, 1) forwards',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 4s ease-in-out infinite',
+            'marquee': 'marquee 20s linear infinite',
+            'scale-in': 'scaleIn 0.2s cubic-bezier(0.2, 0, 0, 1) forwards',
           },
           keyframes: {
             fadeIn: {
-              '0%': { opacity: '0', transform: 'translateY(10px) scale(0.98)' },
-              '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+              '0%': { opacity: '0', transform: 'translateY(8px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
             },
             slideUp: {
-              '0%': { transform: 'translateY(40px)', opacity: '0' },
+              '0%': { transform: 'translateY(20px)', opacity: '0' },
               '100%': { transform: 'translateY(0)', opacity: '1' },
             },
             float: {
               '0%, 100%': { transform: 'translateY(0)' },
-              '50%': { transform: 'translateY(-10px)' },
+              '50%': { transform: 'translateY(-8px)' },
             },
             marquee: {
               '0%': { transform: 'translateX(0%)' },
               '100%': { transform: 'translateX(-100%)' },
+            },
+            scaleIn: {
+              '0%': { transform: 'scale(0.95)', opacity: '0' },
+              '100%': { transform: 'scale(1)', opacity: '1' },
             }
           },
           backgroundImage: {
@@ -84,12 +95,124 @@
     }
   </script>
   <style>
-    /* Smoother scrolling */
+    /* ========================================
+       120Hz PERFORMANCE OPTIMIZATIONS
+       ======================================== */
+
+    /* Enable smooth scrolling at high refresh rates */
     html {
       scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
     }
 
-    /* Noise overlay */
+    /* Force GPU acceleration for better 120Hz support */
+    * {
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    /* Reset for elements that don't need GPU acceleration */
+    body,
+    html,
+    p,
+    span,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    label,
+    input,
+    textarea,
+    select {
+      -webkit-transform: none;
+      transform: none;
+      will-change: auto;
+    }
+
+    /* Optimize interactive elements for 120Hz */
+    a,
+    button,
+    [role="button"],
+    .clickable,
+    [onclick],
+    input,
+    select,
+    textarea {
+      will-change: transform, opacity;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+      /* Fast-out, linear-in */
+    }
+
+    /* Scrollable containers optimization */
+    .overflow-y-auto,
+    .overflow-x-auto,
+    .overflow-auto,
+    .overflow-scroll,
+    [style*="overflow"] {
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+      will-change: scroll-position;
+    }
+
+    /* Animation performance hints */
+    .animate-fade-in,
+    .animate-slide-up,
+    .animate-pulse,
+    .animate-float,
+    .animate-marquee,
+    .animate-spin,
+    [class*="animate-"] {
+      will-change: transform, opacity;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+    }
+
+    /* Cards and interactive surfaces - smoother transitions */
+    .card,
+    .Card,
+    [class*="Card"],
+    .rounded-xl,
+    .rounded-2xl,
+    .rounded-3xl {
+      transition-duration: 150ms;
+      /* Faster for 120Hz */
+      transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    /* Hover effects optimization */
+    *:hover {
+      transition-duration: 100ms;
+    }
+
+    /* Touch response optimization */
+    @media (hover: none) and (pointer: coarse) {
+      * {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+      }
+
+      button,
+      a,
+      [role="button"] {
+        transition-duration: 80ms !important;
+      }
+    }
+
+    /* High refresh rate display hint */
+    @supports (content-visibility: auto) {
+      .lazy-section {
+        content-visibility: auto;
+        contain-intrinsic-size: 0 500px;
+      }
+    }
+
+    /* Noise overlay - optimized */
     body::before {
       content: "";
       position: fixed;
@@ -101,6 +224,8 @@
       pointer-events: none;
       z-index: 50;
       mix-blend-mode: overlay;
+      will-change: auto;
+      /* Static element, no need for GPU */
     }
 
     /* Scrollbar hiding */
@@ -113,18 +238,38 @@
       scrollbar-width: none;
     }
 
+    /* Main body styles */
     body {
       background-color: #050505;
+      background-image: radial-gradient(circle at 50% 0%, #2a2005 0%, #050505 70%);
+      background-attachment: fixed;
       color: #fff;
       -webkit-tap-highlight-color: transparent;
       overflow-x: hidden;
       padding-bottom: env(safe-area-inset-bottom);
+      /* Smooth font rendering */
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* Reduce motion for users who prefer it */
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
     }
   </style>
 
 </head>
 
-<body class="bg-obsidian-950">
+<body class="bg-transparent">
   <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
 </body>

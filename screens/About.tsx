@@ -163,6 +163,16 @@ const About: React.FC = () => {
                     <div className="flex flex-col items-center gap-4 group cursor-pointer hover:scale-105 transition-transform duration-300">
                         <div className="w-64 h-40 flex items-center justify-center">
                             <img
+                                src="/images/partners/auto_vale.svg"
+                                alt="Auto Vale Proteção Veicular"
+                                className="max-w-full max-h-full object-contain filter hover:brightness-110 transition-all duration-500"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col items-center gap-4 group cursor-pointer hover:scale-105 transition-transform duration-300">
+                        <div className="w-64 h-40 flex items-center justify-center">
+                            <img
                                 src="/images/partners/elevamais.png"
                                 alt="Eleva Mais Proteção"
                                 className="max-w-full max-h-full object-contain filter hover:brightness-110 transition-all duration-500"

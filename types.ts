@@ -85,3 +85,133 @@ export interface PartnerDB {
   lng?: number;
   status?: string;
 }
+
+// ===========================================
+// STORE MODULE TYPES
+// ===========================================
+
+export enum ProductType {
+  SERVICE = 'service',    // Serviços (lavagem, manutenção) - sem quantidade, só % desconto
+  PRODUCT = 'product'     // Produtos físicos (roupas, acessórios) - com quantidade
+}
+
+export enum OrderStatus {
+  CREATED = 'created',
+  PENDING_PAYMENT = 'pending_payment',
+  PAID = 'paid',
+  CANCELED = 'canceled',
+  REFUNDED = 'refunded',
+  SHIPPED = 'shipped',
+  DELIVERED = 'delivered'
+}
+
+export enum PaymentStatus {
+  PENDING = 'pending',
+  PAID = 'paid',
+  FAILED = 'failed',
+  CANCELED = 'canceled',
+  REFUNDED = 'refunded'
+}
+
+export enum PaymentMethod {
+  PIX = 'pix',
+  CARD = 'card'
+}
+
+export interface Product {
+  id: string;
+  partnerId: string;
+  title: string;
+  description: string;
+  priceOriginal: number;
+  priceDiscount: number;
+  stock: number;
+  active: boolean;
+  imageUrl: string;
+  createdAt: string;
+  productType?: ProductType; // 'service' or 'product'
+  // Populated fields
+  partnerName?: string;
+}
+
+export interface ProductDB {
+  id: string;
+  partner_id: string;
+  title: string;
+  description?: string;
+  price_original: number;
+  price_discount: number;
+  stock: number;
+  active: boolean;
+  image_url?: string;
+  created_at: string;
+}
+
+export interface Order {
+  id: string;
+  userId: string;
+  partnerId: string;
+  status: OrderStatus;
+  totalAmount: number;
+  createdAt: string;
+  // Populated fields
+  items?: OrderItem[];
+  payment?: Payment;
+  partnerName?: string;
+}
+
+export interface OrderDB {
+  id: string;
+  user_id: string;
+  partner_id: string;
+  status: string;
+  total_amount: number;
+  created_at: string;
+}
+
+export interface OrderItem {
+  id: string;
+  orderId: string;
+  productId: string;
+  quantity: number;
+  unitPrice: number;
+  createdAt: string;
+  // Populated fields
+  productTitle?: string;
+  productImageUrl?: string;
+}
+
+export interface OrderItemDB {
+  id: string;
+  order_id: string;
+  product_id: string;
+  quantity: number;
+  unit_price: number;
+  created_at: string;
+}
+
+export interface Payment {
+  id: string;
+  orderId: string;
+  provider: string;
+  providerPaymentId: string;
+  status: PaymentStatus;
+  method: PaymentMethod;
+  pixQrCode?: string;
+  pixQrCodeBase64?: string;
+  checkoutUrl?: string;
+  createdAt: string;
+}
+
+export interface PaymentDB {
+  id: string;
+  order_id: string;
+  provider: string;
+  provider_payment_id?: string;
+  status: string;
+  method?: string;
+  pix_qr_code?: string;
+  pix_qr_code_base64?: string;
+  checkout_url?: string;
+  created_at: string;
+}
