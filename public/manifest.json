@@ -3,17 +3,17 @@
     "short_name": "TavaresCar",
     "start_url": "/",
     "display": "standalone",
-    "background_color": "#050505",
-    "theme_color": "#050505",
+    "background_color": "#000000",
+    "theme_color": "#D4AF37",
     "orientation": "portrait",
     "icons": [
         {
-            "src": "https://cdn-icons-png.flaticon.com/512/744/744465.png",
+            "src": "/images/logo_shield_v2_transparent.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "https://cdn-icons-png.flaticon.com/512/744/744465.png",
+            "src": "/images/logo_shield_v2_transparent.png",
             "sizes": "512x512",
             "type": "image/png"
         }

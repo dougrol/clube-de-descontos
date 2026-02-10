@@ -19,14 +19,14 @@ interface ExtendedPartner extends Partner {
 }
 
 const StatCard: React.FC<{ title: string; value: string; icon: React.ReactNode; trend?: string }> = ({ title, value, icon, trend }) => (
-  <Card className="bg-obsidian-800 border-l-4 border-l-gold-500">
-    <div className="flex justify-between items-start">
-      <div>
-        <p className="text-gray-400 text-xs uppercase mb-1">{title}</p>
-        <h3 className="text-2xl font-bold text-white">{value}</h3>
-        {trend && <p className="text-green-500 text-xs flex items-center mt-1"><ArrowUpRight size={12} /> {trend}</p>}
+  <Card className="bg-obsidian-800 border-l-4 border-l-gold-500 p-4">
+    <div className="flex justify-between items-start gap-3">
+      <div className="min-w-0 flex-1">
+        <p className="text-gray-400 text-[10px] sm:text-xs uppercase mb-1 truncate">{title}</p>
+        <h3 className="text-xl sm:text-2xl font-bold text-white truncate">{value}</h3>
+        {trend && <p className="text-green-500 text-[10px] sm:text-xs flex items-center mt-1 truncate"><ArrowUpRight size={12} className="shrink-0" /> <span className="truncate">{trend}</span></p>}
       </div>
-      <div className="p-2 bg-obsidian-900 rounded-lg text-gold-500">
+      <div className="p-2 sm:p-3 bg-obsidian-900 rounded-lg text-gold-500 shrink-0">
         {icon}
       </div>
     </div>
@@ -441,45 +441,47 @@ const Admin: React.FC = () => {
   };
 
   return (
-    <div className="p-5 pb-24 min-h-screen bg-black animate-fade-in space-y-8">
-      <header className="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div className="p-4 sm:p-5 pb-24 min-h-screen bg-black animate-fade-in space-y-5 sm:space-y-8">
+      <header className="mb-4 sm:mb-6 flex flex-col gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Painel Gestor</h1>
-          <p className="text-gray-400 text-sm">Visão geral do negócio</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-white">Painel Gestor</h1>
+          <p className="text-gray-400 text-xs sm:text-sm">Visão geral do negócio</p>
         </div>
 
-        {/* Tab Switcher */}
-        <div className="flex bg-obsidian-900 rounded-lg p-1 border border-obsidian-700 self-start md:self-auto flex-wrap">
-          <button
-            onClick={() => setActiveTab('dashboard')}
-            className={`px-4 py-2 rounded-md text-sm font-bold flex items-center gap-2 transition-all ${activeTab === 'dashboard' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
-          >
-            <Layout size={16} /> Dashboard
-          </button>
-          <button
-            onClick={() => setActiveTab('products')}
-            className={`px-4 py-2 rounded-md text-sm font-bold flex items-center gap-2 transition-all ${activeTab === 'products' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
-          >
-            <Package size={16} /> Produtos
-          </button>
-          <button
-            onClick={() => setActiveTab('content')}
-            className={`px-4 py-2 rounded-md text-sm font-bold flex items-center gap-2 transition-all ${activeTab === 'content' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
-          >
-            <Type size={16} /> Site Content
-          </button>
-          <button
-            onClick={() => setActiveTab('coupons')}
-            className={`px-4 py-2 rounded-md text-sm font-bold flex items-center gap-2 transition-all ${activeTab === 'coupons' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
-          >
-            <Ticket size={16} /> Cupons
-          </button>
-          <button
-            onClick={() => setActiveTab('protection')}
-            className={`px-4 py-2 rounded-md text-sm font-bold flex items-center gap-2 transition-all ${activeTab === 'protection' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
-          >
-            <ShieldCheck size={16} /> Proteção
-          </button>
+        {/* Tab Switcher - Mobile Optimized: horizontal scroll */}
+        <div className="overflow-x-auto scrollbar-hide -mx-5 px-5">
+          <div className="flex bg-obsidian-900 rounded-lg p-1 border border-obsidian-700 min-w-max">
+            <button
+              onClick={() => setActiveTab('dashboard')}
+              className={`px-4 py-2.5 rounded-md text-sm font-bold flex items-center gap-2 transition-all whitespace-nowrap ${activeTab === 'dashboard' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
+            >
+              <Layout size={16} /> Dashboard
+            </button>
+            <button
+              onClick={() => setActiveTab('products')}
+              className={`px-4 py-2.5 rounded-md text-sm font-bold flex items-center gap-2 transition-all whitespace-nowrap ${activeTab === 'products' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
+            >
+              <Package size={16} /> Produtos
+            </button>
+            <button
+              onClick={() => setActiveTab('content')}
+              className={`px-4 py-2.5 rounded-md text-sm font-bold flex items-center gap-2 transition-all whitespace-nowrap ${activeTab === 'content' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
+            >
+              <Type size={16} /> Conteúdo
+            </button>
+            <button
+              onClick={() => setActiveTab('coupons')}
+              className={`px-4 py-2.5 rounded-md text-sm font-bold flex items-center gap-2 transition-all whitespace-nowrap ${activeTab === 'coupons' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
+            >
+              <Ticket size={16} /> Cupons
+            </button>
+            <button
+              onClick={() => setActiveTab('protection')}
+              className={`px-4 py-2.5 rounded-md text-sm font-bold flex items-center gap-2 transition-all whitespace-nowrap ${activeTab === 'protection' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
+            >
+              <ShieldCheck size={16} /> Proteção
+            </button>
+          </div>
         </div>
       </header>
 
@@ -506,16 +508,16 @@ const Admin: React.FC = () => {
             />
           </div>
 
-          {/* Subscription Growth Chart */}
-          <section className="h-64 w-full bg-obsidian-800 rounded-xl p-4 border border-obsidian-700">
-            <SectionTitle title="Crescimento de Assinantes (Últimos 6 meses)" />
-            <ResponsiveContainer width="100%" height="100%">
+          {/* Subscription Growth Chart - Reduced height on mobile */}
+          <section className="h-48 sm:h-64 w-full bg-obsidian-800 rounded-xl p-3 sm:p-4 border border-obsidian-700">
+            <h3 className="text-xs sm:text-sm font-medium text-white mb-2">Crescimento de Assinantes</h3>
+            <ResponsiveContainer width="100%" height="85%">
               <BarChart data={chartData.length > 0 ? chartData : [{ name: 'Sem dados', users: 0 }]}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
-                <XAxis dataKey="name" stroke="#666" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#666" fontSize={12} tickLine={false} axisLine={false} />
+                <XAxis dataKey="name" stroke="#666" fontSize={10} tickLine={false} axisLine={false} />
+                <YAxis stroke="#666" fontSize={10} tickLine={false} axisLine={false} width={30} />
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#111', border: '1px solid #333', borderRadius: '8px' }}
+                  contentStyle={{ backgroundColor: '#111', border: '1px solid #333', borderRadius: '8px', fontSize: '12px' }}
                   itemStyle={{ color: '#D4AF37' }}
                   cursor={{ fill: '#ffffff10' }}
                 />
@@ -524,19 +526,19 @@ const Admin: React.FC = () => {
             </ResponsiveContainer>
           </section>
 
-          {/* Partner Monitoring List */}
+          {/* Partner Monitoring List - Mobile optimized with horizontal scroll */}
           <section>
-            <SectionTitle title="Monitoramento de Parceiros" />
+            <h3 className="text-sm sm:text-base font-medium text-white mb-3">Monitoramento de Parceiros</h3>
             <Card className="bg-obsidian-800 border-none overflow-hidden">
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm text-gray-400">
-                  <thead className="bg-obsidian-900 uppercase font-medium">
+                <table className="w-full text-left text-xs sm:text-sm text-gray-400 min-w-[500px]">
+                  <thead className="bg-obsidian-900 uppercase font-medium text-[10px] sm:text-xs">
                     <tr>
-                      <th className="p-3">Parceiro</th>
-                      <th className="p-3">Categoria</th>
-                      <th className="p-3">Cidade</th>
-                      <th className="p-3">Status</th>
-                      <th className="p-3 text-right">Ações</th>
+                      <th className="p-2 sm:p-3">Parceiro</th>
+                      <th className="p-2 sm:p-3 hidden sm:table-cell">Categoria</th>
+                      <th className="p-2 sm:p-3 hidden sm:table-cell">Cidade</th>
+                      <th className="p-2 sm:p-3">Status</th>
+                      <th className="p-2 sm:p-3 text-right">Ações</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-800">
@@ -547,53 +549,57 @@ const Admin: React.FC = () => {
                     ) : (
                       partners.map(partner => (
                         <tr key={partner.id} className="hover:bg-obsidian-700/50 transition-colors">
-                          <td className="p-3 font-medium text-white flex items-center gap-2">
-                            {partner.logoUrl ? (
-                              <img src={partner.logoUrl} alt={partner.name} className="w-6 h-6 rounded-full object-cover" />
-                            ) : (
-                              <div className="w-6 h-6 rounded-full bg-gray-700" />
-                            )}
-                            {partner.name}
+                          <td className="p-2 sm:p-3 font-medium text-white">
+                            <div className="flex items-center gap-2">
+                              {partner.logoUrl ? (
+                                <img src={partner.logoUrl} alt={partner.name} className="w-6 h-6 rounded-full object-cover shrink-0" />
+                              ) : (
+                                <div className="w-6 h-6 rounded-full bg-gray-700 shrink-0" />
+                              )}
+                              <span className="truncate max-w-[100px] sm:max-w-none">{partner.name}</span>
+                            </div>
                           </td>
-                          <td className="p-3">{partner.category}</td>
-                          <td className="p-3">{partner.city || '-'}</td>
-                          <td className={`p-3 flex items-center gap-1 font-bold ${getStatusColor(partner.status)}`}>
-                            {getStatusIcon(partner.status)}
-                            <span className="uppercase text-xs">{partner.status || 'PENDING'}</span>
+                          <td className="p-2 sm:p-3 hidden sm:table-cell">{partner.category}</td>
+                          <td className="p-2 sm:p-3 hidden sm:table-cell">{partner.city || '-'}</td>
+                          <td className={`p-2 sm:p-3 ${getStatusColor(partner.status)}`}>
+                            <div className="flex items-center gap-1 font-bold">
+                              {getStatusIcon(partner.status)}
+                              <span className="uppercase text-[10px] sm:text-xs hidden sm:inline">{partner.status || 'PENDING'}</span>
+                            </div>
                           </td>
-                          <td className="p-3 text-right">
-                            <div className="flex items-center justify-end gap-2">
+                          <td className="p-2 sm:p-3 text-right">
+                            <div className="flex items-center justify-end gap-1 sm:gap-2">
                               {partner.status !== 'active' && (
                                 <button
                                   onClick={() => handleUpdateStatus(partner.id, 'active')}
-                                  className="p-1 hover:text-green-500 transition-colors"
+                                  className="p-1.5 hover:text-green-500 transition-colors active:scale-95"
                                   title="Aprovar/Ativar"
                                 >
-                                  <CheckCircle size={18} />
+                                  <CheckCircle size={16} />
                                 </button>
                               )}
                               {partner.status === 'active' && (
                                 <button
                                   onClick={() => handleUpdateStatus(partner.id, 'suspended')}
-                                  className="p-1 hover:text-red-500 transition-colors"
+                                  className="p-1.5 hover:text-red-500 transition-colors active:scale-95"
                                   title="Suspender"
                                 >
-                                  <Slash size={18} />
+                                  <Slash size={16} />
                                 </button>
                               )}
                               <button
                                 onClick={() => handleEdit(partner)}
-                                className="p-1 hover:text-gold-500 transition-colors"
+                                className="p-1.5 hover:text-gold-500 transition-colors active:scale-95"
                                 title="Editar"
                               >
-                                <Pencil size={18} />
+                                <Pencil size={16} />
                               </button>
                               <button
                                 onClick={() => handleDelete(partner.id)}
-                                className="p-1 hover:text-red-600 transition-colors"
+                                className="p-1.5 hover:text-red-600 transition-colors active:scale-95"
                                 title="Excluir"
                               >
-                                <Trash2 size={18} />
+                                <Trash2 size={16} />
                               </button>
                             </div>
                           </td>
@@ -1060,13 +1066,13 @@ const Admin: React.FC = () => {
               type="text"
               value={planForm.name || ''}
               onChange={e => setPlanForm({ ...planForm, name: e.target.value })}
-              className="w-full bg-black border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+              className="w-full bg-black border border-obsidian-700 rounded p-3 text-white focus:border-gold-500 outline-none"
               placeholder="Ex: Básico, Ouro, Premium"
               required
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm text-gray-400 mb-1">Preço Mensal (R$)</label>
               <input
@@ -1074,7 +1080,7 @@ const Admin: React.FC = () => {
                 step="0.01"
                 value={planForm.price || ''}
                 onChange={e => setPlanForm({ ...planForm, price: parseFloat(e.target.value) })}
-                className="w-full bg-black border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+                className="w-full bg-black border border-obsidian-700 rounded p-3 text-white focus:border-gold-500 outline-none"
                 placeholder="99.90"
                 required
               />
@@ -1085,29 +1091,29 @@ const Admin: React.FC = () => {
                 type="number"
                 value={planForm.display_order || 0}
                 onChange={e => setPlanForm({ ...planForm, display_order: parseInt(e.target.value) })}
-                className="w-full bg-black border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+                className="w-full bg-black border border-obsidian-700 rounded p-3 text-white focus:border-gold-500 outline-none"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex items-center gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex items-center gap-3 p-3 bg-obsidian-800 rounded-lg">
               <input
                 type="checkbox"
                 id="is_popular"
                 checked={planForm.is_popular || false}
                 onChange={e => setPlanForm({ ...planForm, is_popular: e.target.checked })}
-                className="w-4 h-4 accent-gold-500"
+                className="w-5 h-5 bg-white/5 border border-white/10 rounded-sm accent-gold-500"
               />
               <label htmlFor="is_popular" className="text-sm text-gray-300">Marcar como "Mais Vendido"</label>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 p-3 bg-obsidian-800 rounded-lg">
               <input
                 type="checkbox"
                 id="plan_active"
                 checked={planForm.active ?? true}
                 onChange={e => setPlanForm({ ...planForm, active: e.target.checked })}
-                className="w-4 h-4 accent-gold-500"
+                className="w-5 h-5 bg-white/5 border border-white/10 rounded-sm accent-gold-500"
               />
               <label htmlFor="plan_active" className="text-sm text-gray-300">Plano Ativo</label>
             </div>

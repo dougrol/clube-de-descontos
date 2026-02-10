@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, ShieldCheck, Truck, Siren, CheckCircle2, Star, Shield, Loader2, Car, Bike, Calculator, ArrowRight } from 'lucide-react';
-import { Button, Badge } from '../components/ui';
+import { Button, Badge, ImageWithFallback } from '../components/ui';
 import { supabase } from '../services/supabaseClient';
 
 interface ProtectionPlan {
@@ -208,6 +208,33 @@ const Protection: React.FC = () => {
                   )}
                </div>
             )}
+         </div>
+
+         {/* Partner Associations */}
+         <div className="px-5 py-8 border-t border-white/5 mt-8">
+            <p className="text-gray-600 text-[9px] uppercase tracking-[0.2em] text-center mb-4">
+               Associações Parceiras
+            </p>
+            <div className="flex items-center justify-center gap-5">
+               {[
+                  { name: 'Elevamais', logo: 'https://elevamais.org/wp-content/uploads/2025/05/Foto-Capa-Branding-Elevamais-Protecao-Veicular.png' },
+                  { name: 'AGV', logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjxA4WhVJYldBDvC542WyVsqlPhdl2poQONw&s' },
+                  { name: 'Autovale', logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWN3TvLukevIdp8lse0L3FeEIz6YOWGw-Tcg&s' }
+               ].map((partner, index) => (
+                  <div key={index} className="flex flex-col items-center">
+                     <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden border-2 border-white/20 bg-white p-2 shadow-lg">
+                        <ImageWithFallback
+                           src={partner.logo}
+                           alt={partner.name}
+                           className="w-full h-full rounded-full"
+                           objectFit="contain"
+                           showSkeleton={true}
+                        />
+                     </div>
+                     <span className="text-gray-500 text-[8px] mt-1.5 uppercase tracking-wider font-medium">{partner.name}</span>
+                  </div>
+               ))}
+            </div>
          </div>
       </div>
    );

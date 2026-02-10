@@ -136,7 +136,9 @@ const Benefits: React.FC = () => {
         <img
           src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=3000&auto=format&fit=crop"
           alt="Clube de Vantagens Luxo"
-          loading="lazy"
+          loading="eager"
+          // @ts-ignore
+          fetchPriority="high"
           className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-1000 ease-in-out"
         />
 
@@ -172,37 +174,38 @@ const Benefits: React.FC = () => {
               className="bg-obsidian-900 border-obsidian-700 focus:border-gold-500 transition-colors"
             />
 
-            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide items-center">
+            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide items-center -mx-1 px-1">
               {/* Radar Button */}
               <button
                 onClick={handleRadarClick}
                 disabled={isLoadingLocation}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all border ${isNearMeActive
+                className={`flex items-center justify-center gap-2 px-4 h-10 rounded-full text-xs font-bold whitespace-nowrap transition-all border active:scale-95 shrink-0 ${isNearMeActive
                   ? 'bg-gold-500 text-black border-gold-500 shadow-[0_0_20px_rgba(212,175,55,0.4)]'
                   : 'bg-obsidian-800 text-gold-500 border-gold-500/30 hover:bg-gold-500/10 hover:border-gold-500'
                   }`}
               >
                 {isLoadingLocation ? (
-                  <Loader2 size={16} className="animate-spin" />
+                  <Loader2 size={14} className="animate-spin shrink-0" />
                 ) : (
                   <Radar
-                    size={16}
-                    className={`transition-all ${isNearMeActive ? "animate-[spin_3s_linear_infinite]" : ""}`}
+                    size={14}
+                    className={`shrink-0 transition-all ${isNearMeActive ? "animate-[spin_3s_linear_infinite]" : ""}`}
                   />
                 )}
-                {isNearMeActive ? "Radar Ativo" : "Radar de Ofertas"}
+                <span className="hidden sm:inline">{isNearMeActive ? "Radar Ativo" : "Radar de Ofertas"}</span>
+                <span className="sm:hidden">{isNearMeActive ? "Ativo" : "Radar"}</span>
               </button>
 
-              <div className="w-px h-6 bg-gray-800 mx-1 flex-shrink-0" />
+              <div className="w-px h-5 bg-gray-700 shrink-0" />
 
-              {/* Categories */}
+              {/* Categories - Fixed width buttons */}
               {categories.map(cat => (
                 <button
                   key={cat}
                   onClick={() => {
                     setSelectedCategory(cat);
                   }}
-                  className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-300 ${selectedCategory === cat
+                  className={`px-3 sm:px-4 h-10 rounded-full text-[11px] sm:text-xs font-bold whitespace-nowrap transition-all duration-200 active:scale-95 shrink-0 ${selectedCategory === cat
                     ? 'bg-gold-500 text-black border border-gold-500 shadow-[0_0_15px_rgba(212,175,55,0.4)]'
                     : 'bg-obsidian-800 text-gray-400 border border-obsidian-700 hover:border-gold-500/50 hover:text-white'
                     }`}

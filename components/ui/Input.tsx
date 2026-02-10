@@ -23,7 +23,7 @@ export const Input: React.FC<InputProps> = ({ label, className = '', icon, ...pr
         <input
           {...props}
           autoComplete="off"
-          className={`w-full bg-white/5 border border-white/10 rounded-lg py-3 text-sm text-white placeholder:text-gray-600 focus:border-gold-500 focus:bg-obsidian-900 outline-none transition-all ${icon ? 'pl-10 pr-4' : 'px-4'}`}
+          className={`w-full bg-white/5 border border-white/10 rounded-xl text-base text-white placeholder:text-gray-600 focus:border-gold-500 focus:bg-obsidian-900 outline-none transition-all ${icon ? 'pl-10 pr-3 p-3' : 'p-3'}`}
         />
       </div>
     </div>

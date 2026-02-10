@@ -42,10 +42,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         {children}
       </main>
 
-      {/* Mobile Fixed Bottom Bar - Only show if not hidden */}
+      {/* Mobile Fixed Bottom Bar - Optimized for 48px touch targets */}
       {!hideNav && (
-        <nav className="fixed bottom-0 left-0 right-0 z-50 bg-obsidian-950/90 backdrop-blur-xl border-t border-white/5 pb-safe safe-area-bottom">
-          <div className="flex items-center justify-around px-2 py-3">
+        <nav className="fixed bottom-0 left-0 right-0 z-50 bg-obsidian-950/95 backdrop-blur-xl border-t border-white/5">
+          {/* Safe area padding for notched devices */}
+          <div className="flex items-stretch justify-around px-1 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
             {navItems.map((item) => {
               // Exact match for home, startsWith for others to catch sub-routes
               const isActive = item.path === '/home'
@@ -58,22 +59,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <button
                   key={item.path}
                   onClick={() => navigate(item.path)}
-                  className={`relative flex flex-col items-center justify-center w-full gap-1 transition-all duration-300 ${isActive ? 'text-gold-500' : 'text-gray-500 hover:text-gray-300'
+                  className={`relative flex flex-col items-center justify-center min-w-[48px] min-h-[48px] py-1.5 px-2 transition-all duration-200 active:scale-95 ${isActive ? 'text-gold-500' : 'text-gray-500 hover:text-gray-300'
                     }`}
                 >
                   {/* Indicator Line for Active State (Top) */}
                   {isActive && (
                     <motion.div
                       layoutId="bottomBarIndicator"
-                      className="absolute -top-3 w-10 h-0.5 bg-gold-500 shadow-[0_0_10px_#D4AF37]"
+                      className="absolute -top-2 w-10 h-0.5 bg-gold-500 shadow-[0_0_10px_#D4AF37]"
                     />
                   )}
 
-                  <div className={`transition-transform duration-200 ${isActive ? '-translate-y-1' : ''}`}>
+                  <div className={`transition-transform duration-200 ${isActive ? '-translate-y-0.5 scale-110' : ''}`}>
                     {item.icon}
                   </div>
 
-                  <span className={`text-[10px] font-medium tracking-wide transition-opacity duration-200 ${isActive ? 'opacity-100 font-bold' : 'opacity-70'}`}>
+                  <span className={`text-[9px] font-medium tracking-wide mt-0.5 ${isActive ? 'opacity-100 font-bold' : 'opacity-60'}`}>
                     {item.label}
                   </span>
                 </button>

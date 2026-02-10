@@ -5,7 +5,18 @@ interface ImageWithFallbackProps extends React.ImgHTMLAttributes<HTMLImageElemen
     fallbackSrc?: string;
     fallbackComponent?: React.ReactNode;
     showSkeleton?: boolean;
+    aspectRatio?: 'square' | 'video' | '4/3' | '3/2' | 'auto';
+    objectFit?: 'cover' | 'contain' | 'fill';
+    loading?: 'lazy' | 'eager';
 }
+
+const aspectRatioClasses = {
+    'square': 'aspect-square',
+    'video': 'aspect-video',
+    '4/3': 'aspect-[4/3]',
+    '3/2': 'aspect-[3/2]',
+    'auto': ''
+};
 
 export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
     src,
@@ -14,6 +25,9 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
     fallbackSrc,
     fallbackComponent,
     showSkeleton = true,
+    aspectRatio = 'auto',
+    objectFit = 'cover',
+    loading = 'lazy',
     ...props
 }) => {
     const [status, setStatus] = useState<'loading' | 'error' | 'loaded'>('loading');
@@ -30,11 +44,8 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
 
     const handleError = () => {
         if (fallbackSrc && currentSrc !== fallbackSrc) {
-            // Se tiver uma src de fallback e ainda não estivermos nela, tenta carregar
             setCurrentSrc(fallbackSrc);
-            // Mantém status loading até a fallback carregar (a img vai disparar onLoad ou onError de novo)
         } else {
-            // Se não tem fallbackSrc ou já falhou nele
             setStatus('error');
         }
     };
@@ -43,30 +54,39 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
         setStatus('loaded');
     };
 
+    const objectFitClass = {
+        'cover': 'object-cover',
+        'contain': 'object-contain',
+        'fill': 'object-fill'
+    }[objectFit];
+
+    const aspectClass = aspectRatioClasses[aspectRatio];
+
     if (status === 'error') {
         if (fallbackComponent) {
             return <>{fallbackComponent}</>;
         }
         return (
-            <div className={`flex items-center justify-center bg-gray-800 text-gray-600 ${className}`}>
-                <ImageOff size={24} />
+            <div className={`flex items-center justify-center bg-obsidian-900 text-gray-600 rounded-lg ${aspectClass} ${className}`}>
+                <ImageOff size={24} className="opacity-50" />
             </div>
         );
     }
 
     return (
-        <div className={`relative overflow-hidden ${className}`}>
+        <div className={`relative overflow-hidden ${aspectClass} ${className}`}>
             {status === 'loading' && showSkeleton && (
-                <div className="absolute inset-0 bg-gray-800 animate-pulse flex items-center justify-center z-10">
-                    <Loader2 size={24} className="text-gray-600 animate-spin" />
+                <div className="absolute inset-0 bg-obsidian-900 animate-pulse flex items-center justify-center z-10 rounded-lg">
+                    <Loader2 size={20} className="text-gray-600 animate-spin" />
                 </div>
             )}
 
             <img
                 src={currentSrc}
                 alt={alt}
-                loading="lazy"
-                className={`w-full h-full object-cover transition-opacity duration-300 ${status === 'loading' ? 'opacity-0' : 'opacity-100'}`}
+                loading={loading}
+                decoding="async"
+                className={`w-full h-full ${objectFitClass} transition-opacity duration-300 ${status === 'loading' ? 'opacity-0' : 'opacity-100'}`}
                 onError={handleError}
                 onLoad={handleLoad}
                 {...props}
@@ -74,3 +94,4 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
         </div>
     );
 };
+

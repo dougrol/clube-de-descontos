@@ -131,7 +131,7 @@ const Home: React.FC = () => {
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-widest text-purple-400 mb-1 block flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse"></span>
-                  Área do Aluno
+                  Consultoria Especializada
                 </span>
                 <h3 className="text-lg font-bold text-white mb-1">Escola de Negócios</h3>
                 <p className="text-gray-400 text-xs max-w-[180px] leading-relaxed">Treinamentos exclusivos para alta performance em vendas.</p>
