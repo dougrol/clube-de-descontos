@@ -62,7 +62,7 @@ const PartnerDetail: React.FC = () => {
   if (loading) return <div className="h-screen flex items-center justify-center bg-black text-gold-500">Carregando...</div>;
   if (!partner) return <div className="p-10 text-center text-white bg-black h-screen">Parceiro não encontrado</div>;
 
-  const defaultCover = 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1920&auto=format&fit=crop';
+  const defaultCover = 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=75&w=1080&auto=format&fit=crop';
   const defaultLogo = `https://ui-avatars.com/api/?name=${encodeURIComponent(partner.name || 'P')}&background=F59E0B&color=000000`;
 
   return (
@@ -81,6 +81,7 @@ const PartnerDetail: React.FC = () => {
           src={partner.coverUrl || defaultCover}
           className="w-full h-full object-cover"
           alt="Cover"
+          decoding="async"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
             target.src = defaultCover;
@@ -94,6 +95,8 @@ const PartnerDetail: React.FC = () => {
             src={partner.logoUrl || defaultLogo}
             className="w-full h-full object-contain"
             alt="Logo"
+            loading="lazy"
+            decoding="async"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
               target.src = defaultLogo;

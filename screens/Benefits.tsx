@@ -134,7 +134,7 @@ const Benefits: React.FC = () => {
 
         {/* Premium Cover Image */}
         <img
-          src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=3000&auto=format&fit=crop"
+          src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=75&w=1080&auto=format&fit=crop"
           alt="Clube de Vantagens Luxo"
           loading="eager"
           // @ts-ignore

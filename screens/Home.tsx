@@ -65,14 +65,18 @@ const Home: React.FC = () => {
             <p className="text-gray-400 text-xs md:text-sm">Bem-vindo ao seu Clube Exclusive</p>
           </div>
 
-          <div onClick={() => navigate('/profile')} className="relative cursor-pointer group">
-            <div className="w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-white/10 p-1 group-hover:border-gold-500 transition-colors duration-300">
-              <ImageWithFallback
-                src={displayAvatar}
-                alt="Profile"
-                className="w-full h-full object-cover rounded-full"
-                fallbackSrc={`https://ui-avatars.com/api/?name=${user?.user_metadata?.name || 'User'}&background=D4AF37&color=000`}
-              />
+          <div className="flex items-center gap-3">
+
+
+            <div onClick={() => navigate('/profile')} className="relative cursor-pointer group">
+              <div className="w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-white/10 p-1 group-hover:border-gold-500 transition-colors duration-300">
+                <ImageWithFallback
+                  src={displayAvatar}
+                  alt="Profile"
+                  className="w-full h-full object-cover rounded-full"
+                  fallbackSrc={`https://ui-avatars.com/api/?name=${user?.user_metadata?.name || 'User'}&background=D4AF37&color=000`}
+                />
+              </div>
             </div>
           </div>
         </header>
