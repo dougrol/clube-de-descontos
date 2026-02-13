@@ -7,6 +7,7 @@ import { supabase } from '../services/supabaseClient';
 import { Partner, PartnerCategory, Product, ProductDB } from '../types';
 import { useCMS, SiteContent } from '../contexts/CMSContext';
 import { fetchActiveProducts, toggleProductActive, updateProduct } from '../services/storeService';
+import { updatePartner } from '../services/partners';
 import { UsedCouponsList } from '../components/admin/UsedCouponsList';
 
 interface ChartData {
@@ -323,8 +324,10 @@ const Admin: React.FC = () => {
     e.preventDefault();
     if (!editingPartner || !formData) return;
     try {
-      const { error } = await supabase.from('partners').update(formData).eq('id', editingPartner.id);
-      if (error) throw error;
+      // Use the service function to handle camelCase -> snake_case mapping
+      const updated = await updatePartner(editingPartner.id, formData);
+      if (!updated) throw new Error('Falha ao atualizar parceiro');
+
       setIsModalOpen(false);
       setEditingPartner(null);
       fetchDashboardData();
@@ -529,14 +532,91 @@ const Admin: React.FC = () => {
           {/* Partner Monitoring List - Mobile optimized with horizontal scroll */}
           <section>
             <h3 className="text-sm sm:text-base font-medium text-white mb-3">Monitoramento de Parceiros</h3>
-            <Card className="bg-obsidian-800 border-none overflow-hidden">
+
+            {/* Mobile View: Cards */}
+            <div className="grid grid-cols-1 gap-4 sm:hidden">
+              {loading ? (
+                <div className="text-center p-4 text-gray-500">Carregando...</div>
+              ) : partners.length === 0 ? (
+                <div className="text-center p-4 text-gray-500">Nenhum parceiro.</div>
+              ) : (
+                partners.map(partner => (
+                  <Card key={partner.id} className="bg-obsidian-800 border border-obsidian-700 p-4">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        {partner.logoUrl ? (
+                          <img src={partner.logoUrl} alt={partner.name} className="w-10 h-10 rounded-full object-cover" />
+                        ) : (
+                          <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-xs text-white uppercase">
+                            {partner.name.substring(0, 2)}
+                          </div>
+                        )}
+                        <div>
+                          <h4 className="font-bold text-white text-sm">{partner.name}</h4>
+                          <span className="text-xs text-gold-500">{partner.category}</span>
+                        </div>
+                      </div>
+                      <span className={`px-2 py-1 rounded text-[10px] items-center gap-1 font-bold uppercase flex ${partner.status === 'active' ? 'bg-green-500/20 text-green-500' :
+                        partner.status === 'suspended' ? 'bg-red-500/20 text-red-500' : 'bg-yellow-500/20 text-yellow-500'
+                        }`}>
+                        {partner.status === 'active' ? <CheckCircle size={10} /> : partner.status === 'suspended' ? <Slash size={10} /> : <Clock size={10} />}
+                        {partner.status || 'PENDING'}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/5">
+                      <div className="text-xs text-gray-400">
+                        {partner.city || 'Sem local'}
+                      </div>
+                      <div className="flex gap-3">
+                        {partner.status !== 'active' && (
+                          <button
+                            onClick={() => handleUpdateStatus(partner.id, 'active')}
+                            className="text-green-500 hover:text-green-400"
+                            title="Aprovar"
+                          >
+                            <CheckCircle size={18} />
+                          </button>
+                        )}
+                        {partner.status === 'active' && (
+                          <button
+                            onClick={() => handleUpdateStatus(partner.id, 'suspended')}
+                            className="text-red-500 hover:text-red-400"
+                            title="Suspender"
+                          >
+                            <Slash size={18} />
+                          </button>
+                        )}
+                        <button
+                          onClick={() => handleEdit(partner)}
+                          className="text-gold-500 hover:text-gold-400"
+                          title="Editar"
+                        >
+                          <Pencil size={18} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(partner.id)}
+                          className="text-red-600 hover:text-red-500"
+                          title="Excluir"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
+                    </div>
+                  </Card>
+                ))
+              )}
+            </div>
+
+            {/* Desktop View: Table */}
+            <Card className="hidden sm:block bg-obsidian-800 border-none overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs sm:text-sm text-gray-400 min-w-[500px]">
                   <thead className="bg-obsidian-900 uppercase font-medium text-[10px] sm:text-xs">
                     <tr>
                       <th className="p-2 sm:p-3">Parceiro</th>
-                      <th className="p-2 sm:p-3 hidden sm:table-cell">Categoria</th>
-                      <th className="p-2 sm:p-3 hidden sm:table-cell">Cidade</th>
+                      <th className="p-2 sm:p-3">Categoria</th>
+                      <th className="p-2 sm:p-3">Cidade</th>
                       <th className="p-2 sm:p-3">Status</th>
                       <th className="p-2 sm:p-3 text-right">Ações</th>
                     </tr>
@@ -559,8 +639,8 @@ const Admin: React.FC = () => {
                               <span className="truncate max-w-[100px] sm:max-w-none">{partner.name}</span>
                             </div>
                           </td>
-                          <td className="p-2 sm:p-3 hidden sm:table-cell">{partner.category}</td>
-                          <td className="p-2 sm:p-3 hidden sm:table-cell">{partner.city || '-'}</td>
+                          <td className="p-2 sm:p-3">{partner.category}</td>
+                          <td className="p-2 sm:p-3">{partner.city || '-'}</td>
                           <td className={`p-2 sm:p-3 ${getStatusColor(partner.status)}`}>
                             <div className="flex items-center gap-1 font-bold">
                               {getStatusIcon(partner.status)}
@@ -625,7 +705,67 @@ const Admin: React.FC = () => {
           </div>
 
           <Card className="bg-obsidian-800 border-none overflow-hidden">
-            <div className="overflow-x-auto">
+            {/* Mobile View: Cards */}
+            <div className="grid grid-cols-1 gap-4 sm:hidden p-4">
+              {productsLoading ? (
+                <div className="text-center p-4 text-gray-500">Carregando produtos...</div>
+              ) : allProducts.length === 0 ? (
+                <div className="text-center p-4 text-gray-500">Nenhum produto encontrado.</div>
+              ) : (
+                allProducts.map((product: any) => (
+                  <div key={product.id} className="bg-black/40 border border-white/5 p-3 rounded-lg flex gap-3">
+                    <img
+                      src={product.image_url || 'https://placehold.co/40x40/1a1a1a/d4af37?text=P'}
+                      alt={product.title}
+                      className="w-16 h-16 rounded-md object-cover shrink-0"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.onerror = null;
+                        target.src = 'https://placehold.co/40x40/1a1a1a/d4af37?text=P';
+                      }}
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex justify-between items-start">
+                        <h4 className="text-white font-medium text-sm truncate pr-2">{product.title}</h4>
+                        <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${product.active ? 'bg-green-500/20 text-green-500' : 'bg-gray-500/20 text-gray-400'}`}>
+                          {product.active ? 'Ativo' : 'Inativo'}
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-500 truncate mb-1">{product.partners?.name || 'Sem parceiro'}</p>
+
+                      <div className="flex justify-between items-center mt-2">
+                        <div className="flex flex-col">
+                          <span className="text-gold-500 font-bold text-sm">R$ {Number(product.price_discount).toFixed(2)}</span>
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleToggleProductActive(product.id, product.active)}
+                            className={`p-1.5 rounded bg-white/5 ${product.active ? 'text-green-500' : 'text-gray-400'}`}
+                          >
+                            {product.active ? <EyeOff size={16} /> : <Eye size={16} />}
+                          </button>
+                          <button
+                            onClick={() => handleEditProduct(product)}
+                            className="p-1.5 rounded bg-white/5 text-gold-500"
+                          >
+                            <Pencil size={16} />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteProduct(product.id)}
+                            className="p-1.5 rounded bg-white/5 text-red-500"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* Desktop View: Table */}
+            <div className="hidden sm:block overflow-x-auto">
               <table className="w-full text-left text-sm text-gray-400">
                 <thead className="bg-obsidian-900 uppercase font-medium">
                   <tr>
@@ -773,7 +913,64 @@ const Admin: React.FC = () => {
           </div>
 
           <Card className="bg-obsidian-800 border-none overflow-hidden">
-            <div className="overflow-x-auto">
+            {/* Mobile View: Cards */}
+            <div className="grid grid-cols-1 gap-4 sm:hidden p-4">
+              {protectionLoading ? (
+                <div className="text-center p-4 text-gray-500">Carregando planos...</div>
+              ) : protectionPlans.length === 0 ? (
+                <div className="text-center p-4 text-gray-500">Nenhum plano encontrado.</div>
+              ) : (
+                protectionPlans.map(plan => (
+                  <div key={plan.id} className="bg-black/40 border border-white/5 p-3 rounded-lg">
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-white font-medium">{plan.name}</span>
+                        {plan.is_popular && (
+                          <span className="bg-gold-500 text-black text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                            <Star size={10} fill="black" /> Top
+                          </span>
+                        )}
+                      </div>
+                      <span className={`px-2 py-1 rounded text-[10px] font-bold ${plan.active ? 'bg-green-500/20 text-green-500' : 'bg-gray-500/20 text-gray-400'}`}>
+                        {plan.active ? 'Ativo' : 'Inativo'}
+                      </span>
+                    </div>
+
+                    <div className="flex justify-between items-end">
+                      <div>
+                        <span className="text-gold-500 font-bold text-lg">R$ {plan.price.toFixed(2).replace('.', ',')}</span>
+                        <span className="text-gray-500 text-xs">/mês</span>
+                        <div className="text-xs text-gray-400 mt-1">{plan.features.length} coberturas</div>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleTogglePlanActive(plan.id, plan.active)}
+                          className={`p-1.5 rounded bg-white/5 ${plan.active ? 'text-green-500' : 'text-gray-400'}`}
+                        >
+                          {plan.active ? <EyeOff size={16} /> : <Eye size={16} />}
+                        </button>
+                        <button
+                          onClick={() => handleEditPlan(plan)}
+                          className="p-1.5 rounded bg-white/5 text-gold-500"
+                        >
+                          <Pencil size={16} />
+                        </button>
+                        <button
+                          onClick={() => handleDeletePlan(plan.id)}
+                          className="p-1.5 rounded bg-white/5 text-red-500"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* Desktop View: Table */}
+            <div className="hidden sm:block overflow-x-auto">
               <table className="w-full text-left text-sm text-gray-400">
                 <thead className="bg-obsidian-900 uppercase font-medium">
                   <tr>
@@ -856,62 +1053,145 @@ const Admin: React.FC = () => {
         title="Editar Parceiro"
       >
         <form onSubmit={handleSave} className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm text-gray-400 mb-1">Nome Fantasia</label>
+              <input
+                type="text"
+                value={formData?.name || ''}
+                onChange={e => setFormData({ ...formData, name: e.target.value })}
+                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-gray-400 mb-1">Razão Social</label>
+              <input
+                type="text"
+                value={formData?.companyName || ''}
+                onChange={e => setFormData({ ...formData, companyName: e.target.value })}
+                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm text-gray-400 mb-1">CNPJ</label>
+              <input
+                type="text"
+                value={formData?.cnpj || ''}
+                onChange={e => setFormData({ ...formData, cnpj: e.target.value })}
+                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-gray-400 mb-1">Categoria</label>
+              <select
+                value={formData?.category || ''}
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                onChange={e => setFormData({ ...formData, category: e.target.value as any })}
+                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+              >
+                {Object.values(PartnerCategory).map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm text-gray-400 mb-1">Responsável</label>
+              <input
+                type="text"
+                value={formData?.responsibleName || ''}
+                onChange={e => setFormData({ ...formData, responsibleName: e.target.value })}
+                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-gray-400 mb-1">Telefone</label>
+              <input
+                type="text"
+                value={formData?.phone || ''}
+                onChange={e => setFormData({ ...formData, phone: e.target.value })}
+                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+              />
+            </div>
+          </div>
+
           <div>
-            <label className="block text-sm text-gray-400 mb-1">Nome do Parceiro</label>
+            <label className="block text-sm text-gray-400 mb-1">Email</label>
             <input
-              type="text"
-              value={formData.name || ''}
-              onChange={e => setFormData({ ...formData, name: e.target.value })}
-              className="w-full bg-black border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
-              required
+              type="email"
+              value={formData?.email || ''}
+              onChange={e => setFormData({ ...formData, email: e.target.value })}
+              className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
             />
           </div>
 
-          <div>
-            <label className="block text-sm text-gray-400 mb-1">Categoria</label>
-            <select
-              value={formData.category || ''}
-              onChange={e => setFormData({ ...formData, category: e.target.value as PartnerCategory })}
-              className="w-full bg-black border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
-            >
-              {Object.values(PartnerCategory).map(cat => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm text-gray-400 mb-1">Benefício (Ex: 20% OFF)</label>
-              <input
-                type="text"
-                value={formData.benefit || ''}
-                onChange={e => setFormData({ ...formData, benefit: e.target.value })}
-                className="w-full bg-black border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
-              />
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm text-gray-400 mb-1">Cidade</label>
               <input
                 type="text"
-                value={formData.city || ''}
+                value={formData?.city || ''}
                 onChange={e => setFormData({ ...formData, city: e.target.value })}
-                className="w-full bg-black border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-gray-400 mb-1">Status</label>
+              <select
+                value={formData?.status || 'pending'}
+                onChange={e => setFormData({ ...formData, status: e.target.value as ExtendedPartner['status'] })}
+                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+              >
+                <option value="pending">Pendente</option>
+                <option value="active">Ativo</option>
+                <option value="suspended">Suspenso</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm text-gray-400 mb-1">URL do Logo</label>
+              <input
+                type="text"
+                value={formData?.logoUrl || ''}
+                onChange={e => setFormData({ ...formData, logoUrl: e.target.value })}
+                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none text-xs"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-gray-400 mb-1">URL da Capa</label>
+              <input
+                type="text"
+                value={formData?.coverUrl || ''}
+                onChange={e => setFormData({ ...formData, coverUrl: e.target.value })}
+                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none text-xs"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm text-gray-400 mb-1">Status</label>
-            <select
-              value={formData.status || 'pending'}
-              onChange={e => setFormData({ ...formData, status: e.target.value as ExtendedPartner['status'] })}
-              className="w-full bg-black border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
-            >
-              <option value="pending">Pendente</option>
-              <option value="active">Ativo</option>
-              <option value="suspended">Suspenso</option>
-            </select>
+            <label className="block text-sm text-gray-400 mb-1">Benefício (Curto)</label>
+            <input
+              type="text"
+              value={formData?.benefit || ''}
+              onChange={e => setFormData({ ...formData, benefit: e.target.value })}
+              className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm text-gray-400 mb-1">Regras Completas</label>
+            <textarea
+              value={formData?.fullRules || ''}
+              onChange={e => setFormData({ ...formData, fullRules: e.target.value })}
+              className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none min-h-[80px]"
+            />
           </div>
 
           <div className="flex gap-3 justify-end mt-6">

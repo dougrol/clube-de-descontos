@@ -29,7 +29,13 @@ export const fetchPartners = async (): Promise<Partner[]> => {
         address: p.address,
         isOnline: p.is_online,
         website: p.website,
-        coordinates: p.lat && p.lng ? { lat: p.lat, lng: p.lng } : undefined
+        coordinates: p.lat && p.lng ? { lat: p.lat, lng: p.lng } : undefined,
+        // Map new fields
+        cnpj: p.cnpj,
+        phone: p.phone,
+        email: p.email,
+        responsibleName: p.responsible_name,
+        companyName: p.company_name
     }));
 };
 
@@ -59,7 +65,13 @@ export const fetchPartnerById = async (id: string): Promise<Partner | null> => {
         address: p.address,
         isOnline: p.is_online,
         website: p.website,
-        coordinates: p.lat && p.lng ? { lat: p.lat, lng: p.lng } : undefined
+        coordinates: p.lat && p.lng ? { lat: p.lat, lng: p.lng } : undefined,
+        // Map new fields
+        cnpj: p.cnpj,
+        phone: p.phone,
+        email: p.email,
+        responsibleName: p.responsible_name,
+        companyName: p.company_name
     };
 };
 
@@ -96,7 +108,13 @@ export const updatePartner = async (id: string, updates: Partial<Partner>): Prom
         is_online: updates.isOnline,
         website: updates.website,
         lat: updates.coordinates?.lat,
-        lng: updates.coordinates?.lng
+        lng: updates.coordinates?.lng,
+        // New fields
+        cnpj: updates.cnpj,
+        phone: updates.phone,
+        email: updates.email,
+        responsible_name: updates.responsibleName,
+        company_name: updates.companyName
     };
 
     // Remove undefined keys
@@ -128,6 +146,12 @@ export const updatePartner = async (id: string, updates: Partial<Partner>): Prom
         address: p.address,
         isOnline: p.is_online,
         website: p.website,
-        coordinates: p.lat && p.lng ? { lat: p.lat, lng: p.lng } : undefined
+        coordinates: p.lat && p.lng ? { lat: p.lat, lng: p.lng } : undefined,
+        // Map new fields
+        cnpj: p.cnpj,
+        phone: p.phone,
+        email: p.email,
+        responsibleName: p.responsible_name,
+        companyName: p.company_name
     };
 };

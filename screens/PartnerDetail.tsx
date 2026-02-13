@@ -142,6 +142,60 @@ const PartnerDetail: React.FC = () => {
           )}
         </div>
 
+        {/* Contact Info Section */}
+        <div className="bg-obsidian-900/50 rounded-xl p-4 space-y-3 border border-white/5">
+          {partner.phone && (
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-gold-500/10 flex items-center justify-center text-gold-500">
+                <span className="text-xs">📞</span>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">Telefone</p>
+                <a href={`tel:${partner.phone.replace(/\D/g, '')}`} className="text-sm text-white hover:text-gold-500 transition-colors">
+                  {partner.phone}
+                </a>
+              </div>
+            </div>
+          )}
+
+          {partner.email && (
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-gold-500/10 flex items-center justify-center text-gold-500">
+                <span className="text-xs">✉️</span>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">Email</p>
+                <a href={`mailto:${partner.email}`} className="text-sm text-white hover:text-gold-500 transition-colors">
+                  {partner.email}
+                </a>
+              </div>
+            </div>
+          )}
+
+          {partner.responsibleName && (
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-gold-500/10 flex items-center justify-center text-gold-500">
+                <span className="text-xs">👤</span>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">Responsável</p>
+                <p className="text-sm text-white">{partner.responsibleName}</p>
+              </div>
+            </div>
+          )}
+          {partner.companyName && partner.companyName !== partner.name && (
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-gold-500/10 flex items-center justify-center text-gold-500">
+                <span className="text-xs">🏢</span>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">Razão Social</p>
+                <p className="text-sm text-white">{partner.companyName}</p>
+              </div>
+            </div>
+          )}
+        </div>
+
         <Card className="bg-gradient-to-r from-obsidian-900 to-obsidian-800 border-gold-500/30">
           <div className="text-center p-2">
             <p className="text-gray-400 text-xs uppercase tracking-wider mb-1">Benefício Exclusivo</p>

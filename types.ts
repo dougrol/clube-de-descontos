@@ -58,6 +58,12 @@ export interface Partner {
     lat: number;
     lng: number;
   };
+  // New fields
+  cnpj?: string;
+  phone?: string;
+  email?: string;
+  responsibleName?: string;
+  companyName?: string;
 }
 
 export interface Coupon {
@@ -84,6 +90,12 @@ export interface PartnerDB {
   lat?: number;
   lng?: number;
   status?: string;
+  // New fields
+  cnpj?: string;
+  phone?: string;
+  email?: string;
+  responsible_name?: string;
+  company_name?: string;
 }
 
 // ===========================================

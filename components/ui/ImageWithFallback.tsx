@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import React, { useState, useEffect } from 'react';
 import { ImageOff, Loader2 } from 'lucide-react';
 
@@ -30,16 +31,25 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
     loading = 'lazy',
     ...props
 }) => {
-    const [status, setStatus] = useState<'loading' | 'error' | 'loaded'>('loading');
-    const [currentSrc, setCurrentSrc] = useState<string | undefined>(src);
+    const [status, setStatus] = useState<'loading' | 'error' | 'loaded'>(() => {
+        // If no valid src supplied, start in error state so we don't render a blank img
+        if (!src || (typeof src === 'string' && src.trim() === '')) return 'error';
+        return 'loading';
+    });
+
+    const [currentSrc, setCurrentSrc] = useState<string | undefined>(() => {
+        if (!src || (typeof src === 'string' && src.trim() === '')) return undefined;
+        return src as string;
+    });
 
     useEffect(() => {
-        if (!src) {
+        if (!src || (typeof src === 'string' && src.trim() === '')) {
+            setCurrentSrc(undefined);
             setStatus('error');
             return;
         }
+        setCurrentSrc(src as string);
         setStatus('loading');
-        setCurrentSrc(src);
     }, [src]);
 
     const handleError = () => {
@@ -62,7 +72,7 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
 
     const aspectClass = aspectRatioClasses[aspectRatio];
 
-    if (status === 'error') {
+    if (status === 'error' || !currentSrc) {
         if (fallbackComponent) {
             return <>{fallbackComponent}</>;
         }
@@ -81,8 +91,9 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
                 </div>
             )}
 
-            <img
-                src={currentSrc}
+            {currentSrc && (
+                <img
+                    src={currentSrc}
                 alt={alt}
                 loading={loading}
                 decoding="async"
@@ -90,7 +101,8 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
                 onError={handleError}
                 onLoad={handleLoad}
                 {...props}
-            />
+                />
+            )}
         </div>
     );
 };

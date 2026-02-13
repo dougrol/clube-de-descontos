@@ -77,20 +77,33 @@ const Login: React.FC = () => {
 
         if (error) throw error;
 
+        const userId = data?.user?.id;
+        if (!userId) {
+          // Defensive: ensure we have a user id before proceeding
+          throw new Error('Erro ao autenticar parceiro. Tente novamente.');
+        }
+
         // Verify if user is actually a partner
-        const { data: userData } = await supabase
+        const { data: userData, error: userError } = await supabase
           .from('users')
           .select('role')
-          .eq('id', data.user.id)
+          .eq('id', userId)
           .single();
 
-        if (userData && userData.role !== 'PARTNER' && userData.role !== 'ADMIN') {
+        if (userError) {
+          console.error('Error fetching partner role:', userError);
           await supabase.auth.signOut();
-          throw new Error('Esta conta não tem permissão de parceiro.');
+          throw new Error('Erro ao verificar permissões. Tente novamente.');
         }
 
         if (!userData) {
+          await supabase.auth.signOut();
           throw new Error('Usuário não encontrado.');
+        }
+
+        if (userData.role !== 'PARTNER' && userData.role !== 'ADMIN') {
+          await supabase.auth.signOut();
+          throw new Error('Esta conta não tem permissão de parceiro.');
         }
 
         // Force refresh session to ensure AuthContext has the latest role

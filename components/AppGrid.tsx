@@ -95,7 +95,7 @@ export const AppGrid: React.FC = () => {
     ];
 
     return (
-        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-y-8 gap-x-2 w-full px-2">
+        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-y-6 gap-x-2 w-full px-2">
             {items.map((item, idx) => (
                 <GridItem key={idx} icon={item.icon} label={item.title} path={item.path} color={item.color} />
             ))}
