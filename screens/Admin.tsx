@@ -444,7 +444,7 @@ const Admin: React.FC = () => {
   };
 
   return (
-    <div className="p-4 sm:p-5 pb-24 min-h-screen bg-black animate-fade-in space-y-5 sm:space-y-8">
+    <div className="p-4 sm:p-5 pb-32 min-h-screen bg-black animate-fade-in space-y-5 sm:space-y-8">
       <header className="mb-4 sm:mb-6 flex flex-col gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-white">Painel Gestor</h1>

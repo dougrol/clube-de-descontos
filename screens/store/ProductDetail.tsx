@@ -71,7 +71,7 @@ const ProductDetail: React.FC = () => {
     const totalPrice = product.priceDiscount * quantity;
 
     return (
-        <div className="min-h-screen bg-black pb-32 animate-fade-in">
+        <div className="min-h-screen bg-black pb-40 animate-fade-in">
             {/* Header Image */}
             <div className="relative h-80 w-full">
                 <button
