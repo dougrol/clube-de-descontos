@@ -163,6 +163,22 @@ const Profile: React.FC<ProfileProps> = ({ userRole }) => {
                </div>
             </div>
 
+            {/* Group 1.5: Partner Controls (Conditional) */}
+            {userRole === UserRole.PARTNER && (
+               <div>
+                  <h3 className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-2 pl-2 text-gold-500">Gestão de Loja</h3>
+                  <div className="rounded-xl overflow-hidden border border-gold-500/20 bg-gold-500/5">
+                     <MenuOption
+                        icon={Building2}
+                        label="Painel do Parceiro"
+                        subLabel="Validar cupons e ver visitas"
+                        onClick={() => navigate('/partner-dashboard')}
+                        color="text-gold-500"
+                     />
+                  </div>
+               </div>
+            )}
+
             {/* Group 2: Support */}
             <div>
                <h3 className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-2 pl-2">Ajuda</h3>
