@@ -128,7 +128,7 @@ const ResetPassword: React.FC = () => {
             // Sign out and redirect to login after 3 seconds
             setTimeout(async () => {
                 await supabase.auth.signOut();
-                navigate('/admin-login');
+                navigate('/login');
             }, 3000);
 
         } catch (err: unknown) {

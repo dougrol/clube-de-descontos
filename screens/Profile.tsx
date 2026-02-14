@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { UserRole } from '../types';
 import { useAuth } from '../contexts/AuthContext';
-import { Button, AvatarUpload } from '../components/ui';
+import { AvatarUpload } from '../components/ui';
 import { LogOut, ChevronRight, User, Ticket, LifeBuoy, Crown, CheckCircle2, Key, ShoppingBag, BookOpen, CreditCard } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { uploadAvatar, updateUserAvatar } from '../services/avatarService';
@@ -10,6 +10,32 @@ import { supabase } from '../services/supabaseClient';
 interface ProfileProps {
    userRole: UserRole;
 }
+
+interface MenuOptionProps {
+   icon: React.ElementType;
+   label: string;
+   subLabel?: string;
+   onClick: () => void;
+   color?: string;
+}
+
+const MenuOption: React.FC<MenuOptionProps> = ({ icon: Icon, label, subLabel, onClick, color = "text-white" }) => (
+   <div
+      onClick={onClick}
+      className="flex items-center justify-between p-4 bg-obsidian-900 border-b border-white/5 last:border-b-0 cursor-pointer active:bg-white/5 transition-colors"
+   >
+      <div className="flex items-center gap-4">
+         <div className={`w-8 h-8 rounded-lg flex items-center justify-center bg-gray-800/50 ${color}`}>
+            <Icon size={18} />
+         </div>
+         <div>
+            <p className="text-white text-sm font-medium">{label}</p>
+            {subLabel && <p className="text-gray-500 text-xs">{subLabel}</p>}
+         </div>
+      </div>
+      <ChevronRight size={16} className="text-gray-600" />
+   </div>
+);
 
 const Profile: React.FC<ProfileProps> = ({ userRole }) => {
    const navigate = useNavigate();
@@ -60,23 +86,7 @@ const Profile: React.FC<ProfileProps> = ({ userRole }) => {
    const defaultAvatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(userName) + '&background=D4AF37&color=000';
    const displayAvatar = avatarUrl || defaultAvatar;
 
-   const MenuOption = ({ icon: Icon, label, subLabel, onClick, color = "text-white" }: any) => (
-      <div
-         onClick={onClick}
-         className="flex items-center justify-between p-4 bg-obsidian-900 border-b border-white/5 last:border-b-0 cursor-pointer active:bg-white/5 transition-colors"
-      >
-         <div className="flex items-center gap-4">
-            <div className={`w-8 h-8 rounded-lg flex items-center justify-center bg-gray-800/50 ${color}`}>
-               <Icon size={18} />
-            </div>
-            <div>
-               <p className="text-white text-sm font-medium">{label}</p>
-               {subLabel && <p className="text-gray-500 text-xs">{subLabel}</p>}
-            </div>
-         </div>
-         <ChevronRight size={16} className="text-gray-600" />
-      </div>
-   );
+
 
    return (
       <div className="min-h-screen bg-obsidian-950 pb-32 animate-fade-in">

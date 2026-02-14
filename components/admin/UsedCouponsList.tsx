@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../services/supabaseClient';
 import { Card } from '../ui';
-import { Ticket, Search, Filter, RefreshCw, CheckCircle, Clock, XCircle } from 'lucide-react';
+import { Ticket, Search, RefreshCw, CheckCircle, Clock, XCircle, Trash2, CheckSquare } from 'lucide-react';
 
 interface CouponDB {
     id: string;
@@ -12,14 +12,15 @@ interface CouponDB {
     status: string;
     created_at: string;
     used_at?: string;
-    partner_id: string; // To filter by partner if needed
+    partner_id: string;
 }
 
 export const UsedCouponsList: React.FC = () => {
     const [coupons, setCoupons] = useState<CouponDB[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
-    const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'used' | 'expired'>('used');
+    const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'used' | 'expired'>('all');
+    const [actionLoading, setActionLoading] = useState<string | null>(null);
 
     const fetchCoupons = async () => {
         setLoading(true);
@@ -48,6 +49,36 @@ export const UsedCouponsList: React.FC = () => {
         fetchCoupons();
     }, [statusFilter]);
 
+    const handleDelete = async (couponId: string) => {
+        if (!confirm('Excluir este cupom permanentemente?')) return;
+        setActionLoading(couponId);
+        try {
+            const { error } = await supabase.from('coupons').delete().eq('id', couponId);
+            if (error) throw error;
+            setCoupons(prev => prev.filter(c => c.id !== couponId));
+        } catch (error) {
+            console.error('Error deleting coupon:', error);
+        } finally {
+            setActionLoading(null);
+        }
+    };
+
+    const handleMarkAsUsed = async (couponId: string) => {
+        setActionLoading(couponId);
+        try {
+            const { error } = await supabase
+                .from('coupons')
+                .update({ status: 'used', used_at: new Date().toISOString() })
+                .eq('id', couponId);
+            if (error) throw error;
+            setCoupons(prev => prev.map(c => c.id === couponId ? { ...c, status: 'used', used_at: new Date().toISOString() } : c));
+        } catch (error) {
+            console.error('Error marking coupon as used:', error);
+        } finally {
+            setActionLoading(null);
+        }
+    };
+
     const filteredCoupons = coupons.filter(c =>
         c.code.toLowerCase().includes(search.toLowerCase()) ||
         (c.user_name && c.user_name.toLowerCase().includes(search.toLowerCase())) ||
@@ -72,30 +103,34 @@ export const UsedCouponsList: React.FC = () => {
         }
     };
 
+    const filterTabs = [
+        { key: 'all', label: 'Todos', color: 'bg-white text-black' },
+        { key: 'active', label: 'Ativos', color: 'bg-green-500 text-white' },
+        { key: 'used', label: 'Usados', color: 'bg-blue-500 text-white' },
+        { key: 'expired', label: 'Expirados', color: 'bg-red-500 text-white' },
+    ] as const;
+
     return (
         <div className="space-y-6 animate-fade-in">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h2 className="text-xl font-bold text-white flex items-center gap-2">
                         <Ticket className="text-gold-500" size={24} />
-                        Histórico de Cupons
+                        Gestão de Cupons
                     </h2>
-                    <p className="text-gray-400 text-sm">Monitore a utilização dos benefícios</p>
+                    <p className="text-gray-400 text-sm">Monitore, edite e gerencie os cupons</p>
                 </div>
 
-                <div className="flex gap-2">
-                    <button
-                        onClick={() => setStatusFilter('all')}
-                        className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${statusFilter === 'all' ? 'bg-white text-black' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}
-                    >
-                        Todos
-                    </button>
-                    <button
-                        onClick={() => setStatusFilter('used')}
-                        className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${statusFilter === 'used' ? 'bg-blue-500 text-white' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}
-                    >
-                        Usados
-                    </button>
+                <div className="flex gap-2 flex-wrap">
+                    {filterTabs.map(tab => (
+                        <button
+                            key={tab.key}
+                            onClick={() => setStatusFilter(tab.key)}
+                            className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${statusFilter === tab.key ? tab.color : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}
+                        >
+                            {tab.label}
+                        </button>
+                    ))}
                     <button
                         onClick={fetchCoupons}
                         className="p-2 bg-gold-500 text-black rounded-lg hover:bg-gold-400 transition-colors"
@@ -106,7 +141,7 @@ export const UsedCouponsList: React.FC = () => {
                 </div>
             </div>
 
-            {/* Filters */}
+            {/* Search */}
             <div className="flex gap-4 bg-obsidian-900 p-4 rounded-xl border border-white/5">
                 <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
@@ -126,26 +161,27 @@ export const UsedCouponsList: React.FC = () => {
                     <table className="w-full text-left text-sm text-gray-400">
                         <thead className="bg-obsidian-900 uppercase font-medium">
                             <tr>
-                                <th className="p-4">Data Uso</th>
+                                <th className="p-4">Data</th>
                                 <th className="p-4">Código</th>
                                 <th className="p-4">Cliente</th>
                                 <th className="p-4">Parceiro</th>
                                 <th className="p-4">Benefício</th>
                                 <th className="p-4 text-center">Status</th>
+                                <th className="p-4 text-center">Ações</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-800">
                             {loading ? (
-                                <tr><td colSpan={6} className="p-8 text-center">Carregando histórico...</td></tr>
+                                <tr><td colSpan={7} className="p-8 text-center">Carregando...</td></tr>
                             ) : filteredCoupons.length === 0 ? (
-                                <tr><td colSpan={6} className="p-8 text-center">Nenhum cupom encontrado com os filtros atuais.</td></tr>
+                                <tr><td colSpan={7} className="p-8 text-center">Nenhum cupom encontrado.</td></tr>
                             ) : (
                                 filteredCoupons.map((coupon) => (
                                     <tr key={coupon.id} className="hover:bg-obsidian-700/50 transition-colors">
                                         <td className="p-4 font-mono text-xs">
                                             {coupon.used_at
                                                 ? new Date(coupon.used_at).toLocaleDateString() + ' ' + new Date(coupon.used_at).toLocaleTimeString().slice(0, 5)
-                                                : <span className="text-gray-600">-</span>
+                                                : new Date(coupon.created_at).toLocaleDateString()
                                             }
                                         </td>
                                         <td className="p-4 font-mono text-gold-500 font-bold">{coupon.code}</td>
@@ -157,6 +193,28 @@ export const UsedCouponsList: React.FC = () => {
                                                 {getStatusIcon(coupon.status)}
                                                 {coupon.status === 'used' ? 'Utilizado' : coupon.status === 'active' ? 'Ativo' : 'Expirado'}
                                             </span>
+                                        </td>
+                                        <td className="p-4 text-center">
+                                            <div className="flex items-center justify-center gap-1">
+                                                {coupon.status === 'active' && (
+                                                    <button
+                                                        onClick={() => handleMarkAsUsed(coupon.id)}
+                                                        disabled={actionLoading === coupon.id}
+                                                        className="p-1.5 rounded-lg bg-blue-500/10 text-blue-400 hover:bg-blue-500/30 transition-colors disabled:opacity-50"
+                                                        title="Marcar como usado"
+                                                    >
+                                                        <CheckSquare size={14} />
+                                                    </button>
+                                                )}
+                                                <button
+                                                    onClick={() => handleDelete(coupon.id)}
+                                                    disabled={actionLoading === coupon.id}
+                                                    className="p-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/30 transition-colors disabled:opacity-50"
+                                                    title="Excluir cupom"
+                                                >
+                                                    <Trash2 size={14} />
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))

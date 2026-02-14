@@ -7,6 +7,7 @@ import { Toast } from './Toast';
 import Modal from './Modal';
 import AvatarUpload from './AvatarUpload';
 import QRCodeDisplay from './QRCodeDisplay';
+import QRScanner from './QRScanner';
 import { ImageWithFallback } from './ImageWithFallback';
 
 export {
@@ -19,5 +20,6 @@ export {
     Toast,
     AvatarUpload,
     QRCodeDisplay,
+    QRScanner,
     ImageWithFallback
 };

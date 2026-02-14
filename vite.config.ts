@@ -66,7 +66,6 @@ export default defineConfig(({ mode }) => {
         output: {
           manualChunks: {
             react: ["react", "react-dom"],
-            pwa: ["vite-plugin-pwa"],
             supabase: ["@supabase/supabase-js"],
           },
         },

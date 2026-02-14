@@ -122,16 +122,23 @@ const createLocalCoupon = (
  */
 export const validateCoupon = async (code: string): Promise<{ valid: boolean; coupon?: Coupon; error?: string }> => {
     try {
-        // Try database first
         const { data, error } = await supabase
             .from('coupons')
             .select('*')
-            .eq('code', code.toUpperCase())
+            .eq('code', code.toUpperCase().trim())
             .single();
 
         if (error) {
-            // Fallback to localStorage
-            return validateLocalCoupon(code);
+            // PGRST116 = no rows found (not an error, just no match)
+            if (error.code === 'PGRST116') {
+                return { valid: false, error: 'Cupom não encontrado' };
+            }
+            console.error('Supabase coupon validation error:', error.code, error.message);
+            // RLS or permission issue - try localStorage only in dev
+            if (import.meta.env.DEV) {
+                return validateLocalCoupon(code);
+            }
+            return { valid: false, error: `Erro ao consultar cupom (${error.code})` };
         }
 
         const coupon = data as Coupon;
@@ -149,7 +156,10 @@ export const validateCoupon = async (code: string): Promise<{ valid: boolean; co
         return { valid: true, coupon };
     } catch (err: unknown) {
         console.error('Error validating coupon:', err);
-        return validateLocalCoupon(code);
+        if (import.meta.env.DEV) {
+            return validateLocalCoupon(code);
+        }
+        return { valid: false, error: 'Erro de conexão ao validar cupom' };
     }
 };
 
@@ -238,14 +248,20 @@ export const markCouponAsUsed = async (couponId: string): Promise<boolean> => {
             .eq('id', couponId);
 
         if (error) {
-            // Fallback to localStorage
-            return markLocalCouponAsUsed(couponId);
+            console.error('Supabase markCouponAsUsed error:', error.code, error.message);
+            if (import.meta.env.DEV) {
+                return markLocalCouponAsUsed(couponId);
+            }
+            return false;
         }
 
         return true;
     } catch (err) {
         console.error('Error marking coupon as used:', err);
-        return markLocalCouponAsUsed(couponId);
+        if (import.meta.env.DEV) {
+            return markLocalCouponAsUsed(couponId);
+        }
+        return false;
     }
 };
 

@@ -147,9 +147,7 @@ export const registerPartner = (data: PartnerRegistrationData): boolean => {
         partnerId: newPartnerId
     };
 
-    // 3. Save Both
-    localStorage.setItem(KEYS.PARTNERS, JSON.stringify([...currentPartners, newPartner])); // Add to end, or beginning? 
-    // Let's add to beginning so it shows up first
+    // 3. Save Both (prepend so the new partner shows first)
     const updatedPartners = [newPartner, ...currentPartners];
     localStorage.setItem(KEYS.PARTNERS, JSON.stringify(updatedPartners));
 

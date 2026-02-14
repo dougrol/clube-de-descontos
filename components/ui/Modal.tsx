@@ -30,10 +30,10 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in p-0 sm:p-4">
             <div
                 ref={modalRef}
-                className="bg-obsidian-900 border border-obsidian-700 rounded-t-2xl sm:rounded-xl w-full sm:max-w-lg sm:mx-4 shadow-2xl overflow-hidden animate-scale-in max-h-[90vh] sm:max-h-[85vh] flex flex-col"
+                className="bg-obsidian-900 border border-obsidian-700 rounded-t-2xl sm:rounded-xl w-full sm:max-w-lg shadow-2xl overflow-hidden animate-scale-in max-h-[85vh] sm:max-h-[85vh] flex flex-col"
             >
                 {/* Header - Fixed */}
                 <div className="flex justify-between items-center p-4 border-b border-obsidian-800 shrink-0">
@@ -47,7 +47,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
                     </button>
                 </div>
                 {/* Content - Scrollable */}
-                <div className="p-4 sm:p-6 overflow-y-auto flex-1 overscroll-contain">
+                <div className="p-4 sm:p-6 overflow-y-auto flex-1 min-h-0 overscroll-contain">
                     {children}
                 </div>
             </div>

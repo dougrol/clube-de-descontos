@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BarChart3, Users, QrCode, Ticket, Settings, LogOut, Save, X, Edit3, CheckCircle, MapPin, Camera, Upload } from 'lucide-react';
-import { Card, SectionTitle, Badge, Button, Input, AvatarUpload, ImageWithFallback } from '../components/ui';
-import { validateCouponServer, validateCoupon } from '../services/couponService';
+import { Card, SectionTitle, Badge, Button, Input, AvatarUpload, ImageWithFallback, QRScanner } from '../components/ui';
+import { validateCoupon, markCouponAsUsed, Coupon as CouponType } from '../services/couponService';
 import { Partner } from '../types';
 import { uploadPartnerImage } from '../services/avatarService';
 import { useAuth } from '../contexts/AuthContext';
@@ -23,6 +23,7 @@ const PartnerDashboard: React.FC = () => {
     const [couponCodeInput, setCouponCodeInput] = useState('');
     const [validationMessage, setValidationMessage] = useState<string | null>(null);
     const [isValidatingLoading, setIsValidatingLoading] = useState(false);
+    const [validatedCoupon, setValidatedCoupon] = useState<CouponType | null>(null);
 
     // Form State
     const [editForm, setEditForm] = useState<Partner | null>(null);
@@ -96,14 +97,15 @@ const PartnerDashboard: React.FC = () => {
         }
     };
 
-    const validateCodeWithServer = async (code?: string) => {
+    const handleValidateCoupon = async (code?: string) => {
         setValidationMessage(null);
+        setValidatedCoupon(null);
         setIsValidatingLoading(true);
-        setValidationStep(1); // scanning
+        setValidationStep(1);
 
         let toValidate = code ?? couponCodeInput;
 
-        // Tentativa de limpar o input caso seja um JSON escaneado do QR Code
+        // Clean input if it's a scanned QR Code JSON
         try {
             if (toValidate.trim().startsWith('{')) {
                 const parsed = JSON.parse(toValidate);
@@ -111,51 +113,32 @@ const PartnerDashboard: React.FC = () => {
                     toValidate = parsed.code;
                 }
             }
-        } catch (_) {
-            // Se falhar o parse, assume que é apenas o código em texto plano
-            console.log('Input não é JSON, usando como texto plano');
+        } catch {
+            // Not JSON, use as plain text
         }
 
         try {
-            const res = await validateCouponServer(toValidate);
+            const result = await validateCoupon(toValidate);
 
-            // If admin-server is unreachable in DEV, fall back to client validation for local dev flows
-            if (!res.valid && res.error === 'network_error' && import.meta.env.DEV) {
-                const fallback = await validateCoupon(toValidate);
-                if (fallback.valid && fallback.coupon) {
+            if (result.valid && result.coupon) {
+                // Mark as used immediately
+                const marked = await markCouponAsUsed(result.coupon.id);
+                if (marked) {
+                    setValidatedCoupon(result.coupon);
                     setValidationStep(2);
-                    setValidationMessage(`(DEV) Cupom válido — ${fallback.coupon.code} · ${fallback.coupon.benefit}`);
+                    setValidationMessage(`Cupom válido — ${result.coupon.benefit}`);
                 } else {
                     setValidationStep(0);
-                    setValidationMessage(fallback.error || 'Cupom inválido (DEV)');
+                    setValidationMessage('Erro ao consumir o cupom. Tente novamente.');
                 }
-                return;
-            }
-
-            if (res.valid && res.coupon) {
-                setValidationStep(2); // success
-                setValidationMessage(`Cupom válido — ${res.coupon.code} · ${res.coupon.benefit}`);
             } else {
                 setValidationStep(0);
-                setValidationMessage(res.error || 'Cupom inválido');
+                setValidationMessage(result.error || 'Cupom inválido');
             }
         } catch (err: unknown) {
             console.error('Validation error:', err);
-
-            // Network errors in DEV -> attempt local fallback
-            if (import.meta.env.DEV) {
-                const fallback = await validateCoupon(toValidate);
-                if (fallback.valid && fallback.coupon) {
-                    setValidationStep(2);
-                    setValidationMessage(`(DEV) Cupom válido — ${fallback.coupon.code} · ${fallback.coupon.benefit}`);
-                } else {
-                    setValidationStep(0);
-                    setValidationMessage(fallback.error || 'Erro ao validar. Tente novamente');
-                }
-            } else {
-                setValidationMessage('Erro ao validar. Tente novamente');
-                setValidationStep(0);
-            }
+            setValidationMessage('Erro ao validar. Tente novamente.');
+            setValidationStep(0);
         } finally {
             setIsValidatingLoading(false);
         }
@@ -260,7 +243,7 @@ const PartnerDashboard: React.FC = () => {
                 <section>
                     <SectionTitle title="Ações Rápidas" subtitle="Gerencie sua parceria" />
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-                        <button onClick={() => { setIsValidating(true); setValidationStep(0); }} className="bg-obsidian-900 border border-white/10 hover:border-gold-500/50 p-8 rounded-xl flex items-center gap-6 transition-all group text-left hover:bg-white/5">
+                        <button onClick={() => { setIsValidating(true); setValidationStep(0); setValidatedCoupon(null); setValidationMessage(null); setCouponCodeInput(''); }} className="bg-obsidian-900 border border-white/10 hover:border-gold-500/50 p-8 rounded-xl flex items-center gap-6 transition-all group text-left hover:bg-white/5">
                             <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center group-hover:bg-gold-500 group-hover:text-black transition-colors shadow-lg">
                                 <QrCode size={32} />
                             </div>
@@ -472,21 +455,31 @@ const PartnerDashboard: React.FC = () => {
                         <button onClick={() => setIsValidating(false)} className="absolute top-4 right-4 text-gray-400 hover:text-white"><X size={24} /></button>
 
                         {validationStep === 0 && (
-                            <div className="py-8">
-                                <div className="w-48 h-48 border-2 border-gold-500 rounded-2xl mx-auto mb-6 relative overflow-hidden">
-                                    <div className="absolute inset-0 bg-gold-500/10 animate-pulse"></div>
-                                    <div className="absolute top-0 left-0 w-full h-1 bg-gold-500 shadow-[0_0_20px_#D4AF37] animate-[scan_2s_linear_infinite]"></div>
-                                </div>
-                                <h3 className="text-xl font-bold mb-2">Escaneando...</h3>
-                                <p className="text-gray-400 text-sm mb-3">Aponte a câmera para o QR Code do cliente ou digite o código manualmente</p>
+                            <div className="py-4">
+                                <h3 className="text-xl font-bold mb-2">Validar Cupom</h3>
+                                <p className="text-gray-400 text-sm mb-4">Escaneie o QR Code do cliente ou digite o código</p>
 
+                                {/* Real Camera Scanner */}
+                                <QRScanner
+                                    onScan={(data) => handleValidateCoupon(data)}
+                                    onError={(errMsg) => setValidationMessage(errMsg)}
+                                />
+
+                                {/* Divider */}
+                                <div className="flex items-center gap-3 my-4">
+                                    <div className="flex-1 h-px bg-white/10" />
+                                    <span className="text-gray-500 text-xs uppercase tracking-wider">ou digite</span>
+                                    <div className="flex-1 h-px bg-white/10" />
+                                </div>
+
+                                {/* Manual Input */}
                                 <div className="flex gap-2 mb-3">
                                     <Input value={couponCodeInput} onChange={(e) => setCouponCodeInput((e.target as HTMLInputElement).value)} placeholder="TRV-XXXXXX" />
-                                    <Button onClick={() => validateCodeWithServer()} isLoading={isValidatingLoading}>VALIDAR</Button>
+                                    <Button onClick={() => handleValidateCoupon()} isLoading={isValidatingLoading}>VALIDAR</Button>
                                 </div>
 
                                 {validationMessage && (
-                                    <p className="text-sm mt-2 text-gray-200">{validationMessage}</p>
+                                    <p className={`text-sm mt-2 font-medium ${validationStep === 0 ? 'text-red-400' : 'text-green-400'}`}>{validationMessage}</p>
                                 )}
                             </div>
                         )}
@@ -498,20 +491,29 @@ const PartnerDashboard: React.FC = () => {
                             </div>
                         )}
 
-                        {validationStep === 2 && (
+                        {validationStep === 2 && validatedCoupon && (
                             <div className="py-8 animate-scale-up">
                                 <div className="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(34,197,94,0.4)]">
                                     <CheckCircle size={48} className="text-black" />
                                 </div>
                                 <h3 className="text-2xl font-bold text-white mb-1">Cupom Válido!</h3>
-                                <p className="text-green-400 font-bold mb-6">Desconto de {partner?.benefit} Aplicado</p>
+                                <p className="text-green-400 font-bold mb-6">Desconto de {validatedCoupon.benefit} Aplicado</p>
 
-                                <div className="bg-white/5 rounded-xl p-4 mb-6 text-left">
-                                    <p className="text-xs text-gray-500 uppercase">Cliente</p>
-                                    <p className="font-bold">Carlos Tavares</p>
-                                    <div className="h-px bg-white/10 my-2"></div>
-                                    <p className="text-xs text-gray-500 uppercase">Código</p>
-                                    <p className="font-mono text-gold-500">#TRV-8829</p>
+                                <div className="bg-white/5 rounded-xl p-4 mb-6 text-left space-y-2">
+                                    <div>
+                                        <p className="text-xs text-gray-500 uppercase">Cliente</p>
+                                        <p className="font-bold">{validatedCoupon.user_name || 'Cliente'}</p>
+                                    </div>
+                                    <div className="h-px bg-white/10"></div>
+                                    <div>
+                                        <p className="text-xs text-gray-500 uppercase">Código</p>
+                                        <p className="font-mono text-gold-500">{validatedCoupon.code}</p>
+                                    </div>
+                                    <div className="h-px bg-white/10"></div>
+                                    <div>
+                                        <p className="text-xs text-gray-500 uppercase">Benefício</p>
+                                        <p className="text-green-400 font-medium">{validatedCoupon.benefit}</p>
+                                    </div>
                                 </div>
 
                                 <Button onClick={() => setIsValidating(false)} className="w-full">FINALIZAR</Button>
