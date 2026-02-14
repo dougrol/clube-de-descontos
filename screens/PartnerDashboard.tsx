@@ -112,21 +112,31 @@ const PartnerDashboard: React.FC = () => {
                 if (parsed.code) {
                     toValidate = parsed.code;
                 }
-            } else if (toValidate.includes('?validate=') || toValidate.includes('&validate=')) {
-                // Handle URL payload (e.g. https://.../?validate=TRV-XXXX)
-                const url = new URL(toValidate.replace('#/', '')); // Handle hash routing if needed
-                const codeParam = url.searchParams.get('validate');
-                if (codeParam) {
-                    toValidate = codeParam;
+            } else if (toValidate.includes('validate=')) {
+                // Robust extraction: find 'validate=' and get the code after it
+                // This works even if the param is in the search, hash, or both
+                const url = toValidate.trim();
+                
+                // Try to find it via a simple regex first (most reliable)
+                const match = url.match(/[?&]validate=([^&/#?]+)/);
+                if (match && match[1]) {
+                    toValidate = match[1];
+                } else {
+                    // Fallback to URL parsing if regex fails
+                    const urlObj = new URL(url.replace('#/', '/')); 
+                    const codeParam = urlObj.searchParams.get('validate');
+                    if (codeParam) {
+                        toValidate = codeParam;
+                    }
                 }
             }
-        } catch {
-            // Fallback: use regex for a quick extraction if URL parsing fails
-            const match = toValidate.match(/[?&]validate=([^&]+)/);
-            if (match && match[1]) {
-                toValidate = match[1];
-            }
+        } catch (err) {
+            console.warn('Error parsing QR payload:', err);
         }
+
+        // Final trim and cleanup
+        toValidate = toValidate.trim();
+
 
         try {
             const result = await validateCoupon(toValidate);
