@@ -34,12 +34,23 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onError }) => {
                     qrbox: { width: 220, height: 220 },
                     aspectRatio: 1,
                 },
-                (decodedText) => {
+                async (decodedText) => {
                     if (mountedRef.current) {
+                        // Crucia: Stop scanner BEFORE notifying parent
+                        // Parent state change often unmounts this component immediately
+                        try {
+                            setIsScanning(false);
+                            if (scannerRef.current) {
+                                await scannerRef.current.stop();
+                                scannerRef.current.clear();
+                                scannerRef.current = null;
+                            }
+                        } catch (stopErr) {
+                            console.warn('Silent error stopping scanner after scan:', stopErr);
+                        }
+                        
+                        // Now it's safe to notify parent
                         onScan(decodedText);
-                        // Stop scanner after successful scan
-                        scanner.stop().catch(() => {});
-                        setIsScanning(false);
                     }
                 },
                 () => {
@@ -88,7 +99,13 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onError }) => {
         return () => {
             mountedRef.current = false;
             if (scannerRef.current) {
-                scannerRef.current.stop().catch(() => {});
+                // Use a local copy to avoid closure issues
+                const currentScanner = scannerRef.current;
+                currentScanner.stop().catch(() => {
+                    // Ignore error if already stopped
+                }).finally(() => {
+                    try { currentScanner.clear(); } catch { /* ignore */ }
+                });
             }
         };
     }, []);
