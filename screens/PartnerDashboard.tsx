@@ -257,15 +257,20 @@ const PartnerDashboard: React.FC = () => {
                         </div>
                     </Card>
 
-                    <Card className="bg-gold-500 text-black border-none relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-4 opacity-10"><BarChart3 size={100} /></div>
+                    <Card className="bg-gradient-to-br from-gold-400 via-gold-500 to-gold-600 text-black border-none relative overflow-hidden shadow-2xl shadow-gold-500/20 group h-full">
+                        <div className="absolute top-[-20%] right-[-10%] p-4 opacity-15 group-hover:rotate-12 group-hover:scale-110 transition-all duration-700">
+                            <BarChart3 size={140} />
+                        </div>
                         <div className="h-full flex flex-col justify-between relative z-10">
-                            <div className="flex justify-between items-center">
-                                <span className="font-bold opacity-70">Status</span>
+                            <div className="flex justify-between items-center mb-2">
+                                <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-50">Configuração</span>
+                                <Badge className="bg-black/10 text-black border-black/10 text-[9px] font-bold">ATIVA</Badge>
                             </div>
                             <div>
-                                <p className="text-sm font-medium opacity-80 mb-1">Benefício Atual</p>
-                                <h3 className="text-2xl font-black truncate">{partner.benefit}</h3>
+                                <p className="text-[10px] font-bold opacity-60 mb-0.5 uppercase tracking-wider">Benefício Atual</p>
+                                <h3 className="text-2xl font-black tracking-tighter leading-tight drop-shadow-sm truncate">
+                                    {partner.benefit}
+                                </h3>
                             </div>
                         </div>
                     </Card>
