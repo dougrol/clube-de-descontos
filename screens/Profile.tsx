@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { UserRole } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 import { AvatarUpload } from '../components/ui';
-import { LogOut, ChevronRight, User, Ticket, LifeBuoy, Crown, CheckCircle2, Key, ShoppingBag, BookOpen, CreditCard } from 'lucide-react';
+import { LogOut, ChevronRight, User, Ticket, LifeBuoy, Crown, CheckCircle2, Key, ShoppingBag, BookOpen, CreditCard, Building2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { uploadAvatar, updateUserAvatar } from '../services/avatarService';
 import { supabase } from '../services/supabaseClient';

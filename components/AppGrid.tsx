@@ -1,6 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingBag, ShieldCheck, Briefcase, Handshake, Ticket, User, ChevronRight } from 'lucide-react';
+import { ShoppingBag, ShieldCheck, Briefcase, Handshake, Ticket, User, ChevronRight, Building2 } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
+import { UserRole } from '../types';
 
 interface GridItemProps {
     icon: React.ElementType;
@@ -93,6 +95,18 @@ export const AppGrid: React.FC = () => {
             description: 'Minhas informações'
         }
     ];
+
+    // Add Partner Dashboard if user is a partner
+    if (role === UserRole.PARTNER) {
+        items.splice(3, 0, {
+            id: 'partner-panel',
+            title: 'Painel Loja',
+            icon: Building2,
+            path: '/partner-dashboard',
+            color: 'text-gold-500',
+            description: 'Painel do Parceiro'
+        });
+    }
 
     return (
         <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-y-6 gap-x-2 w-full px-2">

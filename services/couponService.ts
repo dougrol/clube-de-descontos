@@ -353,3 +353,55 @@ const getLocalUserCoupons = (userId: string): Coupon[] => {
         })
         .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 };
+
+/**
+ * Interface for partner analytics/stats
+ */
+export interface PartnerStats {
+    totalVisits: number;
+    validatedCount: number;
+    pendingCount: number;
+    recentValidations: Coupon[];
+}
+
+/**
+ * Get real-time stats for a partner
+ */
+export const getPartnerStats = async (partnerId: string): Promise<PartnerStats> => {
+    try {
+        const { data, error } = await supabase
+            .from('coupons')
+            .select('*')
+            .eq('partner_id', partnerId)
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.error('Error fetching partner stats:', error);
+            return {
+                totalVisits: 0,
+                validatedCount: 0,
+                pendingCount: 0,
+                recentValidations: []
+            };
+        }
+
+        const allCoupons = data as Coupon[];
+        const validated = allCoupons.filter(c => c.status === 'used');
+        const pending = allCoupons.filter(c => c.status === 'active' && new Date(c.expires_at) > new Date());
+
+        return {
+            totalVisits: allCoupons.length,
+            validatedCount: validated.length,
+            pendingCount: pending.length,
+            recentValidations: validated.slice(0, 10) // Last 10 validated
+        };
+    } catch (err) {
+        console.error('getPartnerStats error:', err);
+        return {
+            totalVisits: 0,
+            validatedCount: 0,
+            pendingCount: 0,
+            recentValidations: []
+        };
+    }
+};

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BarChart3, Users, QrCode, Ticket, Settings, LogOut, Save, X, Edit3, CheckCircle, MapPin, Camera, Upload } from 'lucide-react';
 import { Card, SectionTitle, Badge, Button, Input, AvatarUpload, ImageWithFallback, QRScanner } from '../components/ui';
-import { validateCoupon, markCouponAsUsed, Coupon as CouponType } from '../services/couponService';
+import { validateCoupon, markCouponAsUsed, Coupon as CouponType, getPartnerStats, PartnerStats } from '../services/couponService';
 import { Partner } from '../types';
 import { uploadPartnerImage } from '../services/avatarService';
 import { useAuth } from '../contexts/AuthContext';
@@ -24,6 +24,8 @@ const PartnerDashboard: React.FC = () => {
     const [validationMessage, setValidationMessage] = useState<string | null>(null);
     const [isValidatingLoading, setIsValidatingLoading] = useState(false);
     const [validatedCoupon, setValidatedCoupon] = useState<CouponType | null>(null);
+    const [stats, setStats] = useState<PartnerStats | null>(null);
+    const [statsLoading, setStatsLoading] = useState(true);
 
     // Form State
     const [editForm, setEditForm] = useState<Partner | null>(null);
@@ -54,6 +56,10 @@ const PartnerDashboard: React.FC = () => {
                 if (foundPartner) {
                     setPartner(foundPartner);
                     setEditForm(foundPartner);
+                    
+                    // Load real stats
+                    const realStats = await getPartnerStats(foundPartner.id);
+                    setStats(realStats);
                 } else {
                     console.error('PartnerDashboard: Partner profile not found for ID:', user.id);
                 }
@@ -61,6 +67,7 @@ const PartnerDashboard: React.FC = () => {
                 console.error('Error loading partner profile:', error);
             } finally {
                 setLoading(false);
+                setStatsLoading(false);
             }
         };
 
@@ -162,6 +169,10 @@ const PartnerDashboard: React.FC = () => {
             setValidationStep(0);
         } finally {
             setIsValidatingLoading(false);
+            // Refresh stats after validation
+            if (partner?.id) {
+                getPartnerStats(partner.id).then(setStats);
+            }
         }
     };
 
@@ -219,30 +230,30 @@ const PartnerDashboard: React.FC = () => {
                             <Badge variant="outline" className="text-xs">Hoje</Badge>
                         </div>
                         <div>
-                            <h3 className="text-3xl font-bold">24</h3>
+                            <h3 className="text-3xl font-bold">{statsLoading ? '...' : stats?.totalVisits || 0}</h3>
                             <p className="text-gray-500 text-sm">Visitas de Clientes</p>
                         </div>
                     </Card>
-
+...
                     <Card className="flex flex-col gap-4">
                         <div className="flex justify-between items-start">
                             <div className="p-2 bg-green-500/10 rounded-lg text-green-500"><Ticket size={20} /></div>
-                            <Badge variant="outline" className="text-xs">+12%</Badge>
+                            <Badge variant="outline" className="text-xs">Validados</Badge>
                         </div>
                         <div>
-                            <h3 className="text-3xl font-bold">8</h3>
-                            <p className="text-gray-500 text-sm">Cupons Validados</p>
+                            <h3 className="text-3xl font-bold">{statsLoading ? '...' : stats?.validatedCount || 0}</h3>
+                            <p className="text-gray-500 text-sm">Cupons Utilizados</p>
                         </div>
                     </Card>
 
                     <Card className="flex flex-col gap-4">
                         <div className="flex justify-between items-start">
-                            <div className="p-2 bg-gold-500/10 rounded-lg text-gold-500"><QrCode size={20} /></div>
-                            <Badge variant="outline" className="text-xs">Ativo</Badge>
+                            <div className="p-2 bg-orange-500/10 rounded-lg text-orange-500"><QrCode size={20} /></div>
+                            <Badge variant="outline" className="text-xs">Pendentes</Badge>
                         </div>
                         <div>
-                            <h3 className="text-3xl font-bold">QR</h3>
-                            <p className="text-gray-500 text-sm">Validar Desconto</p>
+                            <h3 className="text-3xl font-bold">{statsLoading ? '...' : stats?.pendingCount || 0}</h3>
+                            <p className="text-gray-500 text-sm">Cupons em Aberto</p>
                         </div>
                     </Card>
 
@@ -283,6 +294,54 @@ const PartnerDashboard: React.FC = () => {
                                 <p className="text-sm text-gray-500">Alterar benefício, regras, fotos e descrição</p>
                             </div>
                         </button>
+                    </div>
+                </section>
+
+                {/* Validation History */}
+                <section>
+                    <SectionTitle title="Acessos Recentes" subtitle="Últimos clientes que validaram cupons" />
+                    <div className="bg-obsidian-900 border border-white/5 rounded-2xl overflow-hidden mt-6">
+                        {statsLoading ? (
+                            <div className="p-12 text-center text-gray-500">Carregando histórico...</div>
+                        ) : !stats?.recentValidations || stats.recentValidations.length === 0 ? (
+                            <div className="p-12 text-center text-gray-500">
+                                <Ticket className="mx-auto mb-4 opacity-20" size={48} />
+                                <p>Nenhum cupom validado recentemente.</p>
+                            </div>
+                        ) : (
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left">
+                                    <thead>
+                                        <tr className="bg-white/5 text-[10px] uppercase tracking-widest text-gray-500">
+                                            <th className="px-6 py-4 font-bold">Cliente</th>
+                                            <th className="px-6 py-4 font-bold">Código</th>
+                                            <th className="px-6 py-4 font-bold">Benefício</th>
+                                            <th className="px-6 py-4 font-bold">Data/Hora</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-white/5">
+                                        {stats.recentValidations.map((coupon) => (
+                                            <tr key={coupon.id} className="hover:bg-white/[0.02] transition-colors">
+                                                <td className="px-6 py-4">
+                                                    <p className="text-sm font-bold text-white">{coupon.user_name || 'Membro'}</p>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <code className="text-[10px] bg-white/5 px-2 py-1 rounded text-gold-500 font-mono italic">{coupon.code}</code>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <p className="text-xs text-green-400 font-medium">{coupon.benefit}</p>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <p className="text-xs text-gray-500">
+                                                        {new Date(coupon.used_at || coupon.created_at).toLocaleString('pt-BR')}
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
                     </div>
                 </section>
             </div>
