@@ -105,16 +105,27 @@ const PartnerDashboard: React.FC = () => {
 
         let toValidate = code ?? couponCodeInput;
 
-        // Clean input if it's a scanned QR Code JSON
+        // Clean input if it's a scanned QR Code JSON or URL
         try {
             if (toValidate.trim().startsWith('{')) {
                 const parsed = JSON.parse(toValidate);
                 if (parsed.code) {
                     toValidate = parsed.code;
                 }
+            } else if (toValidate.includes('?validate=') || toValidate.includes('&validate=')) {
+                // Handle URL payload (e.g. https://.../?validate=TRV-XXXX)
+                const url = new URL(toValidate.replace('#/', '')); // Handle hash routing if needed
+                const codeParam = url.searchParams.get('validate');
+                if (codeParam) {
+                    toValidate = codeParam;
+                }
             }
         } catch {
-            // Not JSON, use as plain text
+            // Fallback: use regex for a quick extraction if URL parsing fails
+            const match = toValidate.match(/[?&]validate=([^&]+)/);
+            if (match && match[1]) {
+                toValidate = match[1];
+            }
         }
 
         try {

@@ -28,14 +28,8 @@ const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({ code, expiresAt, benefit,
         return () => clearInterval(interval);
     }, [expiresAt]);
 
-    // QR Code contains a structured payload for validation
-    const qrPayload = JSON.stringify({
-        code,
-        partner: partnerName,
-        benefit,
-        expires: expiresAt,
-        type: 'TAVARES_CAR_COUPON'
-    });
+    const baseUrl = window.location.origin;
+    const qrUrl = `${baseUrl}/#/?validate=${code}`;
 
     if (isExpired) {
         return (
@@ -48,20 +42,30 @@ const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({ code, expiresAt, benefit,
     }
 
     return (
-        <div className="bg-white rounded-xl p-6 flex flex-col items-center justify-center animate-slide-up shadow-[0_0_30px_rgba(255,255,255,0.1)]">
-            <h3 className="text-black font-bold text-lg mb-2">
-                Cupom Ativo
-            </h3>
+        <div className="bg-white rounded-xl p-6 flex flex-col items-center justify-center animate-slide-up shadow-[0_0_50px_rgba(255,255,255,0.15)] border border-white/5">
+            <div className="w-full flex justify-between items-center mb-4 px-2">
+                <div className="h-px flex-1 bg-gray-200" />
+                <span className="mx-3 text-[10px] text-gray-400 font-bold uppercase tracking-widest">Cupom Oficial</span>
+                <div className="h-px flex-1 bg-gray-200" />
+            </div>
 
-            {/* QR Code - Functional */}
-            <div className="border-2 border-dashed border-gray-300 p-3 rounded-lg mb-4 bg-white">
+            {/* QR Code - Functional & Branded */}
+            <div className="p-4 rounded-2xl bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 mb-4 group transition-all">
                 <QRCodeSVG
-                    value={qrPayload}
-                    size={180}
+                    value={qrUrl}
+                    size={200}
                     level="H"
-                    includeMargin={true}
+                    includeMargin={false}
                     bgColor="#ffffff"
                     fgColor="#000000"
+                    imageSettings={{
+                        src: "/images/logo_shield.png", // Usando o escudo oficial da Tavares Car
+                        x: undefined,
+                        y: undefined,
+                        height: 48,
+                        width: 48,
+                        excavate: true,
+                    }}
                 />
             </div>
 
