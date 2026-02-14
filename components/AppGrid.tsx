@@ -45,6 +45,7 @@ const GridItem: React.FC<GridItemProps> = ({ icon: Icon, label, path, color = "t
 };
 
 export const AppGrid: React.FC = () => {
+    const { role } = useAuth();
     const items = [
         {
             id: 'consultancy',
