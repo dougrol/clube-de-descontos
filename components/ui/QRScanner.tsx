@@ -15,6 +15,29 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onError }) => {
     const [facingMode, setFacingMode] = useState<'environment' | 'user'>('environment');
     const scannerRef = useRef<Html5Qrcode | null>(null);
     const mountedRef = useRef(true);
+    const stopInProgress = useRef(false);
+
+    const safelyStopScanner = async () => {
+        if (!scannerRef.current || stopInProgress.current) return;
+        
+        stopInProgress.current = true;
+        const scanner = scannerRef.current;
+        // Don't null immediately so we don't restart while stopping, 
+        // but we'll check stopInProgress above.
+        
+        try {
+            if (scanner.isScanning) {
+                await scanner.stop();
+            }
+            scanner.clear();
+        } catch (err) {
+            console.warn('QRScanner: Error during safe stop:', err);
+        } finally {
+            scannerRef.current = null;
+            stopInProgress.current = false;
+            if (mountedRef.current) setIsScanning(false);
+        }
+    };
 
     const startScanner = async () => {
         try {
@@ -36,21 +59,13 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onError }) => {
                 },
                 async (decodedText) => {
                     if (mountedRef.current) {
-                        // Crucia: Stop scanner BEFORE notifying parent
-                        // Parent state change often unmounts this component immediately
-                        try {
-                            setIsScanning(false);
-                            if (scannerRef.current) {
-                                await scannerRef.current.stop();
-                                scannerRef.current.clear();
-                                scannerRef.current = null;
-                            }
-                        } catch (stopErr) {
-                            console.warn('Silent error stopping scanner after scan:', stopErr);
-                        }
+                        // Crucia: Stop scanner safely BEFORE notifying parent
+                        await safelyStopScanner();
                         
                         // Now it's safe to notify parent
-                        onScan(decodedText);
+                        if (mountedRef.current) {
+                            onScan(decodedText);
+                        }
                     }
                 },
                 () => {
@@ -80,12 +95,7 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onError }) => {
     };
 
     const stopScanner = async () => {
-        if (scannerRef.current) {
-            try {
-                await scannerRef.current.stop();
-            } catch { /* ignore */ }
-            setIsScanning(false);
-        }
+        await safelyStopScanner();
     };
 
     const toggleCamera = async () => {
@@ -98,15 +108,7 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onError }) => {
         mountedRef.current = true;
         return () => {
             mountedRef.current = false;
-            if (scannerRef.current) {
-                // Use a local copy to avoid closure issues
-                const currentScanner = scannerRef.current;
-                currentScanner.stop().catch(() => {
-                    // Ignore error if already stopped
-                }).finally(() => {
-                    try { currentScanner.clear(); } catch { /* ignore */ }
-                });
-            }
+            safelyStopScanner();
         };
     }, []);
 
