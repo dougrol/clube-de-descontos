@@ -1156,6 +1156,61 @@ const Admin: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
+              <label className="block text-sm text-gray-400 mb-1">Plano</label>
+              <select
+                value={formData?.plan || 'essencial'}
+                onChange={e => setFormData({ ...formData, plan: e.target.value as 'essencial' | 'destaque' })}
+                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+              >
+                <option value="essencial">Essencial</option>
+                <option value="destaque">Destaque</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm text-gray-400 mb-1">Preço (R$)</label>
+              <div className="relative">
+                <input
+                  type="number"
+                  step="0.01"
+                  value={formData?.price || 0}
+                  onChange={e => setFormData({ ...formData, price: parseFloat(e.target.value) })}
+                  className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={async () => {
+                    const plan = formData?.plan || 'essencial';
+                    const partnerId = editingPartner?.id;
+                    
+                    if (!partnerId) {
+                       alert('ID do parceiro não encontrado.');
+                       return;
+                    }
+
+                    try {
+                      const { data, error } = await supabase.functions.invoke('create-checkout', {
+                        body: { partnerId, plan }
+                      });
+
+                      if (error) throw error;
+                      if (data?.url) {
+                        window.open(data.url, '_blank');
+                      }
+                    } catch (err) {
+                      console.error('Erro ao gerar link:', err);
+                      alert('Erro ao gerar link de pagamento. Verifique as configurações do Stripe.');
+                    }
+                  }}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-gold-500 hover:bg-gold-600 text-black text-[10px] font-bold px-2 py-1 rounded transition-colors"
+                >
+                  Gerar Link Stripe
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
               <label className="block text-sm text-gray-400 mb-1">URL do Logo</label>
               <input
                 type="text"

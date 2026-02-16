@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingBag, ShieldCheck, Briefcase, Handshake, Ticket, User, ChevronRight, Building2 } from 'lucide-react';
+import { ShoppingBag, ShieldCheck, Briefcase, Handshake, Ticket, User, ChevronRight, Building2, BookOpen } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { UserRole } from '../types';
 
@@ -94,6 +94,14 @@ export const AppGrid: React.FC = () => {
             path: '/personal-data',
             color: 'text-gray-400',
             description: 'Minhas informações'
+        },
+        {
+            id: 'about',
+            title: 'Sobre',
+            icon: BookOpen,
+            path: '/about',
+            color: 'text-amber-400',
+            description: 'Quem somos'
         }
     ];
 

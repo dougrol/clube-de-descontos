@@ -190,6 +190,13 @@ const Profile: React.FC<ProfileProps> = ({ userRole }) => {
                      onClick={() => window.open('https://wa.me/5562982553770', '_blank')}
                      color="text-green-500"
                   />
+                  <MenuOption
+                     icon={BookOpen}
+                     label="Sobre a Tavares Car"
+                     subLabel="Nossa história e sócios"
+                     onClick={() => navigate('/about')}
+                     color="text-gold-500"
+                  />
                   {userRole === UserRole.ADMIN && (
                      <MenuOption
                         icon={Crown}

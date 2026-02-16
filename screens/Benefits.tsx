@@ -86,11 +86,19 @@ const Benefits: React.FC = () => {
     }
   };
 
-  // 1. Filter by text and category
+  // 1. Filter by text, category AND active status
   let filteredList = partners.filter(p => {
+    const matchesStatus = (p as any).status === 'active';
     const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) || p.city.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'Todos' || p.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+    return matchesStatus && matchesSearch && matchesCategory;
+  });
+
+  // 1.5 Sort by plan (destaque first)
+  filteredList.sort((a, b) => {
+    if (a.plan === 'destaque' && b.plan !== 'destaque') return -1;
+    if (a.plan !== 'destaque' && b.plan === 'destaque') return 1;
+    return 0;
   });
 
   // 2. Sort by distance if "Near Me" is active
@@ -254,6 +262,11 @@ const Benefits: React.FC = () => {
                       <div className="absolute bottom-0 left-0 right-0 bg-gold-500 text-black text-[10px] text-center py-1 font-bold shadow-md">
                         {distanceDisplay}
                       </div>
+                    )}
+                    {partner.plan === 'destaque' && (
+                       <div className="absolute top-0 right-0 bg-gold-500 text-black text-[8px] font-black px-1 py-0.5 rounded-bl-lg shadow-lg uppercase tracking-tighter">
+                         Destaque
+                       </div>
                     )}
                   </div>
                   <div className="flex-1 flex flex-col justify-between py-1">

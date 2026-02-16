@@ -35,7 +35,9 @@ export const fetchPartners = async (): Promise<Partner[]> => {
         phone: p.phone,
         email: p.email,
         responsibleName: p.responsible_name,
-        companyName: p.company_name
+        companyName: p.company_name,
+        plan: p.plan as 'essencial' | 'destaque',
+        price: p.price
     }));
 };
 
@@ -71,7 +73,9 @@ export const fetchPartnerById = async (id: string): Promise<Partner | null> => {
         phone: p.phone,
         email: p.email,
         responsibleName: p.responsible_name,
-        companyName: p.company_name
+        companyName: p.company_name,
+        plan: p.plan as 'essencial' | 'destaque',
+        price: p.price
     };
 };
 
@@ -114,7 +118,9 @@ export const updatePartner = async (id: string, updates: Partial<Partner>): Prom
         phone: updates.phone,
         email: updates.email,
         responsible_name: updates.responsibleName,
-        company_name: updates.companyName
+        company_name: updates.companyName,
+        plan: updates.plan,
+        price: updates.price
     };
 
     // Remove undefined keys
@@ -152,6 +158,8 @@ export const updatePartner = async (id: string, updates: Partial<Partner>): Prom
         phone: p.phone,
         email: p.email,
         responsibleName: p.responsible_name,
-        companyName: p.company_name
+        companyName: p.company_name,
+        plan: p.plan as 'essencial' | 'destaque',
+        price: p.price
     };
 };

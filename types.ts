@@ -64,6 +64,8 @@ export interface Partner {
   email?: string;
   responsibleName?: string;
   companyName?: string;
+  plan?: 'essencial' | 'destaque';
+  price?: number;
 }
 
 export interface Coupon {
@@ -96,6 +98,8 @@ export interface PartnerDB {
   email?: string;
   responsible_name?: string;
   company_name?: string;
+  plan?: string;
+  price?: number;
 }
 
 // ===========================================
