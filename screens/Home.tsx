@@ -147,6 +147,27 @@ const Home: React.FC = () => {
           </div>
         </div>
 
+        {/* 3.6 Shopee Offers Highlight (New) */}
+        <div className="mb-8 animate-slide-up" style={{ animationDelay: '0.18s' }}>
+          <div onClick={() => navigate('/ofertas')} className="bg-gradient-to-r from-signal-500/20 to-obsidian-900 rounded-2xl p-5 border border-signal-500/30 relative overflow-hidden group cursor-pointer shadow-lg shadow-signal-500/10">
+            <div className="absolute right-0 bottom-0 w-32 h-32 bg-signal-500/10 rounded-full blur-3xl translate-y-10 translate-x-10"></div>
+            
+            <div className="relative z-10 flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-signal-500 mb-1 block flex items-center gap-1">
+                  <ShoppingBag size={10} className="animate-bounce" />
+                  Novidade
+                </span>
+                <h3 className="text-lg font-bold text-white mb-1">Achadinhos Shopee</h3>
+                <p className="text-gray-400 text-xs max-w-[180px] leading-relaxed">Ofertas exclusivas selecionadas para você.</p>
+              </div>
+              <div className="w-10 h-10 bg-signal-500 rounded-full flex items-center justify-center shadow-lg shadow-signal-500/30 group-hover:scale-110 transition-transform">
+                <ShoppingBag size={18} className="text-white" />
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* 4. Feature Grid (Replaces Bento) */}
         <div className="mb-12 animate-slide-up" style={{ animationDelay: '0.2s' }}>
           <div className="flex items-center justify-between mb-6 px-2">

@@ -3,6 +3,7 @@ import { Search, MapPin, Tag, Radar, Loader2, Zap } from 'lucide-react';
 import { Card, Input } from '../components/ui';
 import { PartnerCategory, Partner } from '../types';
 import { useNavigate } from 'react-router-dom';
+
 import { fetchPartners } from '../services/partners';
 
 const Benefits: React.FC = () => {
@@ -88,10 +89,10 @@ const Benefits: React.FC = () => {
 
   // 1. Filter by text, category AND active status
   let filteredList = partners.filter(p => {
-    const matchesStatus = (p as any).status === 'active';
+    const isVisible = p.active !== false && p.status === 'active';
     const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) || p.city.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'Todos' || p.category === selectedCategory;
-    return matchesStatus && matchesSearch && matchesCategory;
+    return isVisible && matchesSearch && matchesCategory;
   });
 
   // 1.5 Sort by plan (destaque first)
@@ -293,6 +294,10 @@ const Benefits: React.FC = () => {
               );
             })
           )}
+        </div>
+        
+        <div className="mt-12 text-center pb-8 border-t border-white/5 pt-8">
+          <p className="text-gray-500 text-sm font-medium tracking-wide">Em breve mais parceiros exclusivos.</p>
         </div>
       </div>
     </div>

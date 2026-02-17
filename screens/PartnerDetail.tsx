@@ -142,59 +142,115 @@ const PartnerDetail: React.FC = () => {
           )}
         </div>
 
-        {/* Contact Info Section */}
-        <div className="bg-obsidian-900/50 rounded-xl p-4 space-y-3 border border-white/5">
-          {partner.phone && (
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-gold-500/10 flex items-center justify-center text-gold-500">
-                <span className="text-xs">📞</span>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Telefone</p>
-                <a href={`tel:${partner.phone.replace(/\D/g, '')}`} className="text-sm text-white hover:text-gold-500 transition-colors">
-                  {partner.phone}
-                </a>
-              </div>
-            </div>
-          )}
+        {/* Actions Section (Dynamic) */}
+        {partner.actions && partner.actions.length > 0 && (
+          <div className="space-y-3">
+             {partner.actions.map((action, idx) => {
+                const getIcon = () => {
+                   switch(action.type) {
+                      case 'whatsapp': return '💬';
+                      case 'phone': return '📞';
+                      case 'maps': return '📍';
+                      case 'instagram': return '📸';
+                      case 'email': return '✉️';
+                      case 'link': return '🔗';
+                      default: return '👉';
+                   }
+                };
+                const handleAction = () => {
+                   switch(action.type) {
+                      case 'whatsapp': {
+                         const number = action.value.replace(/\D/g, '');
+                         window.open(`https://wa.me/${number}?text=${encodeURIComponent(action.message || 'Olá! Vim pelo Clube Tavares Car.')}`, '_blank');
+                         break;
+                      }
+                      case 'phone':
+                         window.open(`tel:${action.value.replace(/\s/g, '')}`, '_self');
+                         break;
+                      case 'maps':
+                         window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(action.value)}`, '_blank');
+                         break;
+                      case 'email':
+                         window.open(`mailto:${action.value}`, '_self');
+                         break;
+                      case 'instagram':
+                      case 'link':
+                      default:
+                         window.open(action.value, '_blank');
+                         break;
+                   }
+                };
 
-          {partner.email && (
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-gold-500/10 flex items-center justify-center text-gold-500">
-                <span className="text-xs">✉️</span>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Email</p>
-                <a href={`mailto:${partner.email}`} className="text-sm text-white hover:text-gold-500 transition-colors">
-                  {partner.email}
-                </a>
-              </div>
-            </div>
-          )}
+                return (
+                  <Button 
+                    key={idx} 
+                    onClick={handleAction}
+                    variant={action.type === 'whatsapp' ? 'primary' : 'outline'}
+                    className={`w-full justify-start gap-3 h-12 text-sm uppercase tracking-wide ${action.type === 'whatsapp' ? 'bg-green-600 hover:bg-green-700 text-white' : 'border-white/10 hover:bg-white/5 text-white'}`}
+                  >
+                    <span className="text-lg">{getIcon()}</span>
+                    {action.label}
+                  </Button>
+                );
+             })}
+          </div>
+        )}
 
-          {partner.responsibleName && (
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-gold-500/10 flex items-center justify-center text-gold-500">
-                <span className="text-xs">👤</span>
+        {/* Info Section (Responsible, Company, and fallback contacts) */}
+        {(partner.phone || partner.email || partner.responsibleName || partner.companyName) && (
+          <div className="bg-obsidian-900/50 rounded-xl p-4 space-y-3 border border-white/5">
+            {partner.phone && !partner.actions?.some(a => a.type === 'phone') && (
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-gold-500/10 flex items-center justify-center text-gold-500">
+                  <span className="text-xs">📞</span>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Telefone</p>
+                  <a href={`tel:${partner.phone.replace(/\D/g, '')}`} className="text-sm text-white hover:text-gold-500 transition-colors">
+                    {partner.phone}
+                  </a>
+                </div>
               </div>
-              <div>
-                <p className="text-xs text-gray-500">Responsável</p>
-                <p className="text-sm text-white">{partner.responsibleName}</p>
+            )}
+
+            {partner.email && !partner.actions?.some(a => a.type === 'email') && (
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-gold-500/10 flex items-center justify-center text-gold-500">
+                  <span className="text-xs">✉️</span>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Email</p>
+                  <a href={`mailto:${partner.email}`} className="text-sm text-white hover:text-gold-500 transition-colors">
+                    {partner.email}
+                  </a>
+                </div>
               </div>
-            </div>
-          )}
-          {partner.companyName && partner.companyName !== partner.name && (
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-gold-500/10 flex items-center justify-center text-gold-500">
-                <span className="text-xs">🏢</span>
+            )}
+
+            {partner.responsibleName && (
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-gold-500/10 flex items-center justify-center text-gold-500">
+                  <span className="text-xs">👤</span>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Responsável</p>
+                  <p className="text-sm text-white">{partner.responsibleName}</p>
+                </div>
               </div>
-              <div>
-                <p className="text-xs text-gray-500">Razão Social</p>
-                <p className="text-sm text-white">{partner.companyName}</p>
+            )}
+            {partner.companyName && partner.companyName !== partner.name && (
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-gold-500/10 flex items-center justify-center text-gold-500">
+                  <span className="text-xs">🏢</span>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Razão Social</p>
+                  <p className="text-sm text-white">{partner.companyName}</p>
+                </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
 
         <Card className="bg-gradient-to-r from-obsidian-900 to-obsidian-800 border-gold-500/30">
           <div className="text-center p-2">

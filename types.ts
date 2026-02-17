@@ -27,6 +27,13 @@ export enum PartnerCategory {
   FINANCIAL = 'Financeiro'
 }
 
+export interface PartnerAction {
+  type: 'whatsapp' | 'phone' | 'link' | 'maps' | 'instagram' | 'email';
+  label: string;
+  value: string;
+  message?: string;
+}
+
 export interface User {
   id: string;
   name: string;
@@ -66,6 +73,10 @@ export interface Partner {
   companyName?: string;
   plan?: 'essencial' | 'destaque';
   price?: number;
+  actions?: PartnerAction[];
+  active?: boolean;
+  status?: string;
+  priority?: number;
 }
 
 export interface Coupon {
@@ -100,6 +111,9 @@ export interface PartnerDB {
   company_name?: string;
   plan?: string;
   price?: number;
+  actions?: any;
+  active?: boolean;
+  priority?: number;
 }
 
 // ===========================================

@@ -1,10 +1,29 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Banknote, Landmark, Percent, Car } from 'lucide-react';
-import { Button } from '../components/ui';
+import { ArrowLeft, Banknote, Landmark, Percent, Car, MapPin, Tag, Radar, Loader2, Zap } from 'lucide-react';
+import { fetchPartners } from '../services/partners';
+import { Partner, PartnerCategory } from '../types';
+import { Button, Card } from '../components/ui';
 
 const SalesConsultancy: React.FC = () => {
    const navigate = useNavigate();
+   const [partners, setPartners] = React.useState<Partner[]>([]);
+   const [loading, setLoading] = React.useState(true);
+
+   React.useEffect(() => {
+     fetchPartners().then(data => {
+       // Only show active partners
+       const filtered = data.filter(p => p.active !== false && p.status === 'active');
+       // Sort by priority (desc) or destaque
+       filtered.sort((a, b) => {
+         if (a.plan === 'destaque' && b.plan !== 'destaque') return -1;
+         if (a.plan !== 'destaque' && b.plan === 'destaque') return 1;
+         return (b.priority || 0) - (a.priority || 0);
+       });
+       setPartners(filtered);
+       setLoading(false);
+     });
+   }, []);
 
    return (
       <div className="min-h-screen bg-black pb-24 animate-fade-in">
@@ -63,10 +82,62 @@ const SalesConsultancy: React.FC = () => {
                </div>
             </div>
 
-            {/* Other Partners Section Placeholder (Future) */}
-            <div className="text-center space-y-2 pt-8 border-t border-white/10">
-               <p className="text-gray-500 text-xs">
-                  Em breve mais parceiros exclusivos.
+            {/* Dynamic Partners List */}
+            <div className="space-y-4">
+               <h3 className="text-white font-bold text-sm uppercase tracking-widest mb-4">Nossos Parceiros</h3>
+               
+               {loading ? (
+                  <div className="flex justify-center py-10 text-gold-500">
+                     <Loader2 className="animate-spin" size={24} />
+                  </div>
+               ) : partners.length === 0 ? (
+                  <div className="text-center py-10 text-gray-500">
+                     <p className="text-xs italic">Em breve mais parceiros exclusivos.</p>
+                  </div>
+               ) : (
+                  partners.map((partner) => (
+                     <Card key={partner.id} onClick={() => navigate(`/benefits/${partner.id}`)} className="flex gap-4 p-3 group border-l-4 border-l-transparent hover:border-l-gold-500 transition-all bg-obsidian-900/50 hover:bg-obsidian-900 border-y border-y-transparent hover:border-y-white/5 cursor-pointer">
+                        <div className="w-20 h-20 bg-gray-800 rounded-lg overflow-hidden flex-shrink-0 relative">
+                           <img
+                              src={partner.logoUrl || 'https://placehold.co/200x200/1a1a1a/d4af37?text=TC'}
+                              alt={partner.name}
+                              loading="lazy"
+                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                           />
+                           {partner.plan === 'destaque' && (
+                              <div className="absolute top-0 right-0 bg-gold-500 text-black text-[7px] font-black px-1 py-0.5 rounded-bl-lg shadow-lg uppercase tracking-tighter">
+                                 Oficial
+                              </div>
+                           )}
+                        </div>
+                        <div className="flex-1 flex flex-col justify-between py-0.5">
+                           <div>
+                              <div className="flex justify-between items-start">
+                                 <h4 className="font-bold text-white text-sm leading-tight mb-1">{partner.name}</h4>
+                                 {partner.benefit.includes("%") && (
+                                    <Tag size={12} className="text-gold-500" />
+                                 )}
+                              </div>
+                              <div className="flex items-center text-gray-500 text-[10px] gap-1 mb-1">
+                                 <MapPin size={10} /> {partner.city}
+                              </div>
+                              <p className="text-xs text-gray-400 line-clamp-2 leading-tight">{partner.description}</p>
+                           </div>
+                           <div className="mt-1 flex items-center justify-between">
+                              <div className="text-gold-500 text-[10px] font-bold bg-gold-500/10 px-1.5 py-0.5 rounded flex items-center gap-1 border border-gold-500/20">
+                                 {partner.benefit}
+                              </div>
+                           </div>
+                        </div>
+                     </Card>
+                  ))
+               )}
+            </div>
+
+            {/* Footer */}
+            <div className="text-center pt-8 opacity-40">
+               <p className="text-gray-500 text-[10px] uppercase tracking-widest font-medium">
+                  Tavares Car &copy; 2024
                </p>
             </div>
          </div>

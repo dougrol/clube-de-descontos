@@ -23,6 +23,7 @@ import About from './screens/About';
 import RegisterPartner from './screens/RegisterPartner';
 import PartnerDashboard from './screens/PartnerDashboard';
 import { StorePage, ProductDetail, Checkout, MyOrders } from './screens/store';
+import Offers from './screens/Offers';
 import { UserRole } from './types';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { CMSProvider } from './contexts/CMSContext';
@@ -153,6 +154,12 @@ const AppRoutes: React.FC = () => {
         <Route
           path="/meus-pedidos"
           element={isAuthenticated ? <MyOrders /> : <Navigate to="/login" />}
+        />
+
+        {/* Affiliate Offers Route */}
+        <Route
+          path="/ofertas"
+          element={isAuthenticated ? <Offers /> : <Navigate to="/login" />}
         />
 
         {/* Partner Routes */}
