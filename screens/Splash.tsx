@@ -7,8 +7,9 @@ interface SplashProps {
 
 const partnerAssociations = [
   { name: 'Elevamais', logo: 'https://elevamais.org/wp-content/uploads/2025/05/Foto-Capa-Branding-Elevamais-Protecao-Veicular.png' },
-  { name: 'AGV', logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjxA4WhVJYldBDvC542WyVsqlPhdl2poQONw&s' },
-  { name: 'Autovale', logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWN3TvLukevIdp8lse0L3FeEIz6YOWGw-Tcg&s' }
+  { name: 'AGV', logo: '/images/partners/agv.png' },
+  { name: 'Autovale', logo: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/a9/12/21/a91221e9-c268-a94b-3986-62c30998eea8/AppIcon-0-0-1x_U007emarketing-0-6-0-85-220.png/1200x630wa.png' },
+  { name: 'APVS', logo: '/images/partners/apvs.png' }
 ];
 
 const Splash: React.FC<SplashProps> = ({ onFinish }) => {

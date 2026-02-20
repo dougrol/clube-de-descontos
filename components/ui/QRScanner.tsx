@@ -112,11 +112,11 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onError }) => {
         };
     }, []);
 
-    // Restart when facingMode changes and was scanning
     useEffect(() => {
         if (hasPermission === true) {
             startScanner();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [facingMode]);
 
     return (

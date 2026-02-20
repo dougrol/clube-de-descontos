@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ShieldCheck, Truck, Siren, CheckCircle2, Star, Shield, Loader2, Car, Bike, Calculator, ArrowRight } from 'lucide-react';
-import { Button, Badge, ImageWithFallback } from '../components/ui';
+import { ArrowLeft, ShieldCheck, Truck, CheckCircle2, Star, Loader2, Car, Bike, ArrowRight } from 'lucide-react';
+import { Button } from '../components/ui';
 import { supabase } from '../services/supabaseClient';
 
 interface ProtectionPlan {
@@ -215,23 +215,37 @@ const Protection: React.FC = () => {
             <p className="text-gray-600 text-[9px] uppercase tracking-[0.2em] text-center mb-4">
                Associações Parceiras
             </p>
-            <div className="flex items-center justify-center gap-5">
+            <div className="flex items-center justify-center gap-6 sm:gap-8">
                {[
                   { name: 'Elevamais', logo: 'https://elevamais.org/wp-content/uploads/2025/05/Foto-Capa-Branding-Elevamais-Protecao-Veicular.png' },
-                  { name: 'AGV', logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjxA4WhVJYldBDvC542WyVsqlPhdl2poQONw&s' },
-                  { name: 'Autovale', logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWN3TvLukevIdp8lse0L3FeEIz6YOWGw-Tcg&s' }
+                  { name: 'AGV', logo: '/images/partners/agv.png' },
+                  { name: 'Autovale', logo: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/a9/12/21/a91221e9-c268-a94b-3986-62c30998eea8/AppIcon-0-0-1x_U007emarketing-0-6-0-85-220.png/1200x630wa.png' },
+                  { name: 'APVS', logo: '/images/partners/apvs.png' }
                ].map((partner, index) => (
-                  <div key={index} className="flex flex-col items-center">
-                     <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden border-2 border-white/20 bg-white p-2 shadow-lg">
-                        <ImageWithFallback
+                  <div key={index} className="flex flex-col items-center group cursor-pointer">
+                     <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-sm p-2 shadow-lg group-hover:border-gold-500/50 group-hover:bg-white/10 transition-all duration-300 flex items-center justify-center">
+                        <img
                            src={partner.logo}
                            alt={partner.name}
-                           className="w-full h-full rounded-full"
-                           objectFit="contain"
-                           showSkeleton={true}
+                           loading="lazy"
+                           decoding="async"
+                           className="w-full h-full object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300"
+                           onError={(e) => {
+                             const target = e.target as HTMLImageElement;
+                             target.style.display = 'none';
+                             const parent = target.parentElement;
+                             if (parent) {
+                               const fallback = document.createElement('span');
+                               fallback.className = 'text-gold-500/80 text-[10px] sm:text-[12px] font-bold text-center leading-tight';
+                               fallback.innerText = partner.name;
+                               parent.appendChild(fallback);
+                             }
+                           }}
                         />
                      </div>
-                     <span className="text-gray-500 text-[8px] mt-1.5 uppercase tracking-wider font-medium">{partner.name}</span>
+                     <span className="text-gray-500 text-[8px] sm:text-[9px] mt-2 uppercase tracking-widest font-bold group-hover:text-gold-500 transition-colors">
+                        {partner.name}
+                     </span>
                   </div>
                ))}
             </div>

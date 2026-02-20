@@ -89,7 +89,9 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
     return (
         <div className={`relative inline-block ${className}`}>
             {/* Hidden file input */}
+            <label htmlFor="avatar-upload" className="sr-only">Upload Avatar</label>
             <input
+                id="avatar-upload"
                 ref={inputRef}
                 type="file"
                 accept="image/jpeg,image/png,image/webp,image/gif"

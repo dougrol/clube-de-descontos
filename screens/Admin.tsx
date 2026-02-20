@@ -4,9 +4,9 @@ import { SectionTitle, Card } from '../components/ui';
 import Modal from '../components/ui/Modal';
 import { Users, DollarSign, Award, ArrowUpRight, CheckCircle, Clock, Save, Pencil, Trash2, Slash, XCircle, Type, Layout, Package, Plus, Eye, EyeOff, Ticket, ShieldCheck, Star, X } from 'lucide-react';
 import { supabase } from '../services/supabaseClient';
-import { Partner, PartnerCategory, Product, ProductDB } from '../types';
+import { Partner, PartnerCategory, ProductDB } from '../types';
 import { useCMS, SiteContent } from '../contexts/CMSContext';
-import { fetchActiveProducts, toggleProductActive, updateProduct } from '../services/storeService';
+import { toggleProductActive } from '../services/storeService';
 import { updatePartner } from '../services/partners';
 import { UsedCouponsList } from '../components/admin/UsedCouponsList';
 
@@ -51,7 +51,7 @@ const Admin: React.FC = () => {
   const [editingPartner, setEditingPartner] = useState<ExtendedPartner | null>(null);
 
   // Products State
-  const [products, setProducts] = useState<Product[]>([]);
+
   const [allProducts, setAllProducts] = useState<ProductDB[]>([]);
   const [productsLoading, setProductsLoading] = useState(false);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
@@ -712,7 +712,7 @@ const Admin: React.FC = () => {
               ) : allProducts.length === 0 ? (
                 <div className="text-center p-4 text-gray-500">Nenhum produto encontrado.</div>
               ) : (
-                allProducts.map((product: any) => (
+                allProducts.map((product: ProductDB & { partners?: { name: string } }) => (
                   <div key={product.id} className="bg-black/40 border border-white/5 p-3 rounded-lg flex gap-3">
                     <img
                       src={product.image_url || 'https://placehold.co/40x40/1a1a1a/d4af37?text=P'}
@@ -782,7 +782,7 @@ const Admin: React.FC = () => {
                   ) : allProducts.length === 0 ? (
                     <tr><td colSpan={5} className="p-4 text-center">Nenhum produto encontrado.</td></tr>
                   ) : (
-                    allProducts.map((product: any) => (
+                    allProducts.map((product: ProductDB & { partners?: { name: string } }) => (
                       <tr key={product.id} className="hover:bg-obsidian-700/50 transition-colors">
                         <td className="p-3">
                           <div className="flex items-center gap-3">

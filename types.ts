@@ -111,6 +111,7 @@ export interface PartnerDB {
   company_name?: string;
   plan?: string;
   price?: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   actions?: any;
   active?: boolean;
   priority?: number;

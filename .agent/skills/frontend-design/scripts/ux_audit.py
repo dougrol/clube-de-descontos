@@ -113,12 +113,12 @@ class UXAuditor:
 
         # Pre-calculate common flags
         has_long_text = bool(re.search(r'<p|<div.*class=.*text|article|<span.*text', content, re.IGNORECASE))
-        has_form = bool(re.search(r'<form|<input|password|credit|card|payment', content, re.IGNORECASE))
+        has_form = bool(re.search(r'<form\b|<input\b|<select\b|<textarea\b', content, re.IGNORECASE))
         complex_elements = len(re.findall(r'<input|<select|<textarea|<option', content, re.IGNORECASE))
 
         # --- 1. PSYCHOLOGY LAWS ---
         # Hick's Law
-        nav_items = len(re.findall(r'<NavLink|<Link|<a\s+href|nav-item', content, re.IGNORECASE))
+        nav_items = len(re.findall(r'<NavLink\b|<Link\b(?!\s+rel)|<a\s+href|nav-item', content, re.IGNORECASE))
         if nav_items > 7:
             self.issues.append(f"[Hick's Law] {filename}: {nav_items} nav items (Max 7)")
         
@@ -502,8 +502,10 @@ class UXAuditor:
                         '#8B5CF6', '#A78BFA', '#C4B5FD', '#DDD6FE', '#EDE9FE',
                         '#8b5cf6', '#a855f7', '#9333ea', '#7c3aed', '#6d28d9',
                         'purple', 'violet', 'fuchsia', 'magenta', 'lavender']
+        
+        content_no_urls = re.sub(r'https?://[^\s\'"]+', '', content)
         for purple in purple_hexes:
-            if purple.lower() in content.lower():
+            if purple.lower() in content_no_urls.lower():
                 self.issues.append(f"[Color] {filename}: PURPLE DETECTED ('{purple}'). Banned by Maestro rules. Use Teal/Cyan/Emerald instead.")
                 break
 

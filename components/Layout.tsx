@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Home, Grid, User, Instagram, ShieldCheck, ShoppingBag } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Home, Grid, User, ShieldCheck, ShoppingBag } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { UserRole } from '../types';
 
@@ -52,8 +52,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               const isActive = item.path === '/home'
                 ? location.pathname === '/home'
                 : location.pathname.startsWith(item.path);
-
-              const isAdminButton = item.path === '/admin';
 
               return (
                 <button

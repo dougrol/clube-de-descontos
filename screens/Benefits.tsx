@@ -146,7 +146,6 @@ const Benefits: React.FC = () => {
           src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=75&w=1080&auto=format&fit=crop"
           alt="Clube de Vantagens Luxo"
           loading="eager"
-          // @ts-ignore
           fetchPriority="high"
           className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-1000 ease-in-out"
         />

@@ -9,7 +9,7 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 async function checkData() {
     console.log('--- ALL PARTNERS ---');
         // Check partners
-        const { data: partners, error: partnersError } = await supabase
+        const { data: partners } = await supabase
             .from('partners')
             .select('*');
 

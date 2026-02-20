@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Package, ShoppingBag, ChevronRight, Loader2, Clock, CheckCircle, XCircle, Truck, AlertCircle } from 'lucide-react';
 import { Card, Badge } from '../../components/ui';
 import { fetchUserOrders } from '../../services/storeService';
-import { Order, OrderStatus, PaymentStatus } from '../../types';
+import { Order, OrderStatus } from '../../types';
 import { useAuth } from '../../contexts/AuthContext';
 
 const MyOrders: React.FC = () => {

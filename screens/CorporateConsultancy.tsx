@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Building2, Users, Presentation, TrendingUp, CheckCircle2, MessageCircle, Shield, Target, Award } from 'lucide-react';
+import { ArrowLeft, Building2, Users, Presentation, TrendingUp, MessageCircle, Shield, Target, Award } from 'lucide-react';
 import { Button, Card } from '../components/ui';
 
 const services = [

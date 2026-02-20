@@ -10,15 +10,13 @@ const Offers: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const loadProducts = async () => {
+      const data = await getAffiliateProducts();
+      setProducts(data || []);
+      setLoading(false);
+    };
     loadProducts();
   }, []);
-
-  const loadProducts = async () => {
-    setLoading(true);
-    const data = await getAffiliateProducts();
-    setProducts(data || []);
-    setLoading(false);
-  };
 
   return (
     <div className="min-h-screen bg-black pb-24 animate-fade-in relative">

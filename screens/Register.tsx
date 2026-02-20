@@ -276,8 +276,10 @@ const Register: React.FC = () => {
                             >
                                 <option value="" className="bg-obsidian-900">Selecione sua associação</option>
                                 <option value="auto_vale" className="bg-obsidian-900">Auto Vale Proteção Veicular</option>
+                                <option value="agv" className="bg-obsidian-900">AGV Proteção</option>
                                 <option value="eleva_mais" className="bg-obsidian-900">Eleva Mais</option>
                                 <option value="protebem" className="bg-obsidian-900">Protebem</option>
+                                <option value="apvs_brasil" className="bg-obsidian-900">APVS Brasil</option>
                             </select>
                         </div>
                     </div>

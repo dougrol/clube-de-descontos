@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, Info, CheckCircle, Globe, Copy } from 'lucide-react';
+import { ArrowLeft, MapPin, Info, Globe, Copy } from 'lucide-react';
 import { Button, Card, Badge, QRCodeDisplay } from '../components/ui';
 import { fetchPartnerById } from '../services/partners';
 import { Partner } from '../types';

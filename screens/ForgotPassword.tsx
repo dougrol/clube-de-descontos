@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Mail, ShieldAlert, ChevronLeft, CheckCircle, AlertCircle } from 'lucide-react';
+import { Mail, ShieldAlert, ChevronLeft, CheckCircle } from 'lucide-react';
 import { Button, Input } from '../components/ui';
 import { supabase } from '../services/supabaseClient';
 import { useToast } from '../contexts/ToastContext';

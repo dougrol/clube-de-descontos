@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Bell, Search, Menu, ShoppingBag, ShieldCheck, Gem, LogOut, X, ArrowRight, Tag } from 'lucide-react';
-import { Card, SectionTitle, Button, ImageWithFallback } from '../components/ui';
+import { ShoppingBag, ArrowRight, Tag } from 'lucide-react';
+import { Card, Button, ImageWithFallback } from '../components/ui';
 import { fetchPartners } from '../services/partners';
 import { useNavigate } from 'react-router-dom';
 import { Partner } from '../types';
 import { useAuth } from '../contexts/AuthContext';
-import { useCMS } from '../contexts/CMSContext';
+
 import { supabase } from '../services/supabaseClient';
 import { WaveBackground } from '../components/WaveBackground';
 import { AppGrid } from '../components/AppGrid';
@@ -13,7 +13,7 @@ import { AppGrid } from '../components/AppGrid';
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { getContent } = useCMS();
+
 
   const [partners, setPartners] = useState<Partner[]>([]);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
@@ -128,19 +128,19 @@ const Home: React.FC = () => {
 
         {/* 3.5 Consultancy Highlight (New) */}
         <div className="mb-8 animate-slide-up" style={{ animationDelay: '0.15s' }}>
-          <div onClick={() => navigate('/consultancy')} className="bg-gradient-to-r from-purple-900 to-obsidian-900 rounded-2xl p-5 border border-purple-500/20 relative overflow-hidden group cursor-pointer shadow-lg shadow-purple-900/10">
-            <div className="absolute right-0 top-0 w-32 h-32 bg-purple-600/20 rounded-full blur-3xl -translate-y-10 translate-x-10"></div>
+          <div onClick={() => navigate('/consultancy')} className="bg-gradient-to-r from-emerald-900 to-obsidian-900 rounded-2xl p-5 border border-emerald-500/20 relative overflow-hidden group cursor-pointer shadow-lg shadow-emerald-900/10">
+            <div className="absolute right-0 top-0 w-32 h-32 bg-emerald-600/20 rounded-full blur-3xl -translate-y-10 translate-x-10"></div>
 
             <div className="relative z-10 flex items-center justify-between">
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-purple-400 mb-1 block flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse"></span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400 mb-1 block flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                   Consultoria Especializada
                 </span>
                 <h3 className="text-lg font-bold text-white mb-1">Escola de Negócios</h3>
                 <p className="text-gray-400 text-xs max-w-[180px] leading-relaxed">Treinamentos exclusivos para alta performance em vendas.</p>
               </div>
-              <div className="w-10 h-10 bg-purple-600/20 rounded-full flex items-center justify-center border border-purple-500/30 group-hover:bg-purple-600 group-hover:text-white transition-all">
+              <div className="w-10 h-10 bg-emerald-600/20 rounded-full flex items-center justify-center border border-emerald-500/30 group-hover:bg-emerald-600 group-hover:text-white transition-all">
                 <ArrowRight size={18} />
               </div>
             </div>

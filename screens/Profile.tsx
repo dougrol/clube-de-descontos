@@ -123,7 +123,7 @@ const Profile: React.FC<ProfileProps> = ({ userRole }) => {
                   <span className="text-xs text-gray-400 font-medium">Cupons</span>
                </button>
                <button onClick={() => navigate('/consultancy')} className="bg-obsidian-800 p-3 rounded-xl border border-white/5 flex flex-col items-center gap-2 active:scale-95 transition-transform">
-                  <BookOpen className="text-purple-500" size={20} />
+                  <BookOpen className="text-emerald-500" size={20} />
                   <span className="text-xs text-gray-400 font-medium">Cursos</span>
                </button>
                <button onClick={() => navigate('/loja')} className="bg-obsidian-800 p-3 rounded-xl border border-white/5 flex flex-col items-center gap-2 active:scale-95 transition-transform">

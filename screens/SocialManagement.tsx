@@ -9,17 +9,17 @@ const SocialManagement: React.FC = () => {
    return (
       <div className="min-h-screen bg-black pb-24 animate-fade-in">
          {/* Stylish Header */}
-         <div className="bg-gradient-to-b from-purple-900/20 to-black pt-10 pb-10 px-6 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-purple-600/10 rounded-full blur-[80px] pointer-events-none"></div>
+         <div className="bg-gradient-to-b from-emerald-900/20 to-black pt-10 pb-10 px-6 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-600/10 rounded-full blur-[80px] pointer-events-none"></div>
 
             <button onClick={() => navigate(-1)} className="text-white mb-6 relative z-10"><ArrowLeft /></button>
 
             <div className="relative z-10">
-               <div className="inline-block px-3 py-1 bg-purple-500/10 text-purple-400 text-[10px] font-bold uppercase tracking-widest rounded-full border border-purple-500/20 mb-4">
+               <div className="inline-block px-3 py-1 bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase tracking-widest rounded-full border border-emerald-500/20 mb-4">
                   B2B Services
                </div>
                <h1 className="text-3xl font-serif font-bold text-white mb-2">
-                  Consultoria para <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">Associações</span>
+                  Consultoria para <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-pink-500">Associações</span>
                </h1>
                <p className="text-gray-400 text-sm max-w-[90%]">
                   Gestão completa, marketing e treinamentos corporativos para o mercado de Proteção Veicular.
@@ -62,7 +62,7 @@ const SocialManagement: React.FC = () => {
 
             {/* Services List */}
             <div className="space-y-6">
-               <h3 className="text-white font-bold text-sm border-l-2 border-purple-500 pl-3">O que entregamos</h3>
+               <h3 className="text-white font-bold text-sm border-l-2 border-emerald-500 pl-3">O que entregamos</h3>
 
                <div className="flex gap-4">
                   <div className="h-12 w-12 rounded-xl bg-obsidian-800 flex items-center justify-center flex-shrink-0 text-gold-500 border border-white/5">

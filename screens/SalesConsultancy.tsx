@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Banknote, Landmark, Percent, Car, MapPin, Tag, Radar, Loader2, Zap } from 'lucide-react';
+import { ArrowLeft, Banknote, Landmark, Percent, Car, MapPin, Tag, Loader2 } from 'lucide-react';
 import { fetchPartners } from '../services/partners';
-import { Partner, PartnerCategory } from '../types';
+import { Partner } from '../types';
 import { Button, Card } from '../components/ui';
 
 const SalesConsultancy: React.FC = () => {

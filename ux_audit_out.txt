@@ -1,0 +1,32 @@
+
+[UX AUDIT] 53 files checked
+--------------------------------------------------
+[!] ISSUES (27):
+  - [Cognitive Load] App.tsx: Form inputs without labels. Use <label> for accessibility and clarity.
+  - [Hick's Law] index.html: 9 nav items (Max 7)
+  - [Cognitive Load] index.html: Form inputs without labels. Use <label> for accessibility and clarity.
+  - [Color] AppGrid.tsx: PURPLE DETECTED ('purple'). Banned by Maestro rules. Use Teal/Cyan/Emerald instead.
+  - [Cognitive Load] Layout.tsx: Form inputs without labels. Use <label> for accessibility and clarity.
+  - [Cognitive Load] AffiliateProductCard.tsx: Form inputs without labels. Use <label> for accessibility and clarity.
+  - [Cognitive Load] AvatarUpload.tsx: Form inputs without labels. Use <label> for accessibility and clarity.
+  - [Cognitive Load] Card.tsx: Form inputs without labels. Use <label> for accessibility and clarity.
+  - [Cognitive Load] AuthContext.tsx: Form inputs without labels. Use <label> for accessibility and clarity.
+  - [Cognitive Load] About.tsx: Form inputs without labels. Use <label> for accessibility and clarity.
+[*] WARNINGS (355):
+  - [Trust] App.tsx: No social proof detected. Consider adding testimonials, ratings, or 'Trusted by' logos.
+  - [Persuasion] App.tsx: Social proof without specific numbers. Use 'Join 10,000+' format.
+  - [Typography] App.tsx: No line length constraint (45-75ch). Use max-w-prose or max-w-[65ch].
+  - [Typography] App.tsx: Text elements found without line-height. Body: 1.4-1.6, Headings: 1.1-1.3
+  - [Visual] App.tsx: Flat design with no depth. Consider shadows or subtle gradients for hierarchy.
+  - [Animation] App.tsx: Routing detected without page transitions. Consider fade/slide for context continuity.
+  - [Von Restorff] index.html: No primary CTA
+  - [Serial Position] index.html: Last nav item may not be important. Place key actions at start/end.
+  - [Performance] index.html: Many will-change declarations (5). Use sparingly, only for heavy animations.
+  - [Color] index.html: 13 distinct colors. Consider 60-30-10 rule: dominant (60%), secondary (30%), accent (10%).
+  - [Color] index.html: Blue color in food context. Blue suppresses appetite; consider warm colors (red, orange, yellow).
+  - [Animation] index.html: Very fast animation (0.01ms). Minimum 50ms for visibility.
+  - [Animation] index.html: Very fast animation (0.01ms). Minimum 50ms for visibility.
+  - [Motion] index.html: Many animations (7). Ensure majority serve functional purpose (feedback, guidance), not decoration.
+  - [Fitts' Law] AppGrid.tsx: Small targets (< 44px)
+[+] PASSED CHECKS: 27
+STATUS: FAIL

@@ -1,0 +1,44 @@
+
+============================================================
+[LINT RUNNER] Unified Linting
+============================================================
+Project: C:\Users\dougl\Downloads\tavares-car
+Time: 2026-02-20 16:38:56
+Type: node
+Linters: 2
+------------------------------------------------------------
+
+Running: npm lint...
+  [FAIL] npm lint
+  Error: Command not found: npm
+
+Running: tsc...
+  [FAIL] tsc
+  Error: Command not found: npx
+
+============================================================
+SUMMARY
+============================================================
+[FAIL] npm lint
+[FAIL] tsc
+
+{
+  "script": "lint_runner",
+  "project": "C:\\Users\\dougl\\Downloads\\tavares-car",
+  "type": "node",
+  "checks": [
+    {
+      "name": "npm lint",
+      "passed": false,
+      "output": "",
+      "error": "Command not found: npm"
+    },
+    {
+      "name": "tsc",
+      "passed": false,
+      "output": "",
+      "error": "Command not found: npx"
+    }
+  ],
+  "passed": false
+}

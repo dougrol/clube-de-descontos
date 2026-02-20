@@ -1,0 +1,42 @@
+
+============================================================
+[LINT RUNNER] Unified Linting
+============================================================
+Project: C:\Users\dougl\Downloads\tavares-car
+Time: 2026-02-20 16:41:03
+Type: node
+Linters: 2
+------------------------------------------------------------
+
+Running: npm lint...
+  [PASS] npm lint
+
+Running: tsc...
+  [PASS] tsc
+
+============================================================
+SUMMARY
+============================================================
+[PASS] npm lint
+[PASS] tsc
+
+{
+  "script": "lint_runner",
+  "project": "C:\\Users\\dougl\\Downloads\\tavares-car",
+  "type": "node",
+  "checks": [
+    {
+      "name": "npm lint",
+      "passed": true,
+      "output": "\n> tavares-car@0.0.1 lint\n> eslint .\n\n",
+      "error": ""
+    },
+    {
+      "name": "tsc",
+      "passed": true,
+      "output": "",
+      "error": ""
+    }
+  ],
+  "passed": true
+}

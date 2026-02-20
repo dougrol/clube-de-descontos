@@ -13,7 +13,7 @@ import { Product, ProductType } from '../../types';
 const QUICK_CATEGORIES = [
     { id: 'automotive', label: 'Automotivo', icon: Car, color: 'from-amber-500 to-orange-600' },
     { id: 'food', label: 'Alimentação', icon: Utensils, color: 'from-red-500 to-pink-600' },
-    { id: 'lifestyle', label: 'Lifestyle', icon: Shirt, color: 'from-purple-500 to-indigo-600' },
+    { id: 'lifestyle', label: 'Lifestyle', icon: Shirt, color: 'from-emerald-500 to-teal-600' },
     { id: 'entertainment', label: 'Lazer', icon: Gamepad2, color: 'from-green-500 to-emerald-600' },
     { id: 'health', label: 'Saúde', icon: Heart, color: 'from-rose-500 to-red-600' },
     { id: 'gifts', label: 'Presentes', icon: Gift, color: 'from-yellow-500 to-amber-600' },

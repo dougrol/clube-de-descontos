@@ -114,7 +114,7 @@ const Checkout: React.FC = () => {
                         >
                             <ArrowLeft size={20} />
                         </button>
-                        <h1 className="text-lg font-bold text-white">Pagamento PIX</h1>
+                        <h2 className="text-lg font-bold text-white">Pagamento PIX</h2>
                     </div>
                 </div>
 

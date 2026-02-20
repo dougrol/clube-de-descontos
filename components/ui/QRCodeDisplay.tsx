@@ -10,7 +10,7 @@ interface QRCodeDisplayProps {
     partnerName: string;
 }
 
-const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({ code, expiresAt, benefit, partnerName }) => {
+const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({ code, expiresAt }) => {
     const [remainingTime, setRemainingTime] = useState(getCouponRemainingTime(expiresAt));
     const [isExpired, setIsExpired] = useState(false);
 

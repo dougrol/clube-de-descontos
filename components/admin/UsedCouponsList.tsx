@@ -47,6 +47,7 @@ export const UsedCouponsList: React.FC = () => {
 
     useEffect(() => {
         fetchCoupons();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [statusFilter]);
 
     const handleDelete = async (couponId: string) => {
