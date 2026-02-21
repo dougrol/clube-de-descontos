@@ -189,18 +189,22 @@ const AppRoutes: React.FC = () => {
   );
 };
 
+import { ThemeProvider } from './contexts/ThemeContext';
+
 const App: React.FC = () => {
   return (
     <ErrorBoundary>
-      <AuthProvider>
-        <CMSProvider>
-          <ToastProvider>
-            <HashRouter>
-              <AppRoutes />
-            </HashRouter>
-          </ToastProvider>
-        </CMSProvider>
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <CMSProvider>
+            <ToastProvider>
+              <HashRouter>
+                <AppRoutes />
+              </HashRouter>
+            </ToastProvider>
+          </CMSProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </ErrorBoundary>
   );
 };
