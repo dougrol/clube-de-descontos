@@ -176,12 +176,9 @@ const Login: React.FC = () => {
         {/* Logo */}
         <StaggerItem>
           <div className="mb-8 flex flex-col items-center">
-            <ImageWithFallback
-              src="/images/logo_shield_v2_transparent.png"
-              alt="Tavares Car"
-              className="w-32 h-32 sm:w-40 sm:h-40 xl:w-48 xl:h-48 mb-2 drop-shadow-[0_0_15px_rgba(212,175,55,0.15)]"
-              objectFit="contain"
-            />
+            <h2 className="text-2xl font-serif font-bold text-white mb-1">
+              TAVARES <span className="text-gold-500">CAR</span>
+            </h2>
             <p className="text-gold-500/80 text-[10px] tracking-[0.3em] uppercase font-medium">Clube de Descontos</p>
           </div>
         </StaggerItem>
