@@ -71,7 +71,7 @@ const MyCoupons: React.FC = () => {
             {/* Header */}
             <div className="sticky top-0 z-20 bg-black/90 backdrop-blur-lg border-b border-white/5">
                 <div className="flex items-center p-4">
-                    <button onClick={() => navigate(-1)} className="p-2 -ml-2 text-gray-400 hover:text-theme-text">
+                    <button onClick={() => navigate(-1)} className="p-2 -ml-2 text-theme-muted hover:text-theme-text">
                         <ChevronLeft size={24} />
                     </button>
                     <h1 className="flex-1 text-center text-theme-text text-sm font-bold tracking-[0.2em] uppercase">Meus Cupons</h1>
@@ -107,7 +107,7 @@ const MyCoupons: React.FC = () => {
                 {loading ? (
                     <div className="flex flex-col items-center justify-center py-20">
                         <div className="w-8 h-8 border-2 border-gold-500 border-t-transparent rounded-full animate-spin mb-4" />
-                        <p className="text-gray-500 text-sm">Carregando cupons...</p>
+                        <p className="text-theme-muted text-sm">Carregando cupons...</p>
                     </div>
                 ) : filteredCoupons.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-20 text-center">
@@ -115,7 +115,7 @@ const MyCoupons: React.FC = () => {
                             <Ticket size={32} className="text-gray-600" />
                         </div>
                         <h3 className="text-theme-text font-semibold mb-2">Nenhum cupom encontrado</h3>
-                        <p className="text-gray-500 text-sm max-w-xs">
+                        <p className="text-theme-muted text-sm max-w-xs">
                             {filter === 'all'
                                 ? 'Acesse nossos parceiros e gere seu primeiro cupom de desconto!'
                                 : `Você não tem cupons ${filter === 'active' ? 'ativos' : filter === 'used' ? 'usados' : 'expirados'}.`
@@ -149,7 +149,7 @@ const MyCoupons: React.FC = () => {
                                         </div>
                                         <div>
                                             <h3 className="text-theme-text font-semibold text-sm">{coupon.partner_name}</h3>
-                                            <p className="text-gray-500 text-xs">{coupon.benefit}</p>
+                                            <p className="text-theme-muted text-xs">{coupon.benefit}</p>
                                         </div>
                                     </div>
                                     {getStatusBadge(coupon.status, coupon.expires_at)}
@@ -158,7 +158,7 @@ const MyCoupons: React.FC = () => {
                                 {/* Coupon Code */}
                                 <div className="bg-black/50 rounded-xl p-3 text-center border border-dashed border-white/10 flex flex-col items-center justify-center gap-2">
                                     <div>
-                                        <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Código do Cupom</p>
+                                        <p className="text-[10px] text-theme-muted uppercase tracking-widest mb-1">Código do Cupom</p>
                                         <p className="text-gold-500 font-mono font-bold text-xl tracking-wider">{coupon.code}</p>
                                     </div>
                                     {canShowQR && (
@@ -192,7 +192,7 @@ const MyCoupons: React.FC = () => {
                     <div className="bg-obsidian-900 w-full max-w-sm rounded-3xl border border-gold-500/30 p-8 text-center relative animate-scale-up shadow-[0_0_50px_rgba(212,175,55,0.1)]">
                         <button
                             onClick={() => setSelectedCoupon(null)}
-                            className="absolute top-4 right-4 p-2 bg-white/5 rounded-full text-gray-400 hover:text-theme-text hover:bg-white/10"
+                            className="absolute top-4 right-4 p-2 bg-white/5 rounded-full text-theme-muted hover:text-theme-text hover:bg-white/10"
                         >
                             <X size={20} />
                         </button>
@@ -209,7 +209,7 @@ const MyCoupons: React.FC = () => {
                             />
                         </div>
 
-                        <p className="text-sm text-gray-400">
+                        <p className="text-sm text-theme-muted">
                             Apresente este QR Code ao parceiro para validar seu desconto.
                         </p>
                     </div>

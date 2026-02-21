@@ -114,7 +114,7 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
             {/* Header */}
             <div className="sticky top-0 z-20 bg-black/90 backdrop-blur-lg border-b border-white/5">
                 <div className="flex items-center p-4">
-                    <button onClick={() => navigate(-1)} className="p-2 -ml-2 text-gray-400 hover:text-theme-text">
+                    <button onClick={() => navigate(-1)} className="p-2 -ml-2 text-theme-muted hover:text-theme-text">
                         <ChevronLeft size={24} />
                     </button>
                     <h1 className="flex-1 text-center text-theme-text text-sm font-bold tracking-[0.2em] uppercase">Dados Pessoais</h1>
@@ -125,7 +125,7 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
             {loading ? (
                 <div className="flex flex-col items-center justify-center py-20">
                     <div className="w-8 h-8 border-2 border-gold-500 border-t-transparent rounded-full animate-spin mb-4" />
-                    <p className="text-gray-500 text-sm">Carregando dados...</p>
+                    <p className="text-theme-muted text-sm">Carregando dados...</p>
                 </div>
             ) : (
                 <div className="p-4 pb-24 space-y-4">
@@ -146,7 +146,7 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
                                     <User size={20} className="text-gold-500" />
                                 </div>
                                 <div>
-                                    <p className="text-gray-500 text-[10px] uppercase tracking-widest">Nome Completo</p>
+                                    <p className="text-theme-muted text-[10px] uppercase tracking-widest">Nome Completo</p>
                                     <p className="text-theme-text font-medium">{userData?.name}</p>
                                 </div>
                             </div>
@@ -159,7 +159,7 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
                                     <Mail size={20} className="text-gold-500" />
                                 </div>
                                 <div>
-                                    <p className="text-gray-500 text-[10px] uppercase tracking-widest">E-mail</p>
+                                    <p className="text-theme-muted text-[10px] uppercase tracking-widest">E-mail</p>
                                     <p className="text-theme-text font-medium break-all">{userData?.email}</p>
                                 </div>
                             </div>
@@ -173,7 +173,7 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
                                         <Phone size={20} className="text-gold-500" />
                                     </div>
                                     <div>
-                                        <p className="text-gray-500 text-[10px] uppercase tracking-widest">Telefone</p>
+                                        <p className="text-theme-muted text-[10px] uppercase tracking-widest">Telefone</p>
                                         <p className="text-theme-text font-medium">{formatPhone(userData.phone)}</p>
                                     </div>
                                 </div>
@@ -188,7 +188,7 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
                                         <Shield size={20} className="text-gold-500" />
                                     </div>
                                     <div>
-                                        <p className="text-gray-500 text-[10px] uppercase tracking-widest">CPF</p>
+                                        <p className="text-theme-muted text-[10px] uppercase tracking-widest">CPF</p>
                                         <p className="text-theme-text font-medium">{formatCPF(userData.cpf)}</p>
                                     </div>
                                 </div>
@@ -203,7 +203,7 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
                                         <MapPin size={20} className="text-gold-500" />
                                     </div>
                                     <div>
-                                        <p className="text-gray-500 text-[10px] uppercase tracking-widest">Associação</p>
+                                        <p className="text-theme-muted text-[10px] uppercase tracking-widest">Associação</p>
                                         <p className="text-theme-text font-medium">{userData.association_name}</p>
                                     </div>
                                 </div>
@@ -217,7 +217,7 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
                                     <Calendar size={20} className="text-gold-500" />
                                 </div>
                                 <div>
-                                    <p className="text-gray-500 text-[10px] uppercase tracking-widest">Membro Desde</p>
+                                    <p className="text-theme-muted text-[10px] uppercase tracking-widest">Membro Desde</p>
                                     <p className="text-theme-text font-medium">
                                         {new Date(userData?.created_at || '').toLocaleDateString('pt-BR', {
                                             day: '2-digit',
@@ -232,7 +232,7 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
 
                     {/* Privacy Note */}
                     <div className="mt-6 p-4 bg-white/5 rounded-xl border border-white/5">
-                        <p className="text-gray-500 text-xs text-center">
+                        <p className="text-theme-muted text-xs text-center">
                             🔒 Seus dados estão protegidos de acordo com a LGPD
                         </p>
                     </div>

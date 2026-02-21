@@ -23,7 +23,7 @@ const StatCard: React.FC<{ title: string; value: string; icon: React.ReactNode; 
   <Card className="bg-obsidian-800 border-l-4 border-l-gold-500 p-4">
     <div className="flex justify-between items-start gap-3">
       <div className="min-w-0 flex-1">
-        <p className="text-gray-400 text-[10px] sm:text-xs uppercase mb-1 truncate">{title}</p>
+        <p className="text-theme-muted text-[10px] sm:text-xs uppercase mb-1 truncate">{title}</p>
         <h3 className="text-xl sm:text-2xl font-bold text-theme-text truncate">{value}</h3>
         {trend && <p className="text-green-500 text-[10px] sm:text-xs flex items-center mt-1 truncate"><ArrowUpRight size={12} className="shrink-0" /> <span className="truncate">{trend}</span></p>}
       </div>
@@ -448,7 +448,7 @@ const Admin: React.FC = () => {
       <header className="mb-4 sm:mb-6 flex flex-col gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-theme-text">Painel Gestor</h1>
-          <p className="text-gray-400 text-xs sm:text-sm">Visão geral do negócio</p>
+          <p className="text-theme-muted text-xs sm:text-sm">Visão geral do negócio</p>
         </div>
 
         {/* Tab Switcher - Mobile Optimized: horizontal scroll */}
@@ -536,9 +536,9 @@ const Admin: React.FC = () => {
             {/* Mobile View: Cards */}
             <div className="grid grid-cols-1 gap-4 sm:hidden">
               {loading ? (
-                <div className="text-center p-4 text-gray-500">Carregando...</div>
+                <div className="text-center p-4 text-theme-muted">Carregando...</div>
               ) : partners.length === 0 ? (
-                <div className="text-center p-4 text-gray-500">Nenhum parceiro.</div>
+                <div className="text-center p-4 text-theme-muted">Nenhum parceiro.</div>
               ) : (
                 partners.map(partner => (
                   <Card key={partner.id} className="bg-obsidian-800 border border-obsidian-700 p-4">
@@ -565,7 +565,7 @@ const Admin: React.FC = () => {
                     </div>
 
                     <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/5">
-                      <div className="text-xs text-gray-400">
+                      <div className="text-xs text-theme-muted">
                         {partner.city || 'Sem local'}
                       </div>
                       <div className="flex gap-3">
@@ -611,7 +611,7 @@ const Admin: React.FC = () => {
             {/* Desktop View: Table */}
             <Card className="hidden sm:block bg-obsidian-800 border-none overflow-hidden">
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs sm:text-sm text-gray-400 min-w-[500px]">
+                <table className="w-full text-left text-xs sm:text-sm text-theme-muted min-w-[500px]">
                   <thead className="bg-obsidian-900 uppercase font-medium text-[10px] sm:text-xs">
                     <tr>
                       <th className="p-2 sm:p-3">Parceiro</th>
@@ -708,9 +708,9 @@ const Admin: React.FC = () => {
             {/* Mobile View: Cards */}
             <div className="grid grid-cols-1 gap-4 sm:hidden p-4">
               {productsLoading ? (
-                <div className="text-center p-4 text-gray-500">Carregando produtos...</div>
+                <div className="text-center p-4 text-theme-muted">Carregando produtos...</div>
               ) : allProducts.length === 0 ? (
-                <div className="text-center p-4 text-gray-500">Nenhum produto encontrado.</div>
+                <div className="text-center p-4 text-theme-muted">Nenhum produto encontrado.</div>
               ) : (
                 allProducts.map((product: ProductDB & { partners?: { name: string } }) => (
                   <div key={product.id} className="bg-black/40 border border-white/5 p-3 rounded-lg flex gap-3">
@@ -731,7 +731,7 @@ const Admin: React.FC = () => {
                           {product.active ? 'Ativo' : 'Inativo'}
                         </span>
                       </div>
-                      <p className="text-xs text-gray-500 truncate mb-1">{product.partners?.name || 'Sem parceiro'}</p>
+                      <p className="text-xs text-theme-muted truncate mb-1">{product.partners?.name || 'Sem parceiro'}</p>
 
                       <div className="flex justify-between items-center mt-2">
                         <div className="flex flex-col">
@@ -740,7 +740,7 @@ const Admin: React.FC = () => {
                         <div className="flex gap-2">
                           <button
                             onClick={() => handleToggleProductActive(product.id, product.active)}
-                            className={`p-1.5 rounded bg-white/5 ${product.active ? 'text-green-500' : 'text-gray-400'}`}
+                            className={`p-1.5 rounded bg-white/5 ${product.active ? 'text-green-500' : 'text-theme-muted'}`}
                           >
                             {product.active ? <EyeOff size={16} /> : <Eye size={16} />}
                           </button>
@@ -766,7 +766,7 @@ const Admin: React.FC = () => {
 
             {/* Desktop View: Table */}
             <div className="hidden sm:block overflow-x-auto">
-              <table className="w-full text-left text-sm text-gray-400">
+              <table className="w-full text-left text-sm text-theme-muted">
                 <thead className="bg-obsidian-900 uppercase font-medium">
                   <tr>
                     <th className="p-3">Produto</th>
@@ -798,7 +798,7 @@ const Admin: React.FC = () => {
                             />
                             <div>
                               <p className="text-theme-text font-medium">{product.title}</p>
-                              <p className="text-xs text-gray-500">{product.partners?.name || 'Sem parceiro'}</p>
+                              <p className="text-xs text-theme-muted">{product.partners?.name || 'Sem parceiro'}</p>
                             </div>
                           </div>
                         </td>
@@ -806,7 +806,7 @@ const Admin: React.FC = () => {
                           <div>
                             <span className="text-gold-500 font-bold">R$ {Number(product.price_discount).toFixed(2)}</span>
                             {product.price_original > product.price_discount && (
-                              <span className="text-gray-500 text-xs line-through ml-2">R$ {Number(product.price_original).toFixed(2)}</span>
+                              <span className="text-theme-muted text-xs line-through ml-2">R$ {Number(product.price_original).toFixed(2)}</span>
                             )}
                           </div>
                         </td>
@@ -863,7 +863,7 @@ const Admin: React.FC = () => {
                 <div className="flex justify-between items-start mb-2">
                   <div>
                     <h4 className="text-theme-text font-medium">{item.label}</h4>
-                    <p className="text-xs text-gray-500 font-mono">{item.key}</p>
+                    <p className="text-xs text-theme-muted font-mono">{item.key}</p>
                   </div>
                   {item.value !== rawContent.find(i => i.key === item.key)?.value && (
                     <span className="text-xs text-yellow-500 animate-pulse font-bold">● Não salvo</span>
@@ -886,7 +886,7 @@ const Admin: React.FC = () => {
               </Card>
             ))}
             {editableContent.length === 0 && !loading && (
-              <div className="text-gray-500 text-center py-10 border border-dashed border-gray-800 rounded-xl">
+              <div className="text-theme-muted text-center py-10 border border-dashed border-gray-800 rounded-xl">
                 Nenhum conteúdo editável encontrado no banco de dados.
               </div>
             )}
@@ -916,9 +916,9 @@ const Admin: React.FC = () => {
             {/* Mobile View: Cards */}
             <div className="grid grid-cols-1 gap-4 sm:hidden p-4">
               {protectionLoading ? (
-                <div className="text-center p-4 text-gray-500">Carregando planos...</div>
+                <div className="text-center p-4 text-theme-muted">Carregando planos...</div>
               ) : protectionPlans.length === 0 ? (
-                <div className="text-center p-4 text-gray-500">Nenhum plano encontrado.</div>
+                <div className="text-center p-4 text-theme-muted">Nenhum plano encontrado.</div>
               ) : (
                 protectionPlans.map(plan => (
                   <div key={plan.id} className="bg-black/40 border border-white/5 p-3 rounded-lg">
@@ -939,14 +939,14 @@ const Admin: React.FC = () => {
                     <div className="flex justify-between items-end">
                       <div>
                         <span className="text-gold-500 font-bold text-lg">R$ {plan.price.toFixed(2).replace('.', ',')}</span>
-                        <span className="text-gray-500 text-xs">/mês</span>
-                        <div className="text-xs text-gray-400 mt-1">{plan.features.length} coberturas</div>
+                        <span className="text-theme-muted text-xs">/mês</span>
+                        <div className="text-xs text-theme-muted mt-1">{plan.features.length} coberturas</div>
                       </div>
 
                       <div className="flex gap-2">
                         <button
                           onClick={() => handleTogglePlanActive(plan.id, plan.active)}
-                          className={`p-1.5 rounded bg-white/5 ${plan.active ? 'text-green-500' : 'text-gray-400'}`}
+                          className={`p-1.5 rounded bg-white/5 ${plan.active ? 'text-green-500' : 'text-theme-muted'}`}
                         >
                           {plan.active ? <EyeOff size={16} /> : <Eye size={16} />}
                         </button>
@@ -971,7 +971,7 @@ const Admin: React.FC = () => {
 
             {/* Desktop View: Table */}
             <div className="hidden sm:block overflow-x-auto">
-              <table className="w-full text-left text-sm text-gray-400">
+              <table className="w-full text-left text-sm text-theme-muted">
                 <thead className="bg-obsidian-900 uppercase font-medium">
                   <tr>
                     <th className="p-3">Plano</th>
@@ -1001,7 +1001,7 @@ const Admin: React.FC = () => {
                         </td>
                         <td className="p-3">
                           <span className="text-gold-500 font-bold">R$ {plan.price.toFixed(2).replace('.', ',')}</span>
-                          <span className="text-gray-500 text-xs">/mês</span>
+                          <span className="text-theme-muted text-xs">/mês</span>
                         </td>
                         <td className="p-3">
                           <span className="text-xs">{plan.features.length} coberturas</span>
@@ -1055,7 +1055,7 @@ const Admin: React.FC = () => {
         <form onSubmit={handleSave} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-gray-400 mb-1">Nome Fantasia</label>
+              <label className="block text-sm text-theme-muted mb-1">Nome Fantasia</label>
               <input
                 type="text"
                 value={formData?.name || ''}
@@ -1064,7 +1064,7 @@ const Admin: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-sm text-gray-400 mb-1">Razão Social</label>
+              <label className="block text-sm text-theme-muted mb-1">Razão Social</label>
               <input
                 type="text"
                 value={formData?.companyName || ''}
@@ -1076,7 +1076,7 @@ const Admin: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-gray-400 mb-1">CNPJ</label>
+              <label className="block text-sm text-theme-muted mb-1">CNPJ</label>
               <input
                 type="text"
                 value={formData?.cnpj || ''}
@@ -1085,7 +1085,7 @@ const Admin: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-sm text-gray-400 mb-1">Categoria</label>
+              <label className="block text-sm text-theme-muted mb-1">Categoria</label>
               <select
                 value={formData?.category || ''}
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1101,7 +1101,7 @@ const Admin: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-gray-400 mb-1">Responsável</label>
+              <label className="block text-sm text-theme-muted mb-1">Responsável</label>
               <input
                 type="text"
                 value={formData?.responsibleName || ''}
@@ -1110,7 +1110,7 @@ const Admin: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-sm text-gray-400 mb-1">Telefone</label>
+              <label className="block text-sm text-theme-muted mb-1">Telefone</label>
               <input
                 type="text"
                 value={formData?.phone || ''}
@@ -1121,7 +1121,7 @@ const Admin: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-sm text-gray-400 mb-1">Email</label>
+            <label className="block text-sm text-theme-muted mb-1">Email</label>
             <input
               type="email"
               value={formData?.email || ''}
@@ -1132,7 +1132,7 @@ const Admin: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-gray-400 mb-1">Cidade</label>
+              <label className="block text-sm text-theme-muted mb-1">Cidade</label>
               <input
                 type="text"
                 value={formData?.city || ''}
@@ -1141,7 +1141,7 @@ const Admin: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-sm text-gray-400 mb-1">Status</label>
+              <label className="block text-sm text-theme-muted mb-1">Status</label>
               <select
                 value={formData?.status || 'pending'}
                 onChange={e => setFormData({ ...formData, status: e.target.value as ExtendedPartner['status'] })}
@@ -1156,7 +1156,7 @@ const Admin: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-gray-400 mb-1">Plano</label>
+              <label className="block text-sm text-theme-muted mb-1">Plano</label>
               <select
                 value={formData?.plan || 'essencial'}
                 onChange={e => setFormData({ ...formData, plan: e.target.value as 'essencial' | 'destaque' })}
@@ -1167,7 +1167,7 @@ const Admin: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm text-gray-400 mb-1">Preço (R$)</label>
+              <label className="block text-sm text-theme-muted mb-1">Preço (R$)</label>
               <div className="relative">
                 <input
                   type="number"
@@ -1211,7 +1211,7 @@ const Admin: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-gray-400 mb-1">URL do Logo</label>
+              <label className="block text-sm text-theme-muted mb-1">URL do Logo</label>
               <input
                 type="text"
                 value={formData?.logoUrl || ''}
@@ -1220,7 +1220,7 @@ const Admin: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-sm text-gray-400 mb-1">URL da Capa</label>
+              <label className="block text-sm text-theme-muted mb-1">URL da Capa</label>
               <input
                 type="text"
                 value={formData?.coverUrl || ''}
@@ -1231,7 +1231,7 @@ const Admin: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-sm text-gray-400 mb-1">Benefício (Curto)</label>
+            <label className="block text-sm text-theme-muted mb-1">Benefício (Curto)</label>
             <input
               type="text"
               value={formData?.benefit || ''}
@@ -1241,7 +1241,7 @@ const Admin: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-sm text-gray-400 mb-1">Regras Completas</label>
+            <label className="block text-sm text-theme-muted mb-1">Regras Completas</label>
             <textarea
               value={formData?.fullRules || ''}
               onChange={e => setFormData({ ...formData, fullRules: e.target.value })}
@@ -1253,7 +1253,7 @@ const Admin: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
-              className="px-4 py-2 text-gray-400 hover:text-theme-text"
+              className="px-4 py-2 text-theme-muted hover:text-theme-text"
             >
               Cancelar
             </button>
@@ -1276,7 +1276,7 @@ const Admin: React.FC = () => {
         <form onSubmit={handleSaveProduct} className="space-y-4">
           {!editingProduct && (
             <div>
-              <label className="block text-sm text-gray-400 mb-1">Parceiro</label>
+              <label className="block text-sm text-theme-muted mb-1">Parceiro</label>
               <select
                 value={productForm.partner_id || ''}
                 onChange={e => setProductForm({ ...productForm, partner_id: e.target.value })}
@@ -1292,7 +1292,7 @@ const Admin: React.FC = () => {
           )}
 
           <div>
-            <label className="block text-sm text-gray-400 mb-1">Título do Produto</label>
+            <label className="block text-sm text-theme-muted mb-1">Título do Produto</label>
             <input
               type="text"
               value={productForm.title || ''}
@@ -1303,7 +1303,7 @@ const Admin: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-sm text-gray-400 mb-1">Descrição</label>
+            <label className="block text-sm text-theme-muted mb-1">Descrição</label>
             <textarea
               value={productForm.description || ''}
               onChange={e => setProductForm({ ...productForm, description: e.target.value })}
@@ -1313,7 +1313,7 @@ const Admin: React.FC = () => {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-gray-400 mb-1">Preço Original (R$)</label>
+              <label className="block text-sm text-theme-muted mb-1">Preço Original (R$)</label>
               <input
                 type="number"
                 step="0.01"
@@ -1324,7 +1324,7 @@ const Admin: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-sm text-gray-400 mb-1">Preço com Desconto (R$)</label>
+              <label className="block text-sm text-theme-muted mb-1">Preço com Desconto (R$)</label>
               <input
                 type="number"
                 step="0.01"
@@ -1338,7 +1338,7 @@ const Admin: React.FC = () => {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-gray-400 mb-1">Estoque</label>
+              <label className="block text-sm text-theme-muted mb-1">Estoque</label>
               <input
                 type="number"
                 value={productForm.stock || 0}
@@ -1347,7 +1347,7 @@ const Admin: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-sm text-gray-400 mb-1">Status</label>
+              <label className="block text-sm text-theme-muted mb-1">Status</label>
               <select
                 value={productForm.active ? 'true' : 'false'}
                 onChange={e => setProductForm({ ...productForm, active: e.target.value === 'true' })}
@@ -1360,7 +1360,7 @@ const Admin: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-sm text-gray-400 mb-1">URL da Imagem</label>
+            <label className="block text-sm text-theme-muted mb-1">URL da Imagem</label>
             <input
               type="text"
               value={productForm.image_url || ''}
@@ -1374,7 +1374,7 @@ const Admin: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsProductModalOpen(false)}
-              className="px-4 py-2 text-gray-400 hover:text-theme-text"
+              className="px-4 py-2 text-theme-muted hover:text-theme-text"
             >
               Cancelar
             </button>
@@ -1396,7 +1396,7 @@ const Admin: React.FC = () => {
       >
         <form onSubmit={handleSavePlan} className="space-y-4">
           <div>
-            <label className="block text-sm text-gray-400 mb-1">Nome do Plano</label>
+            <label className="block text-sm text-theme-muted mb-1">Nome do Plano</label>
             <input
               type="text"
               value={planForm.name || ''}
@@ -1409,7 +1409,7 @@ const Admin: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-gray-400 mb-1">Preço Mensal (R$)</label>
+              <label className="block text-sm text-theme-muted mb-1">Preço Mensal (R$)</label>
               <input
                 type="number"
                 step="0.01"
@@ -1421,7 +1421,7 @@ const Admin: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-sm text-gray-400 mb-1">Ordem de Exibição</label>
+              <label className="block text-sm text-theme-muted mb-1">Ordem de Exibição</label>
               <input
                 type="number"
                 value={planForm.display_order || 0}
@@ -1456,7 +1456,7 @@ const Admin: React.FC = () => {
 
           {/* Features/Coberturas */}
           <div>
-            <label className="block text-sm text-gray-400 mb-2">Coberturas</label>
+            <label className="block text-sm text-theme-muted mb-2">Coberturas</label>
             <div className="flex gap-2 mb-3">
               <input
                 type="text"
@@ -1482,14 +1482,14 @@ const Admin: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => removeFeature(idx)}
-                    className="text-gray-500 hover:text-red-500 transition-colors"
+                    className="text-theme-muted hover:text-red-500 transition-colors"
                   >
                     <X size={16} />
                   </button>
                 </div>
               ))}
               {(planForm.features || []).length === 0 && (
-                <p className="text-gray-500 text-xs text-center py-2">Nenhuma cobertura adicionada</p>
+                <p className="text-theme-muted text-xs text-center py-2">Nenhuma cobertura adicionada</p>
               )}
             </div>
           </div>
@@ -1498,7 +1498,7 @@ const Admin: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsProtectionModalOpen(false)}
-              className="px-4 py-2 text-gray-400 hover:text-theme-text"
+              className="px-4 py-2 text-theme-muted hover:text-theme-text"
             >
               Cancelar
             </button>

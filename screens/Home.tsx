@@ -62,7 +62,7 @@ const Home: React.FC = () => {
             <h1 className="font-serif text-2xl md:text-3xl text-theme-text">
               Olá, <span className="text-gold-500 font-bold">{firstName}</span>
             </h1>
-            <p className="text-gray-400 text-xs md:text-sm">Bem-vindo ao seu Clube Exclusive</p>
+            <p className="text-theme-muted text-xs md:text-sm">Bem-vindo ao seu Clube Exclusive</p>
           </div>
 
           <div className="flex items-center gap-3">
@@ -87,7 +87,7 @@ const Home: React.FC = () => {
 
             {/* Card Content */}
             <div className="relative z-10">
-              <span className="inline-block px-3 py-1 bg-black/5 rounded-full text-[10px] font-bold tracking-widest text-gray-500 mb-4 uppercase">
+              <span className="inline-block px-3 py-1 bg-black/5 rounded-full text-[10px] font-bold tracking-widest text-theme-muted mb-4 uppercase">
                 Tavares Car
               </span>
               <h2 className="text-3xl md:text-5xl font-serif font-bold text-obsidian-950 leading-[0.9] mb-4">
@@ -97,7 +97,7 @@ const Home: React.FC = () => {
                 </span> <br />
                 de benefícios!
               </h2>
-              <p className="text-gray-500 text-sm max-w-[200px] mb-6 leading-tight">
+              <p className="text-theme-muted text-sm max-w-[200px] mb-6 leading-tight">
                 Proteção, descontos e serviços exclusivos em um só lugar.
               </p>
 
@@ -138,7 +138,7 @@ const Home: React.FC = () => {
                   Consultoria Especializada
                 </span>
                 <h3 className="text-lg font-bold text-theme-text mb-1">Escola de Negócios</h3>
-                <p className="text-gray-400 text-xs max-w-[180px] leading-relaxed">Treinamentos exclusivos para alta performance em vendas.</p>
+                <p className="text-theme-muted text-xs max-w-[180px] leading-relaxed">Treinamentos exclusivos para alta performance em vendas.</p>
               </div>
               <div className="w-10 h-10 bg-emerald-600/20 rounded-full flex items-center justify-center border border-emerald-500/30 group-hover:bg-emerald-600 group-hover:text-white transition-all">
                 <ArrowRight size={18} />
@@ -159,7 +159,7 @@ const Home: React.FC = () => {
                   Novidade
                 </span>
                 <h3 className="text-lg font-bold text-theme-text mb-1">Achadinhos Shopee</h3>
-                <p className="text-gray-400 text-xs max-w-[180px] leading-relaxed">Ofertas exclusivas selecionadas para você.</p>
+                <p className="text-theme-muted text-xs max-w-[180px] leading-relaxed">Ofertas exclusivas selecionadas para você.</p>
               </div>
               <div className="w-10 h-10 bg-signal-500 rounded-full flex items-center justify-center shadow-lg shadow-signal-500/30 group-hover:scale-110 transition-transform">
                 <ShoppingBag size={18} className="text-theme-text" />
@@ -207,7 +207,7 @@ const Home: React.FC = () => {
                       </div>
                     </div>
                     <div className="h-[35%] p-5 bg-obsidian-900 relative">
-                      <div className="flex items-center gap-2 text-gray-400 text-xs mb-3">
+                      <div className="flex items-center gap-2 text-theme-muted text-xs mb-3">
                         <Tag size={12} className="text-gold-500" />
                         <span className="line-clamp-1">{partner.benefit}</span>
                       </div>

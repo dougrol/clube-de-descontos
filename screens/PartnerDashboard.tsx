@@ -182,7 +182,7 @@ const PartnerDashboard: React.FC = () => {
         return (
             <div className="min-h-screen bg-black flex flex-col items-center justify-center text-theme-text p-6 text-center">
                 <h2 className="text-xl font-bold text-red-500 mb-2">Erro de Acesso</h2>
-                <p className="text-gray-400 mb-6">Não foi possível carregar o perfil do parceiro. Seus dados locais podem estar desatualizados.</p>
+                <p className="text-theme-muted mb-6">Não foi possível carregar o perfil do parceiro. Seus dados locais podem estar desatualizados.</p>
 
                 <div className="flex flex-col gap-3 w-full max-w-xs">
                     <Button onClick={() => navigate('/login')} variant="outline">
@@ -212,10 +212,10 @@ const PartnerDashboard: React.FC = () => {
                     </div>
                     <div>
                         <h1 className="text-lg font-bold leading-tight">{partner.name}</h1>
-                        <p className="text-[10px] text-gray-400 tracking-wider uppercase">Painel do Parceiro</p>
+                        <p className="text-[10px] text-theme-muted tracking-wider uppercase">Painel do Parceiro</p>
                     </div>
                 </div>
-                <button onClick={handleLogout} className="text-gray-400 hover:text-theme-text transition-colors flex items-center gap-2 text-xs font-bold uppercase tracking-widest">
+                <button onClick={handleLogout} className="text-theme-muted hover:text-theme-text transition-colors flex items-center gap-2 text-xs font-bold uppercase tracking-widest">
                     Sair <LogOut size={16} />
                 </button>
             </header>
@@ -231,7 +231,7 @@ const PartnerDashboard: React.FC = () => {
                         </div>
                         <div>
                             <h3 className="text-3xl font-bold">{statsLoading ? '...' : stats?.totalVisits || 0}</h3>
-                            <p className="text-gray-500 text-sm">Visitas de Clientes</p>
+                            <p className="text-theme-muted text-sm">Visitas de Clientes</p>
                         </div>
                     </Card>
 ...
@@ -242,7 +242,7 @@ const PartnerDashboard: React.FC = () => {
                         </div>
                         <div>
                             <h3 className="text-3xl font-bold">{statsLoading ? '...' : stats?.validatedCount || 0}</h3>
-                            <p className="text-gray-500 text-sm">Cupons Utilizados</p>
+                            <p className="text-theme-muted text-sm">Cupons Utilizados</p>
                         </div>
                     </Card>
 
@@ -253,7 +253,7 @@ const PartnerDashboard: React.FC = () => {
                         </div>
                         <div>
                             <h3 className="text-3xl font-bold">{statsLoading ? '...' : stats?.pendingCount || 0}</h3>
-                            <p className="text-gray-500 text-sm">Cupons em Aberto</p>
+                            <p className="text-theme-muted text-sm">Cupons em Aberto</p>
                         </div>
                     </Card>
 
@@ -286,7 +286,7 @@ const PartnerDashboard: React.FC = () => {
                             </div>
                             <div>
                                 <h4 className="font-bold text-xl mb-1">Validar Cupom</h4>
-                                <p className="text-sm text-gray-500">Ler QR Code do cliente para aplicar desconto</p>
+                                <p className="text-sm text-theme-muted">Ler QR Code do cliente para aplicar desconto</p>
                             </div>
                         </button>
 
@@ -296,7 +296,7 @@ const PartnerDashboard: React.FC = () => {
                             </div>
                             <div>
                                 <h4 className="font-bold text-xl mb-1">Editar Perfil</h4>
-                                <p className="text-sm text-gray-500">Alterar benefício, regras, fotos e descrição</p>
+                                <p className="text-sm text-theme-muted">Alterar benefício, regras, fotos e descrição</p>
                             </div>
                         </button>
                     </div>
@@ -307,9 +307,9 @@ const PartnerDashboard: React.FC = () => {
                     <SectionTitle title="Acessos Recentes" subtitle="Últimos clientes que validaram cupons" />
                     <div className="bg-obsidian-900 border border-white/5 rounded-2xl overflow-hidden mt-6">
                         {statsLoading ? (
-                            <div className="p-12 text-center text-gray-500">Carregando histórico...</div>
+                            <div className="p-12 text-center text-theme-muted">Carregando histórico...</div>
                         ) : !stats?.recentValidations || stats.recentValidations.length === 0 ? (
-                            <div className="p-12 text-center text-gray-500">
+                            <div className="p-12 text-center text-theme-muted">
                                 <Ticket className="mx-auto mb-4 opacity-20" size={48} />
                                 <p>Nenhum cupom validado recentemente.</p>
                             </div>
@@ -317,7 +317,7 @@ const PartnerDashboard: React.FC = () => {
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left">
                                     <thead>
-                                        <tr className="bg-white/5 text-[10px] uppercase tracking-widest text-gray-500">
+                                        <tr className="bg-white/5 text-[10px] uppercase tracking-widest text-theme-muted">
                                             <th className="px-6 py-4 font-bold">Cliente</th>
                                             <th className="px-6 py-4 font-bold">Código</th>
                                             <th className="px-6 py-4 font-bold">Benefício</th>
@@ -337,7 +337,7 @@ const PartnerDashboard: React.FC = () => {
                                                     <p className="text-xs text-green-400 font-medium">{coupon.benefit}</p>
                                                 </td>
                                                 <td className="px-6 py-4">
-                                                    <p className="text-xs text-gray-500">
+                                                    <p className="text-xs text-theme-muted">
                                                         {new Date(coupon.used_at || coupon.created_at).toLocaleString('pt-BR')}
                                                     </p>
                                                 </td>
@@ -359,20 +359,20 @@ const PartnerDashboard: React.FC = () => {
                     <div className="bg-obsidian-900 w-full max-w-2xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
                         <div className="p-6 border-b border-white/5 flex justify-between items-center">
                             <h2 className="text-xl font-bold flex items-center gap-2"><Settings size={20} className="text-gold-500" /> Editar Dados da Loja</h2>
-                            <button onClick={() => setIsEditing(false)} className="text-gray-400 hover:text-theme-text"><X size={24} /></button>
+                            <button onClick={() => setIsEditing(false)} className="text-theme-muted hover:text-theme-text"><X size={24} /></button>
                         </div>
 
                         <div className="p-6 overflow-y-auto custom-scrollbar space-y-6">
                             {/* Basic Info */}
                             <div className="space-y-4">
-                                <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest border-b border-white/10 pb-2">Informações Básicas</h4>
+                                <h4 className="text-xs font-bold text-theme-muted uppercase tracking-widest border-b border-white/10 pb-2">Informações Básicas</h4>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <Input label="Nome da Loja" name="name" value={editForm.name} onChange={handleChange} />
                                     <Input label="Benefício (Destaque)" name="benefit" value={editForm.benefit} onChange={handleChange} placeholder="Ex: 10% OFF" />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Descrição</label>
+                                    <label className="text-xs font-bold text-theme-muted uppercase tracking-wider ml-1">Descrição</label>
                                     <textarea
                                         name="description"
                                         value={editForm.description}
@@ -382,7 +382,7 @@ const PartnerDashboard: React.FC = () => {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Regras de Uso</label>
+                                    <label className="text-xs font-bold text-theme-muted uppercase tracking-wider ml-1">Regras de Uso</label>
                                     <textarea
                                         name="fullRules"
                                         value={editForm.fullRules}
@@ -394,12 +394,12 @@ const PartnerDashboard: React.FC = () => {
 
                             {/* Images with Upload */}
                             <div className="space-y-4">
-                                <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest border-b border-white/10 pb-2">Imagens</h4>
+                                <h4 className="text-xs font-bold text-theme-muted uppercase tracking-widest border-b border-white/10 pb-2">Imagens</h4>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {/* Logo Upload */}
                                     <div className="flex flex-col items-center gap-3 p-4 bg-white/5 rounded-xl border border-white/10">
-                                        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Logo</p>
+                                        <p className="text-xs font-bold text-theme-muted uppercase tracking-wider">Logo</p>
                                         <AvatarUpload
                                             currentImageUrl={editForm.logoUrl || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(editForm.name) + '&background=333&color=D4AF37'}
                                             onUpload={async (file) => {
@@ -409,12 +409,12 @@ const PartnerDashboard: React.FC = () => {
                                             }}
                                             size="lg"
                                         />
-                                        <p className="text-[10px] text-gray-500">Clique para alterar</p>
+                                        <p className="text-[10px] text-theme-muted">Clique para alterar</p>
                                     </div>
 
                                     {/* Cover Upload */}
                                     <div className="flex flex-col items-center gap-3 p-4 bg-white/5 rounded-xl border border-white/10">
-                                        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Capa</p>
+                                        <p className="text-xs font-bold text-theme-muted uppercase tracking-wider">Capa</p>
                                         <div
                                             className="w-full aspect-video rounded-lg border-2 border-dashed border-white/20 overflow-hidden relative cursor-pointer hover:border-gold-500 transition-colors group"
                                             onClick={() => {
@@ -444,7 +444,7 @@ const PartnerDashboard: React.FC = () => {
                                                     fallbackSrc="https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=800&q=80"
                                                 />
                                             ) : (
-                                                <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-500 group-hover:text-gold-500">
+                                                <div className="absolute inset-0 flex flex-col items-center justify-center text-theme-muted group-hover:text-gold-500">
                                                     <Upload size={24} />
                                                     <span className="text-xs mt-1">Adicionar capa</span>
                                                 </div>
@@ -453,7 +453,7 @@ const PartnerDashboard: React.FC = () => {
                                                 <Camera size={24} className="text-theme-text" />
                                             </div>
                                         </div>
-                                        <p className="text-[10px] text-gray-500">Clique para alterar</p>
+                                        <p className="text-[10px] text-theme-muted">Clique para alterar</p>
                                     </div>
                                 </div>
                             </div>
@@ -497,7 +497,7 @@ const PartnerDashboard: React.FC = () => {
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-1">
-                                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Latitude</label>
+                                        <label className="text-[10px] font-bold text-theme-muted uppercase tracking-widest ml-1">Latitude</label>
                                         <input
                                             type="number"
                                             step="any"
@@ -508,7 +508,7 @@ const PartnerDashboard: React.FC = () => {
                                         />
                                     </div>
                                     <div className="space-y-1">
-                                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Longitude</label>
+                                        <label className="text-[10px] font-bold text-theme-muted uppercase tracking-widest ml-1">Longitude</label>
                                         <input
                                             type="number"
                                             step="any"
@@ -519,7 +519,7 @@ const PartnerDashboard: React.FC = () => {
                                         />
                                     </div>
                                 </div>
-                                <p className="text-[10px] text-gray-500 text-center pt-2">
+                                <p className="text-[10px] text-theme-muted text-center pt-2">
                                     *As coordenadas são usadas para o botão "Traçar Rota". O endereço é visual.
                                 </p>
                             </div>
@@ -537,12 +537,12 @@ const PartnerDashboard: React.FC = () => {
             {isValidating && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-fade-in">
                     <div className="bg-obsidian-900 w-full max-w-sm rounded-3xl border border-white/10 shadow-2xl overflow-hidden p-8 text-center relative">
-                        <button onClick={() => setIsValidating(false)} className="absolute top-4 right-4 text-gray-400 hover:text-theme-text"><X size={24} /></button>
+                        <button onClick={() => setIsValidating(false)} className="absolute top-4 right-4 text-theme-muted hover:text-theme-text"><X size={24} /></button>
 
                         {validationStep === 0 && (
                             <div className="py-4">
                                 <h3 className="text-xl font-bold mb-2">Validar Cupom</h3>
-                                <p className="text-gray-400 text-sm mb-4">Escaneie o QR Code do cliente ou digite o código</p>
+                                <p className="text-theme-muted text-sm mb-4">Escaneie o QR Code do cliente ou digite o código</p>
 
                                 {/* Real Camera Scanner */}
                                 <QRScanner
@@ -553,7 +553,7 @@ const PartnerDashboard: React.FC = () => {
                                 {/* Divider */}
                                 <div className="flex items-center gap-3 my-4">
                                     <div className="flex-1 h-px bg-white/10" />
-                                    <span className="text-gray-500 text-xs uppercase tracking-wider">ou digite</span>
+                                    <span className="text-theme-muted text-xs uppercase tracking-wider">ou digite</span>
                                     <div className="flex-1 h-px bg-white/10" />
                                 </div>
 
@@ -586,17 +586,17 @@ const PartnerDashboard: React.FC = () => {
 
                                 <div className="bg-white/5 rounded-xl p-4 mb-6 text-left space-y-2">
                                     <div>
-                                        <p className="text-xs text-gray-500 uppercase">Cliente</p>
+                                        <p className="text-xs text-theme-muted uppercase">Cliente</p>
                                         <p className="font-bold">{validatedCoupon.user_name || 'Cliente'}</p>
                                     </div>
                                     <div className="h-px bg-white/10"></div>
                                     <div>
-                                        <p className="text-xs text-gray-500 uppercase">Código</p>
+                                        <p className="text-xs text-theme-muted uppercase">Código</p>
                                         <p className="font-mono text-gold-500">{validatedCoupon.code}</p>
                                     </div>
                                     <div className="h-px bg-white/10"></div>
                                     <div>
-                                        <p className="text-xs text-gray-500 uppercase">Benefício</p>
+                                        <p className="text-xs text-theme-muted uppercase">Benefício</p>
                                         <p className="text-green-400 font-medium">{validatedCoupon.benefit}</p>
                                     </div>
                                 </div>

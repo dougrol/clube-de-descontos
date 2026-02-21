@@ -172,7 +172,7 @@ const StorePage: React.FC = () => {
                                     }`}>
                                     <IconComponent size={20} className="text-theme-text" />
                                 </div>
-                                <span className="text-[10px] text-gray-400 font-medium text-center leading-tight">
+                                <span className="text-[10px] text-theme-muted font-medium text-center leading-tight">
                                     {cat.label}
                                 </span>
                             </button>
@@ -186,13 +186,13 @@ const StorePage: React.FC = () => {
                 <div className="sticky top-0 z-40 py-3 -mx-1">
                     <div className="bg-obsidian-900/90 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl p-3">
                         <div className="relative">
-                            <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                            <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-theme-muted" />
                             <input
                                 type="text"
                                 placeholder="Buscar na loja..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full bg-black/50 border border-obsidian-700 rounded-xl py-3 pl-10 pr-4 text-theme-text placeholder:text-gray-500 focus:border-gold-500 focus:ring-1 focus:ring-gold-500/50 transition-all outline-none"
+                                className="w-full bg-black/50 border border-obsidian-700 rounded-xl py-3 pl-10 pr-4 text-theme-text placeholder:text-theme-muted focus:border-gold-500 focus:ring-1 focus:ring-gold-500/50 transition-all outline-none"
                             />
                         </div>
                     </div>
@@ -202,12 +202,12 @@ const StorePage: React.FC = () => {
                 {loading ? (
                     <div className="flex flex-col items-center justify-center py-20">
                         <Loader2 className="animate-spin text-gold-500 mb-4" size={40} />
-                        <p className="text-gray-500">Carregando produtos...</p>
+                        <p className="text-theme-muted">Carregando produtos...</p>
                     </div>
                 ) : filteredProducts.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-20">
                         <Package size={56} className="text-gray-700 mb-4" />
-                        <p className="text-gray-500 font-medium">Nenhum produto encontrado</p>
+                        <p className="text-theme-muted font-medium">Nenhum produto encontrado</p>
                         <p className="text-gray-600 text-sm mt-1">Tente buscar por outro termo</p>
                     </div>
                 ) : (
@@ -260,7 +260,7 @@ const StorePage: React.FC = () => {
                         {allProducts.length > 8 && (
                             <section className="mt-8">
                                 <div className="flex items-center gap-2 mb-4">
-                                    <ShoppingBag size={20} className="text-gray-400" />
+                                    <ShoppingBag size={20} className="text-theme-muted" />
                                     <h2 className="text-lg font-bold text-theme-text">Todos os Produtos</h2>
                                 </div>
                                 <div className="grid grid-cols-2 gap-3">
@@ -378,7 +378,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 {/* Price Section */}
                 <div className="space-y-0.5">
                     {hasDiscount && (
-                        <span className="text-gray-500 text-xs line-through block">
+                        <span className="text-theme-muted text-xs line-through block">
                             {formatPrice(product.priceOriginal)}
                         </span>
                     )}

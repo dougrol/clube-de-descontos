@@ -174,7 +174,7 @@ const ResetPassword: React.FC = () => {
                     <h1 className="text-2xl font-bold text-theme-text mb-2">
                         Nova Senha
                     </h1>
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-theme-muted text-sm">
                         {isValidSession
                             ? 'Digite sua nova senha abaixo'
                             : 'Link inválido ou expirado'
@@ -190,7 +190,7 @@ const ResetPassword: React.FC = () => {
                                 <CheckCircle size={32} className="text-green-500" />
                             </div>
                             <h3 className="text-theme-text font-semibold mb-2">Senha Redefinida!</h3>
-                            <p className="text-gray-400 text-sm mb-6">
+                            <p className="text-theme-muted text-sm mb-6">
                                 Sua senha foi alterada com sucesso. Redirecionando para o login...
                             </p>
                         </div>
@@ -200,7 +200,7 @@ const ResetPassword: React.FC = () => {
                                 <AlertCircle size={32} className="text-red-500" />
                             </div>
                             <h3 className="text-theme-text font-semibold mb-2">Link Inválido</h3>
-                            <p className="text-gray-400 text-sm mb-6">
+                            <p className="text-theme-muted text-sm mb-6">
                                 Este link de redefinição é inválido ou já expirou. Solicite um novo link.
                             </p>
                             <Button onClick={() => navigate('/admin-forgot-password')} className="w-full">
@@ -229,7 +229,7 @@ const ResetPassword: React.FC = () => {
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-9 text-gray-400 hover:text-gray-300"
+                                    className="absolute right-3 top-9 text-theme-muted hover:text-gray-300"
                                 >
                                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>

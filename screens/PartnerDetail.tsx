@@ -114,12 +114,12 @@ const PartnerDetail: React.FC = () => {
           </div>
 
           {partner.isOnline ? (
-            <div className="flex items-center text-gray-400 text-sm gap-1 mt-1">
+            <div className="flex items-center text-theme-muted text-sm gap-1 mt-1">
               <Globe size={14} className="text-gold-500" /> Loja Online
             </div>
           ) : (
             <div className="flex flex-col gap-2 mt-1">
-              <div className="flex items-center text-gray-400 text-sm gap-1">
+              <div className="flex items-center text-theme-muted text-sm gap-1">
                 <MapPin size={14} className="text-gold-500" /> {partner.address ? `${partner.address} - ${partner.city}` : 'Localização a definir'}
               </div>
               <Button
@@ -205,7 +205,7 @@ const PartnerDetail: React.FC = () => {
                   <span className="text-xs">📞</span>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">Telefone</p>
+                  <p className="text-xs text-theme-muted">Telefone</p>
                   <a href={`tel:${partner.phone.replace(/\D/g, '')}`} className="text-sm text-theme-text hover:text-gold-500 transition-colors">
                     {partner.phone}
                   </a>
@@ -219,7 +219,7 @@ const PartnerDetail: React.FC = () => {
                   <span className="text-xs">✉️</span>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">Email</p>
+                  <p className="text-xs text-theme-muted">Email</p>
                   <a href={`mailto:${partner.email}`} className="text-sm text-theme-text hover:text-gold-500 transition-colors">
                     {partner.email}
                   </a>
@@ -233,7 +233,7 @@ const PartnerDetail: React.FC = () => {
                   <span className="text-xs">👤</span>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">Responsável</p>
+                  <p className="text-xs text-theme-muted">Responsável</p>
                   <p className="text-sm text-theme-text">{partner.responsibleName}</p>
                 </div>
               </div>
@@ -244,7 +244,7 @@ const PartnerDetail: React.FC = () => {
                   <span className="text-xs">🏢</span>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">Razão Social</p>
+                  <p className="text-xs text-theme-muted">Razão Social</p>
                   <p className="text-sm text-theme-text">{partner.companyName}</p>
                 </div>
               </div>
@@ -254,25 +254,25 @@ const PartnerDetail: React.FC = () => {
 
         <Card className="bg-gradient-to-r from-obsidian-900 to-obsidian-800 border-gold-500/30">
           <div className="text-center p-2">
-            <p className="text-gray-400 text-xs uppercase tracking-wider mb-1">Benefício Exclusivo</p>
+            <p className="text-theme-muted text-xs uppercase tracking-wider mb-1">Benefício Exclusivo</p>
             <p className="text-3xl font-bold text-gold-500">{partner.benefit || 'Consulte condições'}</p>
           </div>
         </Card>
 
         <div className="space-y-4">
           <div className="flex gap-3">
-            <Info className="text-gray-500 flex-shrink-0 mt-1" size={18} />
+            <Info className="text-theme-muted flex-shrink-0 mt-1" size={18} />
             <div>
               <h3 className="font-semibold text-theme-text text-sm">Regras de Uso</h3>
-              <p className="text-gray-400 text-sm leading-relaxed mt-1">{partner.fullRules || 'Válido mediante apresentação do cupom/QR Code.'}</p>
+              <p className="text-theme-muted text-sm leading-relaxed mt-1">{partner.fullRules || 'Válido mediante apresentação do cupom/QR Code.'}</p>
             </div>
           </div>
 
           <div className="flex gap-3">
-            <Info className="text-gray-500 flex-shrink-0 mt-1" size={18} />
+            <Info className="text-theme-muted flex-shrink-0 mt-1" size={18} />
             <div>
               <h3 className="font-semibold text-theme-text text-sm">Como usar</h3>
-              <p className="text-gray-400 text-sm leading-relaxed mt-1">
+              <p className="text-theme-muted text-sm leading-relaxed mt-1">
                 {partner.isOnline
                   ? 'Clique em resgatar para gerar o código promocional e use no site do parceiro.'
                   : 'Apresente o QR Code gerado abaixo no momento do pagamento. O parceiro irá escanear para validar seu desconto.'}
@@ -303,7 +303,7 @@ const PartnerDetail: React.FC = () => {
                 {codeCopied && (
                   <p className="text-green-600 text-sm font-medium mb-2">Código copiado!</p>
                 )}
-                <p className="text-gray-500 text-xs text-center">
+                <p className="text-theme-muted text-xs text-center">
                   Copie o código e aplique no carrinho de compras.
                 </p>
                 {partner.website && (

@@ -129,7 +129,7 @@ const ProductDetail: React.FC = () => {
                             {formatPrice(product.priceDiscount)}
                         </span>
                         {hasDiscount && (
-                            <span className="text-gray-500 text-lg line-through">
+                            <span className="text-theme-muted text-lg line-through">
                                 {formatPrice(product.priceOriginal)}
                             </span>
                         )}
@@ -149,7 +149,7 @@ const ProductDetail: React.FC = () => {
                 {/* Description */}
                 <Card className="bg-obsidian-900/50 border-obsidian-800">
                     <h3 className="font-semibold text-theme-text mb-2">Descrição</h3>
-                    <p className="text-gray-400 text-sm leading-relaxed">
+                    <p className="text-theme-muted text-sm leading-relaxed">
                         {product.description || 'Sem descrição disponível.'}
                     </p>
                 </Card>
@@ -181,7 +181,7 @@ const ProductDetail: React.FC = () => {
                 {/* Product: Stock Info */}
                 {!isService && (
                     <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-gray-400 text-sm">
+                        <div className="flex items-center gap-2 text-theme-muted text-sm">
                             <Package size={16} />
                             <span>
                                 {product.stock > 0
@@ -232,7 +232,7 @@ const ProductDetail: React.FC = () => {
                             <Star size={24} className="text-gold-500 fill-gold-500" />
                             <div>
                                 <p className="text-theme-text font-semibold">Benefício Exclusivo</p>
-                                <p className="text-gray-400 text-sm">Apenas para associados Tavares Car</p>
+                                <p className="text-theme-muted text-sm">Apenas para associados Tavares Car</p>
                             </div>
                         </div>
                     </Card>
@@ -243,7 +243,7 @@ const ProductDetail: React.FC = () => {
             {(isService || product.stock > 0) && (
                 <div className="fixed bottom-20 left-0 right-0 bg-obsidian-950/95 backdrop-blur-md border-t border-obsidian-800 p-4">
                     <div className="flex items-center justify-between mb-3">
-                        <span className="text-gray-400 text-sm">
+                        <span className="text-theme-muted text-sm">
                             {isService ? 'Valor:' : 'Total:'}
                         </span>
                         <span className="text-2xl font-bold text-gold-500">

@@ -53,7 +53,7 @@ const AffiliateProductCard: React.FC<AffiliateProductCardProps> = ({ product }) 
 
         {/* Price */}
         <div className="mt-auto mb-3">
-          <p className="text-xs text-gray-400">A partir de</p>
+          <p className="text-xs text-theme-muted">A partir de</p>
           <div className="flex items-baseline gap-1">
             <span className="text-lg font-bold text-gold-500">
               {formatBRL(product.price)}

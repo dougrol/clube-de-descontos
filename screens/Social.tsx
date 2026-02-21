@@ -24,7 +24,7 @@ const Social: React.FC = () => {
           Siga a <span className="text-gold-500">Tavares Car</span>
         </h1>
 
-        <p className="text-gray-400 mb-10 leading-relaxed">
+        <p className="text-theme-muted mb-10 leading-relaxed">
           Acompanhe nossos stories, novidades e o dia a dia da consultoria automotiva líder de mercado.
         </p>
 
@@ -39,7 +39,7 @@ const Social: React.FC = () => {
             <ExternalLink className="ml-2 opacity-70" size={16} />
           </Button>
 
-          <p className="text-xs text-gray-500 uppercase tracking-widest mt-8">
+          <p className="text-xs text-theme-muted uppercase tracking-widest mt-8">
             @tavares_car_oficial_
           </p>
         </div>

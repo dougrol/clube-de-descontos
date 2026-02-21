@@ -68,7 +68,7 @@ const CorporateConsultancy: React.FC = () => {
                         Consultoria para{' '}
                         <span className="text-gold-500">Associações</span>
                     </h1>
-                    <p className="text-gray-400 text-sm leading-relaxed">
+                    <p className="text-theme-muted text-sm leading-relaxed">
                         Soluções estratégicas da Tavares Car para elevar o padrão da sua associação de proteção veicular.
                     </p>
                 </div>
@@ -94,7 +94,7 @@ const CorporateConsultancy: React.FC = () => {
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <h3 className="text-base font-bold text-theme-text mb-1">{service.title}</h3>
-                                        <p className="text-gray-400 text-xs leading-relaxed">{service.description}</p>
+                                        <p className="text-theme-muted text-xs leading-relaxed">{service.description}</p>
                                     </div>
                                 </div>
                             </Card>
@@ -121,15 +121,15 @@ const CorporateConsultancy: React.FC = () => {
                     <div className="mt-6 pt-6 border-t border-white/10 grid grid-cols-3 gap-4">
                         <div className="text-center">
                             <p className="text-2xl font-bold text-theme-text">10+</p>
-                            <p className="text-[10px] text-gray-500 uppercase tracking-wider mt-1">Anos</p>
+                            <p className="text-[10px] text-theme-muted uppercase tracking-wider mt-1">Anos</p>
                         </div>
                         <div className="text-center border-x border-white/10">
                             <p className="text-2xl font-bold text-theme-text">500+</p>
-                            <p className="text-[10px] text-gray-500 uppercase tracking-wider mt-1">Empresas</p>
+                            <p className="text-[10px] text-theme-muted uppercase tracking-wider mt-1">Empresas</p>
                         </div>
                         <div className="text-center">
                             <p className="text-2xl font-bold text-theme-text">98%</p>
-                            <p className="text-[10px] text-gray-500 uppercase tracking-wider mt-1">Satisfação</p>
+                            <p className="text-[10px] text-theme-muted uppercase tracking-wider mt-1">Satisfação</p>
                         </div>
                     </div>
                 </section>

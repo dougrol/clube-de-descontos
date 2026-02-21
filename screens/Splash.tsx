@@ -60,7 +60,7 @@ const Splash: React.FC<SplashProps> = ({ onFinish }) => {
                   showSkeleton={true}
                 />
               </div>
-              <span className="text-gray-500 text-[8px] mt-1.5 uppercase tracking-wider font-medium">{partner.name}</span>
+              <span className="text-theme-muted text-[8px] mt-1.5 uppercase tracking-wider font-medium">{partner.name}</span>
             </div>
           ))}
         </div>

@@ -133,7 +133,7 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onError }) => {
                         >
                             <Camera size={32} />
                         </button>
-                        <p className="text-gray-400 text-xs mt-3">Toque para abrir câmera</p>
+                        <p className="text-theme-muted text-xs mt-3">Toque para abrir câmera</p>
                     </div>
                 )}
 
@@ -141,7 +141,7 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onError }) => {
                     <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/90 p-4 text-center">
                         <CameraOff size={32} className="text-red-400 mb-2" />
                         <p className="text-red-400 text-xs font-bold">Câmera não disponível</p>
-                        <p className="text-gray-500 text-[10px] mt-1">Habilite a permissão nas configurações do navegador</p>
+                        <p className="text-theme-muted text-[10px] mt-1">Habilite a permissão nas configurações do navegador</p>
                         <button
                             onClick={startScanner}
                             className="mt-3 px-4 py-2 bg-gold-500/20 text-gold-500 rounded-lg text-xs font-bold hover:bg-gold-500/30 transition-colors"

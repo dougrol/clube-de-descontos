@@ -100,7 +100,7 @@ const RegisterPartner: React.FC = () => {
                             <CheckCircle size={40} className="text-green-500" />
                         </div>
                         <h2 className="text-2xl font-bold font-serif mb-2">Solicitação Enviada!</h2>
-                        <p className="text-gray-400 mb-8">
+                        <p className="text-theme-muted mb-8">
                             Seu cadastro foi recebido com sucesso. Verifique seu e-mail para confirmar a conta e aguarde a aprovação da nossa equipe.
                         </p>
                         <Button onClick={() => navigate('/login')} className="w-full">
@@ -114,7 +114,7 @@ const RegisterPartner: React.FC = () => {
             <div className="pt-8 px-6 md:px-12 mb-8">
                 <button
                     onClick={() => navigate('/login')}
-                    className="flex items-center text-gray-400 hover:text-theme-text transition-colors group"
+                    className="flex items-center text-theme-muted hover:text-theme-text transition-colors group"
                 >
                     <ArrowLeft size={20} className="mr-2 group-hover:-translate-x-1 transition-transform" />
                     Voltar
@@ -126,7 +126,7 @@ const RegisterPartner: React.FC = () => {
                     <h1 className="text-3xl md:text-5xl font-serif font-bold mb-4">
                         Seja um <span className="text-gold-500">Parceiro</span>
                     </h1>
-                    <p className="text-gray-400">
+                    <p className="text-theme-muted">
                         Junte-se ao clube de vantagens mais exclusivo e expanda seus negócios.
                     </p>
                 </div>
@@ -193,7 +193,7 @@ const RegisterPartner: React.FC = () => {
                     </div>
 
                     <div className="space-y-1">
-                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Categoria</label>
+                        <label className="text-xs font-bold text-theme-muted uppercase tracking-wider ml-1">Categoria</label>
                         <div className="relative">
                             <select
                                 name="category"
@@ -205,7 +205,7 @@ const RegisterPartner: React.FC = () => {
                                     <option key={cat} value={cat}>{cat}</option>
                                 ))}
                             </select>
-                            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">
+                            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-theme-muted pointer-events-none">
                                 <Building2 size={18} />
                             </div>
                         </div>
@@ -239,7 +239,7 @@ const RegisterPartner: React.FC = () => {
                         <Button type="submit" isLoading={isLoading} className="w-full py-4 text-base">
                             SOLICITAR CADASTRO
                         </Button>
-                        <p className="text-center text-xs text-gray-500 mt-4">
+                        <p className="text-center text-xs text-theme-muted mt-4">
                             Ao se cadastrar, você concorda com nossos termos de parceria.
                         </p>
                     </div>

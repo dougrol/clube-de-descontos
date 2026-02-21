@@ -232,7 +232,7 @@ const Benefits: React.FC = () => {
               <Loader2 className="animate-spin" size={32} />
             </div>
           ) : filteredList.length === 0 ? (
-            <div className="text-center py-20 text-gray-500">
+            <div className="text-center py-20 text-theme-muted">
               <p>Nenhum parceiro encontrado.</p>
             </div>
           ) : (
@@ -278,10 +278,10 @@ const Benefits: React.FC = () => {
                           <Zap size={14} className="text-gold-500 fill-gold-500 animate-pulse" />
                         )}
                       </div>
-                      <div className="flex items-center text-gray-500 text-xs gap-1 mb-2">
+                      <div className="flex items-center text-theme-muted text-xs gap-1 mb-2">
                         <MapPin size={12} /> {partner.city}
                       </div>
-                      <p className="text-xs text-gray-400 line-clamp-2">{partner.description}</p>
+                      <p className="text-xs text-theme-muted line-clamp-2">{partner.description}</p>
                     </div>
                     <div className="mt-2 flex items-center justify-between">
                       <div className="text-gold-500 text-xs font-bold bg-gold-500/10 px-2 py-1 rounded flex items-center gap-1 border border-gold-500/20">
@@ -296,7 +296,7 @@ const Benefits: React.FC = () => {
         </div>
         
         <div className="mt-12 text-center pb-8 border-t border-white/5 pt-8">
-          <p className="text-gray-500 text-sm font-medium tracking-wide">Em breve mais parceiros exclusivos.</p>
+          <p className="text-theme-muted text-sm font-medium tracking-wide">Em breve mais parceiros exclusivos.</p>
         </div>
       </div>
     </div>

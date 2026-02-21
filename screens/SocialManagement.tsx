@@ -21,7 +21,7 @@ const SocialManagement: React.FC = () => {
                <h1 className="text-3xl font-serif font-bold text-theme-text mb-2">
                   Consultoria para <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-pink-500">Associações</span>
                </h1>
-               <p className="text-gray-400 text-sm max-w-[90%]">
+               <p className="text-theme-muted text-sm max-w-[90%]">
                   Gestão completa, marketing e treinamentos corporativos para o mercado de Proteção Veicular.
                </p>
             </div>
@@ -31,7 +31,7 @@ const SocialManagement: React.FC = () => {
 
             {/* Official Partners / Authority */}
             <div className="border-y border-white/5 py-6">
-               <p className="text-center text-[10px] text-gray-500 uppercase tracking-[0.2em] mb-4">Parceiros Oficiais & Cases</p>
+               <p className="text-center text-[10px] text-theme-muted uppercase tracking-[0.2em] mb-4">Parceiros Oficiais & Cases</p>
                <div className="flex justify-center gap-3">
                   <div className="bg-obsidian-800 px-4 py-3 rounded-xl border border-white/5 flex items-center gap-2 min-w-[130px] justify-center shadow-lg">
                      <Shield size={18} className="text-blue-500" />
@@ -48,15 +48,15 @@ const SocialManagement: React.FC = () => {
             <div className="flex justify-between pb-2">
                <div className="text-center">
                   <p className="text-2xl font-bold text-theme-text">+50</p>
-                  <p className="text-[10px] text-gray-500 uppercase">Associações</p>
+                  <p className="text-[10px] text-theme-muted uppercase">Associações</p>
                </div>
                <div className="text-center border-l border-white/10 pl-6">
                   <p className="text-2xl font-bold text-theme-text">+10k</p>
-                  <p className="text-[10px] text-gray-500 uppercase">Vendas/Mês</p>
+                  <p className="text-[10px] text-theme-muted uppercase">Vendas/Mês</p>
                </div>
                <div className="text-center border-l border-white/10 pl-6">
                   <p className="text-2xl font-bold text-theme-text">360º</p>
-                  <p className="text-[10px] text-gray-500 uppercase">Soluções</p>
+                  <p className="text-[10px] text-theme-muted uppercase">Soluções</p>
                </div>
             </div>
 
@@ -70,7 +70,7 @@ const SocialManagement: React.FC = () => {
                   </div>
                   <div>
                      <h3 className="text-theme-text font-bold">Treinamento Corporativo</h3>
-                     <p className="text-gray-400 text-xs mt-1 leading-relaxed">
+                     <p className="text-theme-muted text-xs mt-1 leading-relaxed">
                         Capacitação especializada para <span className="text-theme-text font-medium">Consultores e Gestores</span>.
                         Do script de vendas e quebra de objeções à liderança de alta performance.
                      </p>
@@ -87,7 +87,7 @@ const SocialManagement: React.FC = () => {
                   </div>
                   <div>
                      <h3 className="text-theme-text font-bold">Gestão de Redes Sociais</h3>
-                     <p className="text-gray-400 text-xs mt-1 leading-relaxed">Design premium e estratégia de conteúdo para posicionar sua associação como líder de mercado.</p>
+                     <p className="text-theme-muted text-xs mt-1 leading-relaxed">Design premium e estratégia de conteúdo para posicionar sua associação como líder de mercado.</p>
                   </div>
                </div>
 
@@ -97,7 +97,7 @@ const SocialManagement: React.FC = () => {
                   </div>
                   <div>
                      <h3 className="text-theme-text font-bold">Tráfego Pago (Ads)</h3>
-                     <p className="text-gray-400 text-xs mt-1 leading-relaxed">Geração de leads qualificados (Google & Meta) focados na sua região de atuação.</p>
+                     <p className="text-theme-muted text-xs mt-1 leading-relaxed">Geração de leads qualificados (Google & Meta) focados na sua região de atuação.</p>
                   </div>
                </div>
             </div>
@@ -108,7 +108,7 @@ const SocialManagement: React.FC = () => {
                   <Users size={100} />
                </div>
                <h3 className="text-theme-text font-bold text-lg mb-2 relative z-10">Solicite uma Consultoria</h3>
-               <p className="text-gray-400 text-xs mb-6 relative z-10 max-w-[80%]">
+               <p className="text-theme-muted text-xs mb-6 relative z-10 max-w-[80%]">
                   Junte-se à PROTBEM, ELEVAMAIS e outras gigantes que confiam na Tavares Car.
                </p>
                <Button className="relative z-10 bg-white text-black hover:bg-gray-200 border-none shadow-none">

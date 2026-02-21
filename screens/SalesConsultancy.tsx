@@ -54,21 +54,21 @@ const SalesConsultancy: React.FC = () => {
                         <div className="bg-blue-900/50 p-1.5 rounded text-blue-400 mt-0.5"><Percent size={14} /></div>
                         <div>
                            <h4 className="text-theme-text font-bold text-sm">Empréstimos Consignados</h4>
-                           <p className="text-gray-400 text-xs">Todos os tipos disponiveis para você.</p>
+                           <p className="text-theme-muted text-xs">Todos os tipos disponiveis para você.</p>
                         </div>
                      </div>
                      <div className="flex items-start gap-3">
                         <div className="bg-blue-900/50 p-1.5 rounded text-blue-400 mt-0.5"><Car size={14} /></div>
                         <div>
                            <h4 className="text-theme-text font-bold text-sm">Consórcios de Veículos</h4>
-                           <p className="text-gray-400 text-xs">Planeje seu carro novo com segurança.</p>
+                           <p className="text-theme-muted text-xs">Planeje seu carro novo com segurança.</p>
                         </div>
                      </div>
                      <div className="flex items-start gap-3">
                         <div className="bg-blue-900/50 p-1.5 rounded text-blue-400 mt-0.5"><Banknote size={14} /></div>
                         <div>
                            <h4 className="text-theme-text font-bold text-sm">Empréstimo com Garantia</h4>
-                           <p className="text-gray-400 text-xs">Use seu veículo como garantia para melhores taxas.</p>
+                           <p className="text-theme-muted text-xs">Use seu veículo como garantia para melhores taxas.</p>
                         </div>
                      </div>
                   </div>
@@ -91,7 +91,7 @@ const SalesConsultancy: React.FC = () => {
                      <Loader2 className="animate-spin" size={24} />
                   </div>
                ) : partners.length === 0 ? (
-                  <div className="text-center py-10 text-gray-500">
+                  <div className="text-center py-10 text-theme-muted">
                      <p className="text-xs italic">Em breve mais parceiros exclusivos.</p>
                   </div>
                ) : (
@@ -118,10 +118,10 @@ const SalesConsultancy: React.FC = () => {
                                     <Tag size={12} className="text-gold-500" />
                                  )}
                               </div>
-                              <div className="flex items-center text-gray-500 text-[10px] gap-1 mb-1">
+                              <div className="flex items-center text-theme-muted text-[10px] gap-1 mb-1">
                                  <MapPin size={10} /> {partner.city}
                               </div>
-                              <p className="text-xs text-gray-400 line-clamp-2 leading-tight">{partner.description}</p>
+                              <p className="text-xs text-theme-muted line-clamp-2 leading-tight">{partner.description}</p>
                            </div>
                            <div className="mt-1 flex items-center justify-between">
                               <div className="text-gold-500 text-[10px] font-bold bg-gold-500/10 px-1.5 py-0.5 rounded flex items-center gap-1 border border-gold-500/20">
@@ -136,7 +136,7 @@ const SalesConsultancy: React.FC = () => {
 
             {/* Footer */}
             <div className="text-center pt-8 opacity-40">
-               <p className="text-gray-500 text-[10px] uppercase tracking-widest font-medium">
+               <p className="text-theme-muted text-[10px] uppercase tracking-widest font-medium">
                   Tavares Car &copy; 2024
                </p>
             </div>

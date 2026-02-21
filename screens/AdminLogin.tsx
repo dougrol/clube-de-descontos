@@ -88,7 +88,7 @@ const AdminLogin: React.FC = () => {
                     <h1 className="text-2xl font-bold text-theme-text mb-2">
                         Painel Administrativo
                     </h1>
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-theme-muted text-sm">
                         Acesso restrito a administradores do sistema
                     </p>
                 </div>
@@ -146,7 +146,7 @@ const AdminLogin: React.FC = () => {
                 <div className="mt-8 text-center">
                     <button
                         onClick={() => navigate('/login')}
-                        className="text-gray-500 text-sm hover:text-gray-300 transition-colors"
+                        className="text-theme-muted text-sm hover:text-gray-300 transition-colors"
                     >
                         ← Voltar para login principal
                     </button>

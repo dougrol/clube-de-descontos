@@ -125,7 +125,7 @@ const Checkout: React.FC = () => {
                             <CheckCircle size={32} className="text-green-500" />
                         </div>
                         <h2 className="text-xl font-bold text-theme-text mb-2">Pedido Criado!</h2>
-                        <p className="text-gray-400 text-sm">Escaneie o QR Code ou copie o código PIX</p>
+                        <p className="text-theme-muted text-sm">Escaneie o QR Code ou copie o código PIX</p>
                     </div>
 
                     {/* QR Code */}
@@ -150,11 +150,11 @@ const Checkout: React.FC = () => {
 
                     {/* Order Info */}
                     <Card className="bg-obsidian-900/50 border-obsidian-800">
-                        <p className="text-gray-400 text-sm mb-2">Número do Pedido</p>
+                        <p className="text-theme-muted text-sm mb-2">Número do Pedido</p>
                         <p className="text-theme-text font-mono text-sm">{paymentResult.orderId}</p>
                     </Card>
 
-                    <div className="text-center text-gray-500 text-sm">
+                    <div className="text-center text-theme-muted text-sm">
                         <p>Após o pagamento, seu pedido será confirmado automaticamente.</p>
                     </div>
 
@@ -200,7 +200,7 @@ const Checkout: React.FC = () => {
                     />
                     <div className="flex-1">
                         <h3 className="text-theme-text font-medium mb-1">{product.title}</h3>
-                        <p className="text-gray-500 text-sm mb-2">Qtd: {quantity}</p>
+                        <p className="text-theme-muted text-sm mb-2">Qtd: {quantity}</p>
                         <p className="text-gold-500 font-bold">{formatPrice(totalPrice)}</p>
                     </div>
                 </Card>
@@ -224,7 +224,7 @@ const Checkout: React.FC = () => {
                                 </div>
                                 <div className="flex-1">
                                     <h3 className="text-theme-text font-medium">PIX</h3>
-                                    <p className="text-gray-500 text-sm">Pagamento instantâneo</p>
+                                    <p className="text-theme-muted text-sm">Pagamento instantâneo</p>
                                 </div>
                                 <div className={`w-5 h-5 rounded-full border-2 ${selectedMethod === PaymentMethod.PIX
                                         ? 'border-gold-500 bg-gold-500'
@@ -252,7 +252,7 @@ const Checkout: React.FC = () => {
                                 </div>
                                 <div className="flex-1">
                                     <h3 className="text-theme-text font-medium">Cartão de Crédito</h3>
-                                    <p className="text-gray-500 text-sm">Via Mercado Pago</p>
+                                    <p className="text-theme-muted text-sm">Via Mercado Pago</p>
                                 </div>
                                 <div className={`w-5 h-5 rounded-full border-2 ${selectedMethod === PaymentMethod.CARD
                                         ? 'border-gold-500 bg-gold-500'
@@ -277,7 +277,7 @@ const Checkout: React.FC = () => {
                 {/* Total & Pay Button */}
                 <div className="space-y-4 pt-4">
                     <div className="flex items-center justify-between">
-                        <span className="text-gray-400">Total a pagar:</span>
+                        <span className="text-theme-muted">Total a pagar:</span>
                         <span className="text-2xl font-bold text-gold-500">{formatPrice(totalPrice)}</span>
                     </div>
 

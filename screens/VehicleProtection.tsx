@@ -65,7 +65,7 @@ const Protection: React.FC = () => {
                   <span className={`w-8 h-1 rounded-full ${step === 'vehicle-select' ? 'bg-blue-500' : 'bg-blue-900'}`}></span>
                   <span className={`w-8 h-1 rounded-full ${step === 'plans' ? 'bg-blue-500' : 'bg-gray-800'}`}></span>
                </div>
-               <p className="text-gray-400 text-xs">
+               <p className="text-theme-muted text-xs">
                   {step === 'vehicle-select' ? 'Passo 1: Identificação' : 'Passo 2: Planos Recomendados'}
                </p>
             </div>
@@ -76,7 +76,7 @@ const Protection: React.FC = () => {
             {step === 'vehicle-select' && (
                <div className="animate-slide-up">
                   <h2 className="text-2xl font-bold text-theme-text mb-2">Qual seu veículo?</h2>
-                  <p className="text-gray-400 text-sm mb-8">Selecione o tipo para ver os planos ideais.</p>
+                  <p className="text-theme-muted text-sm mb-8">Selecione o tipo para ver os planos ideais.</p>
 
                   <div className="grid grid-cols-1 gap-4">
                      <button
@@ -89,7 +89,7 @@ const Protection: React.FC = () => {
                            </div>
                            <div className="text-left">
                               <h3 className="text-theme-text font-bold text-lg">Carro / SUV</h3>
-                              <p className="text-gray-500 text-xs">Uso particular ou app</p>
+                              <p className="text-theme-muted text-xs">Uso particular ou app</p>
                            </div>
                         </div>
                         <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-blue-500 group-hover:border-blue-500 transition-colors">
@@ -107,7 +107,7 @@ const Protection: React.FC = () => {
                            </div>
                            <div className="text-left">
                               <h3 className="text-theme-text font-bold text-lg">Motocicleta</h3>
-                              <p className="text-gray-500 text-xs">Todas as cilindradas</p>
+                              <p className="text-theme-muted text-xs">Todas as cilindradas</p>
                            </div>
                         </div>
                         <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-blue-500 group-hover:border-blue-500 transition-colors">
@@ -125,7 +125,7 @@ const Protection: React.FC = () => {
                            </div>
                            <div className="text-left">
                               <h3 className="text-theme-text font-bold text-lg">Pesados</h3>
-                              <p className="text-gray-500 text-xs">Caminhões e Utilitários</p>
+                              <p className="text-theme-muted text-xs">Caminhões e Utilitários</p>
                            </div>
                         </div>
                         <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-blue-500 group-hover:border-blue-500 transition-colors">
@@ -145,7 +145,7 @@ const Protection: React.FC = () => {
                <div className="animate-slide-up">
                   <div className="flex justify-between items-end mb-6">
                      <div>
-                        <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Veículo Selecionado</p>
+                        <p className="text-theme-muted text-xs uppercase tracking-wider mb-1">Veículo Selecionado</p>
                         <h2 className="text-2xl font-bold text-theme-text flex items-center gap-2">
                            {selectedVehicle}
                            <button onClick={() => setStep('vehicle-select')} className="text-xs text-blue-400 font-normal underline">Alterar</button>
@@ -173,12 +173,12 @@ const Protection: React.FC = () => {
                               <div className="flex justify-between items-start mb-6 mt-2">
                                  <div>
                                     <h4 className="font-bold text-xl text-theme-text">{plan.name}</h4>
-                                    <p className="text-gray-500 text-xs mt-1">Cobertura Nacional</p>
+                                    <p className="text-theme-muted text-xs mt-1">Cobertura Nacional</p>
                                  </div>
                                  <div className="text-right">
-                                    <span className="text-xs text-gray-400 block">Mensalidade</span>
+                                    <span className="text-xs text-theme-muted block">Mensalidade</span>
                                     <span className="text-2xl font-bold text-theme-text">R$ {plan.price.toFixed(0)}</span>
-                                    <span className="text-xs text-gray-500">,00</span>
+                                    <span className="text-xs text-theme-muted">,00</span>
                                  </div>
                               </div>
 
@@ -192,7 +192,7 @@ const Protection: React.FC = () => {
                                     </div>
                                  ))}
                                  {plan.features.length > 4 && (
-                                    <p className="text-xs text-center text-gray-500 pt-2">+ {plan.features.length - 4} benefícios inclusos</p>
+                                    <p className="text-xs text-center text-theme-muted pt-2">+ {plan.features.length - 4} benefícios inclusos</p>
                                  )}
                               </div>
 
@@ -243,7 +243,7 @@ const Protection: React.FC = () => {
                            }}
                         />
                      </div>
-                     <span className="text-gray-500 text-[8px] sm:text-[9px] mt-2 uppercase tracking-widest font-bold group-hover:text-gold-500 transition-colors">
+                     <span className="text-theme-muted text-[8px] sm:text-[9px] mt-2 uppercase tracking-widest font-bold group-hover:text-gold-500 transition-colors">
                         {partner.name}
                      </span>
                   </div>

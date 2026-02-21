@@ -39,8 +39,17 @@ for d in TARGET_DIRS:
                 new_content = re.sub(r'(className=)(["\'])(.*?)\2', replacer, content)
                 new_content = re.sub(r'(className=\{[`"\'])(.*?)([`"\']\})', replacer, new_content)
 
-                # Special case explicitly text-gray-400 -> text-theme-muted, but let's just do text-white for now to be safe.
-                # Just text-gray-500, text-gray-400 could remain as they are or we can map them.
+                # Special case explicitly text-gray-400/500 -> text-theme-muted
+                def replacer_gray(match):
+                    class_str = match.group(0)
+                    has_strong_bg = any(bg in class_str for bg in STRONG_BGS)
+                    if not has_strong_bg:
+                        class_str = re.sub(r'\btext-gray-400\b', 'text-theme-muted', class_str)
+                        class_str = re.sub(r'\btext-gray-500\b', 'text-theme-muted', class_str)
+                    return class_str
+
+                new_content = re.sub(r'(className=)(["\'])(.*?)\2', replacer_gray, new_content)
+                new_content = re.sub(r'(className=\{[`"\'])(.*?)([`"\']\})', replacer_gray, new_content)
                 # Let's see if content changed
                 if new_content != content:
                     with open(filepath, "w", encoding="utf-8") as file:

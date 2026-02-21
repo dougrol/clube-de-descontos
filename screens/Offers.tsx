@@ -28,7 +28,7 @@ const Offers: React.FC = () => {
         <div className="flex items-center justify-between px-4 h-16 max-w-7xl mx-auto">
           <button 
             onClick={() => navigate(-1)} 
-            className="w-10 h-10 rounded-full flex items-center justify-center text-gray-400 hover:text-theme-text hover:bg-white/10 transition-colors"
+            className="w-10 h-10 rounded-full flex items-center justify-center text-theme-muted hover:text-theme-text hover:bg-white/10 transition-colors"
           >
             <ArrowLeft size={20} />
           </button>
@@ -50,7 +50,7 @@ const Offers: React.FC = () => {
            <h2 className="text-2xl md:text-3xl font-bold text-theme-text font-serif">
              Achadinhos <span className="text-gold-500">Shopee</span>
            </h2>
-           <p className="text-gray-400 text-sm max-w-md mx-auto">
+           <p className="text-theme-muted text-sm max-w-md mx-auto">
              Seleção especial de produtos com descontos imperdíveis para você aproveitar.
            </p>
         </div>
@@ -59,11 +59,11 @@ const Offers: React.FC = () => {
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 space-y-4">
             <Loader2 className="animate-spin text-gold-500" size={40} />
-            <p className="text-gray-500 text-xs uppercase tracking-widest">Carregando ofertas...</p>
+            <p className="text-theme-muted text-xs uppercase tracking-widest">Carregando ofertas...</p>
           </div>
         ) : products.length === 0 ? (
           <div className="text-center py-20 px-6 rounded-2xl bg-white/5 border border-white/10 border-dashed">
-            <p className="text-gray-400 mb-2">Sem ofertas no momento.</p>
+            <p className="text-theme-muted mb-2">Sem ofertas no momento.</p>
             <p className="text-xs text-gray-600">Volte em breve para novidades!</p>
           </div>
         ) : (
@@ -76,7 +76,7 @@ const Offers: React.FC = () => {
 
         {/* Disclaimer Footer */}
         <div className="mt-12 pt-8 border-t border-white/5 text-center px-4">
-          <p className="text-[10px] text-gray-500 uppercase tracking-wider leading-relaxed">
+          <p className="text-[10px] text-theme-muted uppercase tracking-wider leading-relaxed">
             Ao clicar em comprar, você será redirecionado para a Shopee.<br/>
             Somos parceiros afiliados e podemos receber comissão por compras qualificadas.
           </p>

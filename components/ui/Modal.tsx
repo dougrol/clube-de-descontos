@@ -40,7 +40,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
                     <h3 className="text-lg sm:text-xl font-bold text-theme-text">{title}</h3>
                     <button
                         onClick={onClose}
-                        className="p-2 -mr-2 text-gray-400 hover:text-theme-text transition-colors active:scale-95"
+                        className="p-2 -mr-2 text-theme-muted hover:text-theme-text transition-colors active:scale-95"
                         aria-label="Fechar"
                     >
                         <X size={24} />

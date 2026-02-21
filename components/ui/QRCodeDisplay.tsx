@@ -36,7 +36,7 @@ const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({ code, expiresAt }) => {
             <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-6 text-center">
                 <div className="text-red-500 text-4xl mb-2">⏰</div>
                 <h3 className="text-red-500 font-bold text-lg mb-1">Cupom Expirado</h3>
-                <p className="text-gray-400 text-sm">Gere um novo cupom para usar o desconto</p>
+                <p className="text-theme-muted text-sm">Gere um novo cupom para usar o desconto</p>
             </div>
         );
     }
@@ -45,7 +45,7 @@ const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({ code, expiresAt }) => {
         <div className="bg-white rounded-xl p-6 flex flex-col items-center justify-center animate-slide-up shadow-[0_0_50px_rgba(255,255,255,0.15)] border border-white/5">
             <div className="w-full flex justify-between items-center mb-4 px-2">
                 <div className="h-px flex-1 bg-gray-200" />
-                <span className="mx-3 text-[10px] text-gray-400 font-bold uppercase tracking-widest">Cupom Oficial</span>
+                <span className="mx-3 text-[10px] text-theme-muted font-bold uppercase tracking-widest">Cupom Oficial</span>
                 <div className="h-px flex-1 bg-gray-200" />
             </div>
 
@@ -89,7 +89,7 @@ const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({ code, expiresAt }) => {
             </div>
 
             {/* Instructions */}
-            <p className="text-gray-500 text-xs mt-4 text-center max-w-[250px]">
+            <p className="text-theme-muted text-xs mt-4 text-center max-w-[250px]">
                 Apresente este QR Code no caixa. O parceiro irá escanear para validar seu desconto.
             </p>
         </div>

@@ -177,7 +177,7 @@ const Register: React.FC = () => {
                     <CheckCircle size={64} className="text-gold-500" />
                 </div>
                 <h2 className="text-2xl font-bold text-theme-text mb-2">Conta Criada!</h2>
-                <p className="text-gray-400 mb-6 max-w-xs mx-auto">
+                <p className="text-theme-muted mb-6 max-w-xs mx-auto">
                     Enviamos um link de confirmação para <b>{formData.email}</b>. Verifique sua caixa de entrada para ativar sua conta.
                 </p>
                 <div className="bg-gold-500/10 border border-gold-500/30 rounded-xl p-4 mb-6 max-w-xs mx-auto">
@@ -201,7 +201,7 @@ const Register: React.FC = () => {
             <div className="relative z-10 w-full max-w-sm mx-auto animate-fade-in">
                 <button
                     onClick={() => navigate('/login')}
-                    className="flex items-center text-gray-500 hover:text-theme-text mb-6 transition-colors text-sm"
+                    className="flex items-center text-theme-muted hover:text-theme-text mb-6 transition-colors text-sm"
                 >
                     <ArrowLeft size={16} className="mr-2" /> Voltar
                 </button>
@@ -210,7 +210,7 @@ const Register: React.FC = () => {
                     <h2 className="text-2xl font-serif font-bold text-theme-text mb-2">
                         Cadastro de <span className="text-gold-500">Associado</span>
                     </h2>
-                    <p className="text-gray-500 text-xs">
+                    <p className="text-theme-muted text-xs">
                         Exclusivo para associados ativos das associações parceiras.
                     </p>
                 </div>
@@ -263,11 +263,11 @@ const Register: React.FC = () => {
                     />
 
                     <div className="space-y-1">
-                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">
+                        <label className="text-xs font-bold text-theme-muted uppercase tracking-wider ml-1">
                             Associação de Origem
                         </label>
                         <div className="relative">
-                            <Building2 size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                            <Building2 size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-theme-muted" />
                             <select
                                 value={formData.association}
                                 onChange={(e) => setFormData({ ...formData, association: e.target.value })}

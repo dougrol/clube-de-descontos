@@ -119,7 +119,7 @@ export const UsedCouponsList: React.FC = () => {
                         <Ticket className="text-gold-500" size={24} />
                         Gestão de Cupons
                     </h2>
-                    <p className="text-gray-400 text-sm">Monitore, edite e gerencie os cupons</p>
+                    <p className="text-theme-muted text-sm">Monitore, edite e gerencie os cupons</p>
                 </div>
 
                 <div className="flex gap-2 flex-wrap">
@@ -127,7 +127,7 @@ export const UsedCouponsList: React.FC = () => {
                         <button
                             key={tab.key}
                             onClick={() => setStatusFilter(tab.key)}
-                            className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${statusFilter === tab.key ? tab.color : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}
+                            className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${statusFilter === tab.key ? tab.color : 'bg-white/5 text-theme-muted hover:bg-white/10'}`}
                         >
                             {tab.label}
                         </button>
@@ -145,7 +145,7 @@ export const UsedCouponsList: React.FC = () => {
             {/* Search */}
             <div className="flex gap-4 bg-obsidian-900 p-4 rounded-xl border border-white/5">
                 <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-theme-muted" size={16} />
                     <input
                         type="text"
                         placeholder="Buscar por código, cliente ou parceiro..."
@@ -159,7 +159,7 @@ export const UsedCouponsList: React.FC = () => {
             {/* Table */}
             <Card className="bg-obsidian-800 border-none overflow-hidden">
                 <div className="overflow-x-auto">
-                    <table className="w-full text-left text-sm text-gray-400">
+                    <table className="w-full text-left text-sm text-theme-muted">
                         <thead className="bg-obsidian-900 uppercase font-medium">
                             <tr>
                                 <th className="p-4">Data</th>

@@ -56,7 +56,7 @@ const ForgotPassword: React.FC = () => {
                     <h1 className="text-2xl font-bold text-theme-text mb-2">
                         Redefinir Senha
                     </h1>
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-theme-muted text-sm">
                         Digite seu email cadastrado para receber o link de redefinição
                     </p>
                 </div>
@@ -69,7 +69,7 @@ const ForgotPassword: React.FC = () => {
                                 <CheckCircle size={32} className="text-green-500" />
                             </div>
                             <h3 className="text-theme-text font-semibold mb-2">Email Enviado!</h3>
-                            <p className="text-gray-400 text-sm mb-6">
+                            <p className="text-theme-muted text-sm mb-6">
                                 Verifique sua caixa de entrada e spam. Clique no link para redefinir sua senha.
                             </p>
                             <Button onClick={() => navigate('/login')} className="w-full">
@@ -99,7 +99,7 @@ const ForgotPassword: React.FC = () => {
                 <div className="mt-8 text-center">
                     <button
                         onClick={() => navigate('/login')}
-                        className="text-gray-500 text-sm hover:text-gray-300 transition-colors flex items-center justify-center gap-1 mx-auto"
+                        className="text-theme-muted text-sm hover:text-gray-300 transition-colors flex items-center justify-center gap-1 mx-auto"
                     >
                         <ChevronLeft size={16} /> Voltar para login
                     </button>

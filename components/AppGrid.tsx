@@ -37,7 +37,7 @@ const GridItem: React.FC<GridItemProps> = ({ icon: Icon, label, path, color = "t
                 </div>
             </div>
 
-            <span className="text-xs md:text-sm font-medium text-gray-400 group-hover:text-theme-text text-center leading-tight max-w-[80px] transition-colors duration-300">
+            <span className="text-xs md:text-sm font-medium text-theme-muted group-hover:text-theme-text text-center leading-tight max-w-[80px] transition-colors duration-300">
                 {label}
             </span>
         </div>

@@ -119,7 +119,7 @@ const MyOrders: React.FC = () => {
                     <div className="text-center py-20">
                         <Package size={48} className="mx-auto text-gray-600 mb-4" />
                         <h3 className="text-theme-text font-medium mb-2">Nenhum pedido ainda</h3>
-                        <p className="text-gray-500 text-sm mb-6">
+                        <p className="text-theme-muted text-sm mb-6">
                             Quando você fizer uma compra, seus pedidos aparecerão aqui.
                         </p>
                         <button
@@ -144,7 +144,7 @@ const MyOrders: React.FC = () => {
                                     {/* Header */}
                                     <div className="flex items-start justify-between mb-3">
                                         <div>
-                                            <p className="text-gray-500 text-xs mb-1">
+                                            <p className="text-theme-muted text-xs mb-1">
                                                 {formatDate(order.createdAt)}
                                             </p>
                                             <p className="text-theme-text font-medium">{order.partnerName}</p>
@@ -177,7 +177,7 @@ const MyOrders: React.FC = () => {
                                             ))}
                                             {order.items.length > 3 && (
                                                 <div className="flex-shrink-0 w-16 h-16 rounded-lg bg-obsidian-800 flex items-center justify-center">
-                                                    <span className="text-gray-500 text-sm">+{order.items.length - 3}</span>
+                                                    <span className="text-theme-muted text-sm">+{order.items.length - 3}</span>
                                                 </div>
                                             )}
                                         </div>
@@ -186,7 +186,7 @@ const MyOrders: React.FC = () => {
                                     {/* Footer */}
                                     <div className="flex items-center justify-between pt-3 border-t border-obsidian-800">
                                         <div>
-                                            <p className="text-gray-500 text-xs">Total</p>
+                                            <p className="text-theme-muted text-xs">Total</p>
                                             <p className="text-gold-500 font-bold">{formatPrice(order.totalAmount)}</p>
                                         </div>
                                         <ChevronRight size={20} className="text-gray-600" />

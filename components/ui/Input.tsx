@@ -10,13 +10,13 @@ export const Input: React.FC<InputProps> = ({ label, className = '', icon, ...pr
   return (
     <div className={`flex flex-col gap-1 ${className}`}>
       {label && (
-        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">
+        <label className="text-xs font-bold text-theme-muted uppercase tracking-wider ml-1">
           {label}
         </label>
       )}
       <div className="relative">
         {icon && (
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-theme-muted">
             {icon}
           </div>
         )}

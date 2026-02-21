@@ -230,7 +230,7 @@ const Login: React.FC = () => {
             <h3 className="text-lg text-theme-text font-medium">
               {selectedRole === 'partner' ? 'Acesse seu Painel' : 'Entre no Clube'}
             </h3>
-            <p className="text-gray-500 text-xs mt-1">
+            <p className="text-theme-muted text-xs mt-1">
               {selectedRole === 'partner'
                 ? 'Gerencie cupons, veja estatísticas e atualize sua loja'
                 : 'Exclusivo para associados ativos das associações parceiras'}
@@ -288,7 +288,7 @@ const Login: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-9 text-gray-400 hover:text-gray-300 transition-colors"
+                  className="absolute right-3 top-9 text-theme-muted hover:text-gray-300 transition-colors"
                   aria-label={showPassword ? 'Esconder senha' : 'Mostrar senha'}
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -350,7 +350,7 @@ const Login: React.FC = () => {
             {/* Client Registration */}
             {selectedRole === 'client' && (
               <div className="text-center">
-                <p className="text-gray-500 text-sm">
+                <p className="text-theme-muted text-sm">
                   Associado e ainda não tem conta?{' '}
                   <motion.button
                     onClick={() => navigate('/register')}
@@ -366,7 +366,7 @@ const Login: React.FC = () => {
             {/* Partner Registration Link */}
             {selectedRole === 'partner' && (
               <div className="text-center bg-white/5 p-4 rounded-xl border border-white/5">
-                <p className="text-gray-400 text-xs mb-2">Quer oferecer descontos no clube?</p>
+                <p className="text-theme-muted text-xs mb-2">Quer oferecer descontos no clube?</p>
                 <motion.button
                   onClick={() => navigate('/register-partner')}
                   whileHover={{ scale: 1.02 }}
@@ -411,7 +411,7 @@ const Login: React.FC = () => {
                         }}
                       />
                     </div>
-                    <span className="text-gray-500 text-[8px] sm:text-[9px] mt-2 uppercase tracking-[0.15em] font-bold group-hover:text-gold-500 transition-colors">{partner.name}</span>
+                    <span className="text-theme-muted text-[8px] sm:text-[9px] mt-2 uppercase tracking-[0.15em] font-bold group-hover:text-gold-500 transition-colors">{partner.name}</span>
                   </div>
                 ))}
               </div>

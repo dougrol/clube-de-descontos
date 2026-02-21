@@ -51,7 +51,7 @@ const About: React.FC = () => {
             <div className="pt-8 px-6 md:px-12">
                 <button
                     onClick={() => navigate(-1)}
-                    className="flex items-center text-gray-400 hover:text-theme-text transition-colors mb-8 group"
+                    className="flex items-center text-theme-muted hover:text-theme-text transition-colors mb-8 group"
                 >
                     <ArrowLeft size={20} className="mr-2 group-hover:-translate-x-1 transition-transform" />
                     Voltar
@@ -78,7 +78,7 @@ const About: React.FC = () => {
                             <Target size={24} />
                         </div>
                         <h3 className="text-2xl font-bold mb-4 text-theme-text">Missão</h3>
-                        <p className="text-gray-400 leading-relaxed">
+                        <p className="text-theme-muted leading-relaxed">
                             Impactar vidas e transformar pessoas por meio de oportunidades profissionais no setor automotivo.
                         </p>
                     </Card>
@@ -89,7 +89,7 @@ const About: React.FC = () => {
                             <Eye size={24} />
                         </div>
                         <h3 className="text-2xl font-bold mb-4 text-theme-text">Visão</h3>
-                        <p className="text-gray-400 leading-relaxed">
+                        <p className="text-theme-muted leading-relaxed">
                             Ser referência nacional em consultoria, capacitação e liderança em proteção veicular.
                         </p>
                     </Card>
@@ -100,7 +100,7 @@ const About: React.FC = () => {
                             <Heart size={24} />
                         </div>
                         <h3 className="text-2xl font-bold mb-4 text-theme-text">Valores</h3>
-                        <ul className="space-y-3 text-gray-400">
+                        <ul className="space-y-3 text-theme-muted">
                             <li className="flex items-center gap-2"><Award size={16} className="text-gold-500" /> Comprometimento</li>
                             <li className="flex items-center gap-2"><Award size={16} className="text-gold-500" /> Integridade</li>
                             <li className="flex items-center gap-2"><TrendingUp size={16} className="text-gold-500" /> Crescimento Contínuo</li>
@@ -139,7 +139,7 @@ const About: React.FC = () => {
                                 </div>
                                 <ul className="space-y-3">
                                     {partner.bio.map((item, i) => (
-                                        <li key={i} className="flex items-start gap-3 text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
+                                        <li key={i} className="flex items-start gap-3 text-sm text-theme-muted group-hover:text-gray-300 transition-colors">
                                             <span className="w-1.5 h-1.5 rounded-full bg-gold-500 mt-2 shrink-0" />
                                             {item}
                                         </li>
@@ -197,7 +197,7 @@ const About: React.FC = () => {
                             
                             {/* Label */}
                             <div className="flex flex-col items-center gap-2">
-                                <span className="text-gray-500 font-bold text-[10px] sm:text-xs group-hover:text-gold-500 transition-all duration-500 uppercase tracking-[0.3em] transform group-hover:translate-y-[-2px]">
+                                <span className="text-theme-muted font-bold text-[10px] sm:text-xs group-hover:text-gold-500 transition-all duration-500 uppercase tracking-[0.3em] transform group-hover:translate-y-[-2px]">
                                     {partner.name}
                                 </span>
                                 <div className="h-[2px] w-0 bg-gold-500 rounded-full transition-all duration-700 group-hover:w-12 group-hover:shadow-[0_0_10px_rgba(212,175,55,0.5)]"></div>
