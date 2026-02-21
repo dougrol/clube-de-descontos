@@ -37,7 +37,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     : baseNavItems;
 
   return (
-    <div className="bg-transparent min-h-screen text-white font-sans w-full relative overflow-x-hidden selection:bg-signal-500/30 selection:text-signal-500">
+    <div className="bg-transparent min-h-screen text-theme-text font-sans w-full relative overflow-x-hidden selection:bg-signal-500/30 selection:text-signal-500">
       <main className="min-h-screen w-full pb-28 md:pb-32">
         {children}
       </main>

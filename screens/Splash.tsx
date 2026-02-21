@@ -29,7 +29,7 @@ const Splash: React.FC<SplashProps> = ({ onFinish }) => {
         <div className="relative flex flex-col items-center animate-slide-up z-10">
           {/* Shield Logo - Fixed dimensions to prevent cutting */}
           <ImageWithFallback
-            src="/images/logo_shield_v2_transparent.png"
+            src="/icons/icon-512.png"
             alt="Escudo Tavares Car"
             className="w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 mb-6 drop-shadow-[0_0_25px_rgba(212,175,55,0.25)]"
             objectFit="contain"
