@@ -48,11 +48,13 @@ jobs:
 
       - name: Ensure DB secret is set
         id: check_db
+        env:
+          STAGING_DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
         run: |
-          if [ -z "${{ secrets.STAGING_DATABASE_URL }}" ]; then
+          if [ -z "$STAGING_DATABASE_URL" ]; then
             echo "skip_migrations=true" >> $GITHUB_OUTPUT
-            echo "No STAGING_DATABASE_URL provided; skipping migrations.";
-            exit 0;
+            echo "No STAGING_DATABASE_URL provided; skipping migrations."
+            exit 0
           fi
 
       - name: Apply migrations (bash)
@@ -132,7 +134,7 @@ jobs:
         run: npm ci
       - name: Run Playwright
         env:
-             PLAYWRIGHT_API_KEY: ${{ secrets.PLAYWRIGHT_API_KEY }}
+          PLAYWRIGHT_API_KEY: ${{ secrets.PLAYWRIGHT_API_KEY }}
         run: |
           if [ -z "$PLAYWRIGHT_API_KEY" ]; then
             echo "No PLAYWRIGHT_API_KEY found, skipping E2E tests."
