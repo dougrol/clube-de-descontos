@@ -188,7 +188,7 @@ const Protection: React.FC = () => {
                                        <div className="bg-blue-500/20 p-1 rounded-full text-blue-400">
                                           <CheckCircle2 size={12} strokeWidth={3} />
                                        </div>
-                                       <span className="text-gray-300 text-sm font-medium">{feat}</span>
+                                       <span className="text-theme-muted text-sm font-medium">{feat}</span>
                                     </div>
                                  ))}
                                  {plan.features.length > 4 && (

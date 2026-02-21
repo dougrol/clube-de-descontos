@@ -112,7 +112,7 @@ const CorporateConsultancy: React.FC = () => {
                         {differentials.map((item, i) => (
                             <div key={i} className="flex items-start gap-3">
                                 <div className="text-gold-500 mt-0.5 shrink-0">{item.icon}</div>
-                                <span className="text-gray-300 text-sm">{item.text}</span>
+                                <span className="text-theme-muted text-sm">{item.text}</span>
                             </div>
                         ))}
                     </div>

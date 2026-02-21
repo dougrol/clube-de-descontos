@@ -163,7 +163,7 @@ const Benefits: React.FC = () => {
           <h1 className="text-3xl md:text-5xl font-serif font-black text-theme-text leading-tight opacity-0 animate-slide-up" style={{ animationDelay: '0.2s' }}>
             CLUBE DE <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-600">VANTAGENS</span>
           </h1>
-          <p className="text-gray-300 text-sm md:text-base mt-2 max-w-lg opacity-0 animate-slide-up" style={{ animationDelay: '0.3s' }}>
+          <p className="text-theme-muted text-sm md:text-base mt-2 max-w-lg opacity-0 animate-slide-up" style={{ animationDelay: '0.3s' }}>
             Descontos exclusivos em parceiros selecionados. Viva a experiência Tavares Car.
           </p>
         </div>
@@ -215,7 +215,7 @@ const Benefits: React.FC = () => {
                   }}
                   className={`px-3 sm:px-4 h-10 rounded-full text-[11px] sm:text-xs font-bold whitespace-nowrap transition-all duration-200 active:scale-95 shrink-0 ${selectedCategory === cat
                     ? 'bg-gold-500 text-black border border-gold-500 shadow-[0_0_15px_rgba(212,175,55,0.4)]'
-                    : 'bg-obsidian-800 text-gray-400 border border-obsidian-700 hover:border-gold-500/50 hover:text-white'
+                    : 'bg-obsidian-800 text-theme-muted border border-obsidian-700 hover:border-gold-500/50 hover:text-white'
                     }`}
                 >
                   {cat}

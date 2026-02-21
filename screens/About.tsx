@@ -62,7 +62,7 @@ const About: React.FC = () => {
                     <h1 className="text-4xl md:text-6xl font-serif font-bold mt-4 mb-6">
                         Quem <span className="text-gold-500">Somos?</span>
                     </h1>
-                    <p className="text-xl md:text-2xl text-gray-300 max-w-3xl leading-relaxed">
+                    <p className="text-xl md:text-2xl text-theme-muted max-w-3xl leading-relaxed">
                         Fundada em 2017, atuamos com excelência no segmento de proteção veicular e consultoria.
                         Com mais de 10 anos de experiência no setor e mais de <span className="text-gold-500 font-bold">300 profissionais formados</span>.
                     </p>
@@ -139,7 +139,7 @@ const About: React.FC = () => {
                                 </div>
                                 <ul className="space-y-3">
                                     {partner.bio.map((item, i) => (
-                                        <li key={i} className="flex items-start gap-3 text-sm text-theme-muted group-hover:text-gray-300 transition-colors">
+                                        <li key={i} className="flex items-start gap-3 text-sm text-theme-muted group-hover:text-theme-text transition-colors">
                                             <span className="w-1.5 h-1.5 rounded-full bg-gold-500 mt-2 shrink-0" />
                                             {item}
                                         </li>
