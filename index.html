@@ -114,18 +114,20 @@
        THEME VARIABLES (Light / Dark)
        ======================================== */
     :root {
-      /* LIGHT MODE (Elegant Cream Palette) */
-      --color-obsidian-950: 249 246 240; /* #F9F6F0 Base App BG */
-      --color-obsidian-900: 255 255 255; /* #FFFFFF Cards/Surfaces */
-      --color-obsidian-800: 240 235 225; /* Hover/Borders */
-      --color-obsidian-700: 220 215 205; /* Dividers */
-      --color-obsidian-600: 200 195 185; 
-      --text-main: 26 26 26;             /* #1A1A1A */
-      --text-muted: 102 102 102;         /* #666666 */
+      /* LIGHT MODE (Elegant Champagne / Pearl Gradient for better contrast) */
+      --bg-gradient: linear-gradient(135deg, #FDFBF7 0%, #E3DCD2 100%);
+      --color-obsidian-950: 227 220 210; /* #E3DCD2 (Bottom nav & bases) */
+      --color-obsidian-900: 250 248 244; /* #FAF8F4 (Cards/Surfaces) */
+      --color-obsidian-800: 210 200 185; /* Borders / Hovers */
+      --color-obsidian-700: 190 180 160; 
+      --color-obsidian-600: 170 160 140; 
+      --text-main: 10 10 10;             /* Much darker for max contrast */
+      --text-muted: 95 95 95;            /* Dark grey for unselected icons */
     }
 
     html.dark {
       /* DARK MODE (Original Obsidian Palette) */
+      --bg-gradient: radial-gradient(circle at 50% 0%, #2a2005 0%, #050505 70%);
       --color-obsidian-950: 5 5 5;       /* #050505 */
       --color-obsidian-900: 10 10 10;    /* #0A0A0A */
       --color-obsidian-800: 18 18 18;    /* #121212 */
@@ -289,7 +291,7 @@
     /* Main body styles */
     body {
       background-color: rgb(var(--color-obsidian-950));
-      background-image: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+      background-image: var(--bg-gradient);
       background-attachment: fixed;
       color: rgb(var(--text-main));
       -webkit-tap-highlight-color: transparent;
@@ -301,7 +303,7 @@
     }
     
     html.dark body {
-      background-image: radial-gradient(circle at 50% 0%, #2a2005 0%, #050505 70%);
+      background-image: var(--bg-gradient);
     }
 
     /* Reduce motion for users who prefer it */

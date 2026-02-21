@@ -32,10 +32,10 @@ const MenuOption: React.FC<MenuOptionProps> = ({ icon: Icon, label, subLabel, on
          </div>
          <div>
             <p className="text-theme-text text-sm font-medium">{label}</p>
-            {subLabel && <p className="text-gray-500 text-xs">{subLabel}</p>}
+            {subLabel && <p className="text-theme-muted text-xs">{subLabel}</p>}
          </div>
       </div>
-      {rightElement || <ChevronRight size={16} className="text-gray-600" />}
+      {rightElement || <ChevronRight size={16} className="text-theme-muted" />}
    </div>
 );
 
@@ -109,7 +109,7 @@ const Profile: React.FC<ProfileProps> = ({ userRole }) => {
                   </div>
                </div>
                <h1 className="text-xl font-bold text-theme-text mb-1">{userName}</h1>
-               <p className="text-gray-500 text-sm mb-4">{userEmail}</p>
+               <p className="text-theme-muted text-sm mb-4">{userEmail}</p>
 
                {userRole !== UserRole.ADMIN && (
                   <div className="bg-gold-500/10 border border-gold-500/20 px-3 py-1 rounded-full flex items-center gap-2">
@@ -123,15 +123,15 @@ const Profile: React.FC<ProfileProps> = ({ userRole }) => {
             <div className="grid grid-cols-3 gap-3 mt-8">
                <button onClick={() => navigate('/my-coupons')} className="bg-obsidian-800 p-3 rounded-xl border border-white/5 flex flex-col items-center gap-2 active:scale-95 transition-transform">
                   <Ticket className="text-orange-500" size={20} />
-                  <span className="text-xs text-gray-400 font-medium">Cupons</span>
+                  <span className="text-xs text-theme-muted font-medium">Cupons</span>
                </button>
                <button onClick={() => navigate('/consultancy')} className="bg-obsidian-800 p-3 rounded-xl border border-white/5 flex flex-col items-center gap-2 active:scale-95 transition-transform">
                   <BookOpen className="text-emerald-500" size={20} />
-                  <span className="text-xs text-gray-400 font-medium">Cursos</span>
+                  <span className="text-xs text-theme-muted font-medium">Cursos</span>
                </button>
                <button onClick={() => navigate('/loja')} className="bg-obsidian-800 p-3 rounded-xl border border-white/5 flex flex-col items-center gap-2 active:scale-95 transition-transform">
                   <ShoppingBag className="text-emerald-500" size={20} />
-                  <span className="text-xs text-gray-400 font-medium">Pedidos</span>
+                  <span className="text-xs text-theme-muted font-medium">Pedidos</span>
                </button>
             </div>
          </div>
@@ -141,7 +141,7 @@ const Profile: React.FC<ProfileProps> = ({ userRole }) => {
 
             {/* Group 1: Account */}
             <div>
-               <h3 className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-2 pl-2">Minha Conta</h3>
+               <h3 className="text-theme-muted text-xs font-bold uppercase tracking-widest mb-2 pl-2">Minha Conta</h3>
                <div className="rounded-xl overflow-hidden border border-white/5 bg-obsidian-900">
                   <MenuOption
                      icon={theme === 'dark' ? Sun : Moon}
@@ -196,7 +196,7 @@ const Profile: React.FC<ProfileProps> = ({ userRole }) => {
 
             {/* Group 2: Support */}
             <div>
-               <h3 className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-2 pl-2">Ajuda</h3>
+               <h3 className="text-theme-muted text-xs font-bold uppercase tracking-widest mb-2 pl-2">Ajuda</h3>
                <div className="rounded-xl overflow-hidden border border-white/5 bg-obsidian-900">
                   <MenuOption
                      icon={LifeBuoy}

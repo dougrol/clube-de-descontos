@@ -57,7 +57,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <button
                   key={item.path}
                   onClick={() => navigate(item.path)}
-                  className={`relative flex flex-col items-center justify-center min-w-[48px] min-h-[48px] py-1.5 px-2 transition-all duration-200 active:scale-95 ${isActive ? 'text-gold-500' : 'text-gray-500 hover:text-gray-300'
+                  className={`relative flex flex-col items-center justify-center min-w-[48px] min-h-[48px] py-1.5 px-2 transition-all duration-200 active:scale-95 ${isActive ? 'text-gold-500' : 'text-theme-muted hover:text-theme-text'
                     }`}
                 >
                   {/* Indicator Line for Active State (Top) */}
