@@ -90,7 +90,7 @@ const Checkout: React.FC = () => {
 
     if (!product) {
         return (
-            <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white p-10">
+            <div className="min-h-screen bg-black flex flex-col items-center justify-center text-theme-text p-10">
                 <p>Produto não encontrado</p>
                 <Button className="mt-4" onClick={() => navigate('/loja')}>
                     Voltar à Loja
@@ -110,11 +110,11 @@ const Checkout: React.FC = () => {
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => navigate('/meus-pedidos')}
-                            className="h-10 w-10 rounded-full flex items-center justify-center text-white hover:bg-obsidian-800 transition-colors"
+                            className="h-10 w-10 rounded-full flex items-center justify-center text-theme-text hover:bg-obsidian-800 transition-colors"
                         >
                             <ArrowLeft size={20} />
                         </button>
-                        <h2 className="text-lg font-bold text-white">Pagamento PIX</h2>
+                        <h2 className="text-lg font-bold text-theme-text">Pagamento PIX</h2>
                     </div>
                 </div>
 
@@ -124,7 +124,7 @@ const Checkout: React.FC = () => {
                         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-500/20 mb-4">
                             <CheckCircle size={32} className="text-green-500" />
                         </div>
-                        <h2 className="text-xl font-bold text-white mb-2">Pedido Criado!</h2>
+                        <h2 className="text-xl font-bold text-theme-text mb-2">Pedido Criado!</h2>
                         <p className="text-gray-400 text-sm">Escaneie o QR Code ou copie o código PIX</p>
                     </div>
 
@@ -151,7 +151,7 @@ const Checkout: React.FC = () => {
                     {/* Order Info */}
                     <Card className="bg-obsidian-900/50 border-obsidian-800">
                         <p className="text-gray-400 text-sm mb-2">Número do Pedido</p>
-                        <p className="text-white font-mono text-sm">{paymentResult.orderId}</p>
+                        <p className="text-theme-text font-mono text-sm">{paymentResult.orderId}</p>
                     </Card>
 
                     <div className="text-center text-gray-500 text-sm">
@@ -177,11 +177,11 @@ const Checkout: React.FC = () => {
                 <div className="flex items-center gap-3">
                     <button
                         onClick={() => navigate(-1)}
-                        className="h-10 w-10 rounded-full flex items-center justify-center text-white hover:bg-obsidian-800 transition-colors"
+                        className="h-10 w-10 rounded-full flex items-center justify-center text-theme-text hover:bg-obsidian-800 transition-colors"
                     >
                         <ArrowLeft size={20} />
                     </button>
-                    <h1 className="text-lg font-bold text-white">Checkout</h1>
+                    <h1 className="text-lg font-bold text-theme-text">Checkout</h1>
                 </div>
             </div>
 
@@ -199,7 +199,7 @@ const Checkout: React.FC = () => {
                         }}
                     />
                     <div className="flex-1">
-                        <h3 className="text-white font-medium mb-1">{product.title}</h3>
+                        <h3 className="text-theme-text font-medium mb-1">{product.title}</h3>
                         <p className="text-gray-500 text-sm mb-2">Qtd: {quantity}</p>
                         <p className="text-gold-500 font-bold">{formatPrice(totalPrice)}</p>
                     </div>
@@ -207,7 +207,7 @@ const Checkout: React.FC = () => {
 
                 {/* Payment Method Selection */}
                 <div>
-                    <h2 className="text-white font-bold mb-4">Forma de Pagamento</h2>
+                    <h2 className="text-theme-text font-bold mb-4">Forma de Pagamento</h2>
                     <div className="space-y-3">
                         {/* PIX Option */}
                         <Card
@@ -223,7 +223,7 @@ const Checkout: React.FC = () => {
                                     <QrCode size={24} className={selectedMethod === PaymentMethod.PIX ? 'text-black' : 'text-white'} />
                                 </div>
                                 <div className="flex-1">
-                                    <h3 className="text-white font-medium">PIX</h3>
+                                    <h3 className="text-theme-text font-medium">PIX</h3>
                                     <p className="text-gray-500 text-sm">Pagamento instantâneo</p>
                                 </div>
                                 <div className={`w-5 h-5 rounded-full border-2 ${selectedMethod === PaymentMethod.PIX
@@ -251,7 +251,7 @@ const Checkout: React.FC = () => {
                                     <CreditCard size={24} className={selectedMethod === PaymentMethod.CARD ? 'text-black' : 'text-white'} />
                                 </div>
                                 <div className="flex-1">
-                                    <h3 className="text-white font-medium">Cartão de Crédito</h3>
+                                    <h3 className="text-theme-text font-medium">Cartão de Crédito</h3>
                                     <p className="text-gray-500 text-sm">Via Mercado Pago</p>
                                 </div>
                                 <div className={`w-5 h-5 rounded-full border-2 ${selectedMethod === PaymentMethod.CARD

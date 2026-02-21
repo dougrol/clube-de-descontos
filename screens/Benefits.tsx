@@ -132,7 +132,7 @@ const Benefits: React.FC = () => {
               <Radar size={48} className="animate-spin" />
             </div>
           </div>
-          <h2 className="text-white font-bold text-xl mt-8 animate-pulse">Rastreando Ofertas...</h2>
+          <h2 className="text-theme-text font-bold text-xl mt-8 animate-pulse">Rastreando Ofertas...</h2>
           <p className="text-gold-500 text-sm mt-2 uppercase tracking-widest font-medium">Buscando Postos e Serviços</p>
         </div>
       )}
@@ -160,7 +160,7 @@ const Benefits: React.FC = () => {
               Exclusive Member
             </span>
           </div>
-          <h1 className="text-3xl md:text-5xl font-serif font-black text-white leading-tight opacity-0 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+          <h1 className="text-3xl md:text-5xl font-serif font-black text-theme-text leading-tight opacity-0 animate-slide-up" style={{ animationDelay: '0.2s' }}>
             CLUBE DE <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-600">VANTAGENS</span>
           </h1>
           <p className="text-gray-300 text-sm md:text-base mt-2 max-w-lg opacity-0 animate-slide-up" style={{ animationDelay: '0.3s' }}>
@@ -272,7 +272,7 @@ const Benefits: React.FC = () => {
                   <div className="flex-1 flex flex-col justify-between py-1">
                     <div>
                       <div className="flex justify-between items-start">
-                        <h3 className="font-bold text-white text-base leading-tight mb-1">{partner.name}</h3>
+                        <h3 className="font-bold text-theme-text text-base leading-tight mb-1">{partner.name}</h3>
                         {/* Highlight Best Conditions */}
                         {(partner.benefit.includes("Grátis") || partner.benefit.includes("30%") || partner.benefit.includes("0,15")) && (
                           <Zap size={14} className="text-gold-500 fill-gold-500 animate-pulse" />

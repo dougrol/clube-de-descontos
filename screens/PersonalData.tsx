@@ -114,10 +114,10 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
             {/* Header */}
             <div className="sticky top-0 z-20 bg-black/90 backdrop-blur-lg border-b border-white/5">
                 <div className="flex items-center p-4">
-                    <button onClick={() => navigate(-1)} className="p-2 -ml-2 text-gray-400 hover:text-white">
+                    <button onClick={() => navigate(-1)} className="p-2 -ml-2 text-gray-400 hover:text-theme-text">
                         <ChevronLeft size={24} />
                     </button>
-                    <h1 className="flex-1 text-center text-white text-sm font-bold tracking-[0.2em] uppercase">Dados Pessoais</h1>
+                    <h1 className="flex-1 text-center text-theme-text text-sm font-bold tracking-[0.2em] uppercase">Dados Pessoais</h1>
                     <div className="w-10" />
                 </div>
             </div>
@@ -147,7 +147,7 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
                                 </div>
                                 <div>
                                     <p className="text-gray-500 text-[10px] uppercase tracking-widest">Nome Completo</p>
-                                    <p className="text-white font-medium">{userData?.name}</p>
+                                    <p className="text-theme-text font-medium">{userData?.name}</p>
                                 </div>
                             </div>
                         </div>
@@ -160,7 +160,7 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
                                 </div>
                                 <div>
                                     <p className="text-gray-500 text-[10px] uppercase tracking-widest">E-mail</p>
-                                    <p className="text-white font-medium break-all">{userData?.email}</p>
+                                    <p className="text-theme-text font-medium break-all">{userData?.email}</p>
                                 </div>
                             </div>
                         </div>
@@ -174,7 +174,7 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
                                     </div>
                                     <div>
                                         <p className="text-gray-500 text-[10px] uppercase tracking-widest">Telefone</p>
-                                        <p className="text-white font-medium">{formatPhone(userData.phone)}</p>
+                                        <p className="text-theme-text font-medium">{formatPhone(userData.phone)}</p>
                                     </div>
                                 </div>
                             </div>
@@ -189,7 +189,7 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
                                     </div>
                                     <div>
                                         <p className="text-gray-500 text-[10px] uppercase tracking-widest">CPF</p>
-                                        <p className="text-white font-medium">{formatCPF(userData.cpf)}</p>
+                                        <p className="text-theme-text font-medium">{formatCPF(userData.cpf)}</p>
                                     </div>
                                 </div>
                             </div>
@@ -204,7 +204,7 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
                                     </div>
                                     <div>
                                         <p className="text-gray-500 text-[10px] uppercase tracking-widest">Associação</p>
-                                        <p className="text-white font-medium">{userData.association_name}</p>
+                                        <p className="text-theme-text font-medium">{userData.association_name}</p>
                                     </div>
                                 </div>
                             </div>
@@ -218,7 +218,7 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
                                 </div>
                                 <div>
                                     <p className="text-gray-500 text-[10px] uppercase tracking-widest">Membro Desde</p>
-                                    <p className="text-white font-medium">
+                                    <p className="text-theme-text font-medium">
                                         {new Date(userData?.created_at || '').toLocaleDateString('pt-BR', {
                                             day: '2-digit',
                                             month: 'long',

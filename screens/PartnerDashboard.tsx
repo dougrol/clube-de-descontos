@@ -176,11 +176,11 @@ const PartnerDashboard: React.FC = () => {
         }
     };
 
-    if (loading) return <div className="min-h-screen bg-black flex items-center justify-center text-white">Carregando painel...</div>;
+    if (loading) return <div className="min-h-screen bg-black flex items-center justify-center text-theme-text">Carregando painel...</div>;
 
     if (!partner) {
         return (
-            <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white p-6 text-center">
+            <div className="min-h-screen bg-black flex flex-col items-center justify-center text-theme-text p-6 text-center">
                 <h2 className="text-xl font-bold text-red-500 mb-2">Erro de Acesso</h2>
                 <p className="text-gray-400 mb-6">Não foi possível carregar o perfil do parceiro. Seus dados locais podem estar desatualizados.</p>
 
@@ -203,7 +203,7 @@ const PartnerDashboard: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen bg-obsidian-950 font-sans text-white pb-32">
+        <div className="min-h-screen bg-obsidian-950 font-sans text-theme-text pb-32">
             {/* Header */}
             <header className="bg-obsidian-900 border-b border-white/5 p-6 md:px-12 flex justify-between items-center sticky top-0 z-40 backdrop-blur-md bg-opacity-80">
                 <div className="flex items-center gap-3">
@@ -215,7 +215,7 @@ const PartnerDashboard: React.FC = () => {
                         <p className="text-[10px] text-gray-400 tracking-wider uppercase">Painel do Parceiro</p>
                     </div>
                 </div>
-                <button onClick={handleLogout} className="text-gray-400 hover:text-white transition-colors flex items-center gap-2 text-xs font-bold uppercase tracking-widest">
+                <button onClick={handleLogout} className="text-gray-400 hover:text-theme-text transition-colors flex items-center gap-2 text-xs font-bold uppercase tracking-widest">
                     Sair <LogOut size={16} />
                 </button>
             </header>
@@ -328,7 +328,7 @@ const PartnerDashboard: React.FC = () => {
                                         {stats.recentValidations.map((coupon) => (
                                             <tr key={coupon.id} className="hover:bg-white/[0.02] transition-colors">
                                                 <td className="px-6 py-4">
-                                                    <p className="text-sm font-bold text-white">{coupon.user_name || 'Membro'}</p>
+                                                    <p className="text-sm font-bold text-theme-text">{coupon.user_name || 'Membro'}</p>
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     <code className="text-[10px] bg-white/5 px-2 py-1 rounded text-gold-500 font-mono italic">{coupon.code}</code>
@@ -359,7 +359,7 @@ const PartnerDashboard: React.FC = () => {
                     <div className="bg-obsidian-900 w-full max-w-2xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
                         <div className="p-6 border-b border-white/5 flex justify-between items-center">
                             <h2 className="text-xl font-bold flex items-center gap-2"><Settings size={20} className="text-gold-500" /> Editar Dados da Loja</h2>
-                            <button onClick={() => setIsEditing(false)} className="text-gray-400 hover:text-white"><X size={24} /></button>
+                            <button onClick={() => setIsEditing(false)} className="text-gray-400 hover:text-theme-text"><X size={24} /></button>
                         </div>
 
                         <div className="p-6 overflow-y-auto custom-scrollbar space-y-6">
@@ -377,7 +377,7 @@ const PartnerDashboard: React.FC = () => {
                                         name="description"
                                         value={editForm.description}
                                         onChange={handleChange}
-                                        className="w-full bg-white/5 border border-white/10 rounded-sm px-4 py-3 text-sm text-white focus:border-gold-500 focus:bg-obsidian-900 outline-none transition-all min-h-[80px]"
+                                        className="w-full bg-white/5 border border-white/10 rounded-sm px-4 py-3 text-sm text-theme-text focus:border-gold-500 focus:bg-obsidian-900 outline-none transition-all min-h-[80px]"
                                     />
                                 </div>
 
@@ -387,7 +387,7 @@ const PartnerDashboard: React.FC = () => {
                                         name="fullRules"
                                         value={editForm.fullRules}
                                         onChange={handleChange}
-                                        className="w-full bg-white/5 border border-white/10 rounded-sm px-4 py-3 text-sm text-white focus:border-gold-500 focus:bg-obsidian-900 outline-none transition-all min-h-[80px]"
+                                        className="w-full bg-white/5 border border-white/10 rounded-sm px-4 py-3 text-sm text-theme-text focus:border-gold-500 focus:bg-obsidian-900 outline-none transition-all min-h-[80px]"
                                     />
                                 </div>
                             </div>
@@ -450,7 +450,7 @@ const PartnerDashboard: React.FC = () => {
                                                 </div>
                                             )}
                                             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                                <Camera size={24} className="text-white" />
+                                                <Camera size={24} className="text-theme-text" />
                                             </div>
                                         </div>
                                         <p className="text-[10px] text-gray-500">Clique para alterar</p>
@@ -461,7 +461,7 @@ const PartnerDashboard: React.FC = () => {
                             {/* Location Section - CONSOLIDATED */}
                             <div className="space-y-4 bg-white/5 p-4 rounded-lg border border-white/10">
                                 <div className="flex justify-between items-center">
-                                    <h4 className="text-sm font-bold text-white flex items-center gap-2"><MapPin size={16} className="text-gold-500" /> Localização e Endereço</h4>
+                                    <h4 className="text-sm font-bold text-theme-text flex items-center gap-2"><MapPin size={16} className="text-gold-500" /> Localização e Endereço</h4>
                                     <button
                                         type="button"
                                         onClick={() => {
@@ -537,7 +537,7 @@ const PartnerDashboard: React.FC = () => {
             {isValidating && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-fade-in">
                     <div className="bg-obsidian-900 w-full max-w-sm rounded-3xl border border-white/10 shadow-2xl overflow-hidden p-8 text-center relative">
-                        <button onClick={() => setIsValidating(false)} className="absolute top-4 right-4 text-gray-400 hover:text-white"><X size={24} /></button>
+                        <button onClick={() => setIsValidating(false)} className="absolute top-4 right-4 text-gray-400 hover:text-theme-text"><X size={24} /></button>
 
                         {validationStep === 0 && (
                             <div className="py-4">
@@ -581,7 +581,7 @@ const PartnerDashboard: React.FC = () => {
                                 <div className="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(34,197,94,0.4)]">
                                     <CheckCircle size={48} className="text-black" />
                                 </div>
-                                <h3 className="text-2xl font-bold text-white mb-1">Cupom Válido!</h3>
+                                <h3 className="text-2xl font-bold text-theme-text mb-1">Cupom Válido!</h3>
                                 <p className="text-green-400 font-bold mb-6">Desconto de {validatedCoupon.benefit} Aplicado</p>
 
                                 <div className="bg-white/5 rounded-xl p-4 mb-6 text-left space-y-2">

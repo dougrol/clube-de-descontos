@@ -24,7 +24,7 @@ const StatCard: React.FC<{ title: string; value: string; icon: React.ReactNode; 
     <div className="flex justify-between items-start gap-3">
       <div className="min-w-0 flex-1">
         <p className="text-gray-400 text-[10px] sm:text-xs uppercase mb-1 truncate">{title}</p>
-        <h3 className="text-xl sm:text-2xl font-bold text-white truncate">{value}</h3>
+        <h3 className="text-xl sm:text-2xl font-bold text-theme-text truncate">{value}</h3>
         {trend && <p className="text-green-500 text-[10px] sm:text-xs flex items-center mt-1 truncate"><ArrowUpRight size={12} className="shrink-0" /> <span className="truncate">{trend}</span></p>}
       </div>
       <div className="p-2 sm:p-3 bg-obsidian-900 rounded-lg text-gold-500 shrink-0">
@@ -447,7 +447,7 @@ const Admin: React.FC = () => {
     <div className="p-4 sm:p-5 pb-32 min-h-screen bg-black animate-fade-in space-y-5 sm:space-y-8">
       <header className="mb-4 sm:mb-6 flex flex-col gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-white">Painel Gestor</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-theme-text">Painel Gestor</h1>
           <p className="text-gray-400 text-xs sm:text-sm">Visão geral do negócio</p>
         </div>
 
@@ -513,7 +513,7 @@ const Admin: React.FC = () => {
 
           {/* Subscription Growth Chart - Reduced height on mobile */}
           <section className="h-48 sm:h-64 w-full bg-obsidian-800 rounded-xl p-3 sm:p-4 border border-obsidian-700">
-            <h3 className="text-xs sm:text-sm font-medium text-white mb-2">Crescimento de Assinantes</h3>
+            <h3 className="text-xs sm:text-sm font-medium text-theme-text mb-2">Crescimento de Assinantes</h3>
             <ResponsiveContainer width="100%" height="85%">
               <BarChart data={chartData.length > 0 ? chartData : [{ name: 'Sem dados', users: 0 }]}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
@@ -531,7 +531,7 @@ const Admin: React.FC = () => {
 
           {/* Partner Monitoring List - Mobile optimized with horizontal scroll */}
           <section>
-            <h3 className="text-sm sm:text-base font-medium text-white mb-3">Monitoramento de Parceiros</h3>
+            <h3 className="text-sm sm:text-base font-medium text-theme-text mb-3">Monitoramento de Parceiros</h3>
 
             {/* Mobile View: Cards */}
             <div className="grid grid-cols-1 gap-4 sm:hidden">
@@ -547,12 +547,12 @@ const Admin: React.FC = () => {
                         {partner.logoUrl ? (
                           <img src={partner.logoUrl} alt={partner.name} className="w-10 h-10 rounded-full object-cover" />
                         ) : (
-                          <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-xs text-white uppercase">
+                          <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-xs text-theme-text uppercase">
                             {partner.name.substring(0, 2)}
                           </div>
                         )}
                         <div>
-                          <h4 className="font-bold text-white text-sm">{partner.name}</h4>
+                          <h4 className="font-bold text-theme-text text-sm">{partner.name}</h4>
                           <span className="text-xs text-gold-500">{partner.category}</span>
                         </div>
                       </div>
@@ -629,7 +629,7 @@ const Admin: React.FC = () => {
                     ) : (
                       partners.map(partner => (
                         <tr key={partner.id} className="hover:bg-obsidian-700/50 transition-colors">
-                          <td className="p-2 sm:p-3 font-medium text-white">
+                          <td className="p-2 sm:p-3 font-medium text-theme-text">
                             <div className="flex items-center gap-2">
                               {partner.logoUrl ? (
                                 <img src={partner.logoUrl} alt={partner.name} className="w-6 h-6 rounded-full object-cover shrink-0" />
@@ -726,7 +726,7 @@ const Admin: React.FC = () => {
                     />
                     <div className="flex-1 min-w-0">
                       <div className="flex justify-between items-start">
-                        <h4 className="text-white font-medium text-sm truncate pr-2">{product.title}</h4>
+                        <h4 className="text-theme-text font-medium text-sm truncate pr-2">{product.title}</h4>
                         <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${product.active ? 'bg-green-500/20 text-green-500' : 'bg-gray-500/20 text-gray-400'}`}>
                           {product.active ? 'Ativo' : 'Inativo'}
                         </span>
@@ -797,7 +797,7 @@ const Admin: React.FC = () => {
                               }}
                             />
                             <div>
-                              <p className="text-white font-medium">{product.title}</p>
+                              <p className="text-theme-text font-medium">{product.title}</p>
                               <p className="text-xs text-gray-500">{product.partners?.name || 'Sem parceiro'}</p>
                             </div>
                           </div>
@@ -862,7 +862,7 @@ const Admin: React.FC = () => {
               <Card key={item.key} className="bg-obsidian-900 border-obsidian-800 p-4">
                 <div className="flex justify-between items-start mb-2">
                   <div>
-                    <h4 className="text-white font-medium">{item.label}</h4>
+                    <h4 className="text-theme-text font-medium">{item.label}</h4>
                     <p className="text-xs text-gray-500 font-mono">{item.key}</p>
                   </div>
                   {item.value !== rawContent.find(i => i.key === item.key)?.value && (
@@ -873,7 +873,7 @@ const Admin: React.FC = () => {
                   <textarea
                     value={item.value}
                     onChange={e => handleContentChange(item.key, e.target.value)}
-                    className="flex-1 bg-black border border-obsidian-700 rounded p-3 text-white focus:border-gold-500 outline-none min-h-[50px] text-sm"
+                    className="flex-1 bg-black border border-obsidian-700 rounded p-3 text-theme-text focus:border-gold-500 outline-none min-h-[50px] text-sm"
                   />
                   <button
                     onClick={() => saveContent(item.key, item.value)}
@@ -924,7 +924,7 @@ const Admin: React.FC = () => {
                   <div key={plan.id} className="bg-black/40 border border-white/5 p-3 rounded-lg">
                     <div className="flex justify-between items-start mb-2">
                       <div className="flex items-center gap-2">
-                        <span className="text-white font-medium">{plan.name}</span>
+                        <span className="text-theme-text font-medium">{plan.name}</span>
                         {plan.is_popular && (
                           <span className="bg-gold-500 text-black text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
                             <Star size={10} fill="black" /> Top
@@ -991,7 +991,7 @@ const Admin: React.FC = () => {
                       <tr key={plan.id} className="hover:bg-obsidian-700/50 transition-colors">
                         <td className="p-3">
                           <div className="flex items-center gap-2">
-                            <span className="text-white font-medium">{plan.name}</span>
+                            <span className="text-theme-text font-medium">{plan.name}</span>
                             {plan.is_popular && (
                               <span className="bg-gold-500 text-black text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
                                 <Star size={10} fill="black" /> Popular
@@ -1060,7 +1060,7 @@ const Admin: React.FC = () => {
                 type="text"
                 value={formData?.name || ''}
                 onChange={e => setFormData({ ...formData, name: e.target.value })}
-                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
               />
             </div>
             <div>
@@ -1069,7 +1069,7 @@ const Admin: React.FC = () => {
                 type="text"
                 value={formData?.companyName || ''}
                 onChange={e => setFormData({ ...formData, companyName: e.target.value })}
-                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
               />
             </div>
           </div>
@@ -1081,7 +1081,7 @@ const Admin: React.FC = () => {
                 type="text"
                 value={formData?.cnpj || ''}
                 onChange={e => setFormData({ ...formData, cnpj: e.target.value })}
-                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
               />
             </div>
             <div>
@@ -1090,7 +1090,7 @@ const Admin: React.FC = () => {
                 value={formData?.category || ''}
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 onChange={e => setFormData({ ...formData, category: e.target.value as any })}
-                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
               >
                 {Object.values(PartnerCategory).map(cat => (
                   <option key={cat} value={cat}>{cat}</option>
@@ -1106,7 +1106,7 @@ const Admin: React.FC = () => {
                 type="text"
                 value={formData?.responsibleName || ''}
                 onChange={e => setFormData({ ...formData, responsibleName: e.target.value })}
-                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
               />
             </div>
             <div>
@@ -1115,7 +1115,7 @@ const Admin: React.FC = () => {
                 type="text"
                 value={formData?.phone || ''}
                 onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
               />
             </div>
           </div>
@@ -1126,7 +1126,7 @@ const Admin: React.FC = () => {
               type="email"
               value={formData?.email || ''}
               onChange={e => setFormData({ ...formData, email: e.target.value })}
-              className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+              className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
             />
           </div>
 
@@ -1137,7 +1137,7 @@ const Admin: React.FC = () => {
                 type="text"
                 value={formData?.city || ''}
                 onChange={e => setFormData({ ...formData, city: e.target.value })}
-                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
               />
             </div>
             <div>
@@ -1145,7 +1145,7 @@ const Admin: React.FC = () => {
               <select
                 value={formData?.status || 'pending'}
                 onChange={e => setFormData({ ...formData, status: e.target.value as ExtendedPartner['status'] })}
-                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
               >
                 <option value="pending">Pendente</option>
                 <option value="active">Ativo</option>
@@ -1160,7 +1160,7 @@ const Admin: React.FC = () => {
               <select
                 value={formData?.plan || 'essencial'}
                 onChange={e => setFormData({ ...formData, plan: e.target.value as 'essencial' | 'destaque' })}
-                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
               >
                 <option value="essencial">Essencial</option>
                 <option value="destaque">Destaque</option>
@@ -1174,7 +1174,7 @@ const Admin: React.FC = () => {
                   step="0.01"
                   value={formData?.price || 0}
                   onChange={e => setFormData({ ...formData, price: parseFloat(e.target.value) })}
-                  className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+                  className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
                 />
                 <button
                   type="button"
@@ -1216,7 +1216,7 @@ const Admin: React.FC = () => {
                 type="text"
                 value={formData?.logoUrl || ''}
                 onChange={e => setFormData({ ...formData, logoUrl: e.target.value })}
-                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none text-xs"
+                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none text-xs"
               />
             </div>
             <div>
@@ -1225,7 +1225,7 @@ const Admin: React.FC = () => {
                 type="text"
                 value={formData?.coverUrl || ''}
                 onChange={e => setFormData({ ...formData, coverUrl: e.target.value })}
-                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none text-xs"
+                className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none text-xs"
               />
             </div>
           </div>
@@ -1236,7 +1236,7 @@ const Admin: React.FC = () => {
               type="text"
               value={formData?.benefit || ''}
               onChange={e => setFormData({ ...formData, benefit: e.target.value })}
-              className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+              className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
             />
           </div>
 
@@ -1245,7 +1245,7 @@ const Admin: React.FC = () => {
             <textarea
               value={formData?.fullRules || ''}
               onChange={e => setFormData({ ...formData, fullRules: e.target.value })}
-              className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none min-h-[80px]"
+              className="w-full bg-obsidian-900 border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none min-h-[80px]"
             />
           </div>
 
@@ -1253,7 +1253,7 @@ const Admin: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
-              className="px-4 py-2 text-gray-400 hover:text-white"
+              className="px-4 py-2 text-gray-400 hover:text-theme-text"
             >
               Cancelar
             </button>
@@ -1280,7 +1280,7 @@ const Admin: React.FC = () => {
               <select
                 value={productForm.partner_id || ''}
                 onChange={e => setProductForm({ ...productForm, partner_id: e.target.value })}
-                className="w-full bg-black border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+                className="w-full bg-black border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
                 required
               >
                 <option value="">Selecione um parceiro</option>
@@ -1297,7 +1297,7 @@ const Admin: React.FC = () => {
               type="text"
               value={productForm.title || ''}
               onChange={e => setProductForm({ ...productForm, title: e.target.value })}
-              className="w-full bg-black border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+              className="w-full bg-black border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
               required
             />
           </div>
@@ -1307,7 +1307,7 @@ const Admin: React.FC = () => {
             <textarea
               value={productForm.description || ''}
               onChange={e => setProductForm({ ...productForm, description: e.target.value })}
-              className="w-full bg-black border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none min-h-[80px]"
+              className="w-full bg-black border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none min-h-[80px]"
             />
           </div>
 
@@ -1319,7 +1319,7 @@ const Admin: React.FC = () => {
                 step="0.01"
                 value={productForm.price_original || ''}
                 onChange={e => setProductForm({ ...productForm, price_original: parseFloat(e.target.value) })}
-                className="w-full bg-black border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+                className="w-full bg-black border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
                 required
               />
             </div>
@@ -1330,7 +1330,7 @@ const Admin: React.FC = () => {
                 step="0.01"
                 value={productForm.price_discount || ''}
                 onChange={e => setProductForm({ ...productForm, price_discount: parseFloat(e.target.value) })}
-                className="w-full bg-black border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+                className="w-full bg-black border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
                 required
               />
             </div>
@@ -1343,7 +1343,7 @@ const Admin: React.FC = () => {
                 type="number"
                 value={productForm.stock || 0}
                 onChange={e => setProductForm({ ...productForm, stock: parseInt(e.target.value) })}
-                className="w-full bg-black border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+                className="w-full bg-black border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
               />
             </div>
             <div>
@@ -1351,7 +1351,7 @@ const Admin: React.FC = () => {
               <select
                 value={productForm.active ? 'true' : 'false'}
                 onChange={e => setProductForm({ ...productForm, active: e.target.value === 'true' })}
-                className="w-full bg-black border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+                className="w-full bg-black border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
               >
                 <option value="false">Inativo</option>
                 <option value="true">Ativo</option>
@@ -1365,7 +1365,7 @@ const Admin: React.FC = () => {
               type="text"
               value={productForm.image_url || ''}
               onChange={e => setProductForm({ ...productForm, image_url: e.target.value })}
-              className="w-full bg-black border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none"
+              className="w-full bg-black border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
               placeholder="https://..."
             />
           </div>
@@ -1374,7 +1374,7 @@ const Admin: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsProductModalOpen(false)}
-              className="px-4 py-2 text-gray-400 hover:text-white"
+              className="px-4 py-2 text-gray-400 hover:text-theme-text"
             >
               Cancelar
             </button>
@@ -1401,7 +1401,7 @@ const Admin: React.FC = () => {
               type="text"
               value={planForm.name || ''}
               onChange={e => setPlanForm({ ...planForm, name: e.target.value })}
-              className="w-full bg-black border border-obsidian-700 rounded p-3 text-white focus:border-gold-500 outline-none"
+              className="w-full bg-black border border-obsidian-700 rounded p-3 text-theme-text focus:border-gold-500 outline-none"
               placeholder="Ex: Básico, Ouro, Premium"
               required
             />
@@ -1415,7 +1415,7 @@ const Admin: React.FC = () => {
                 step="0.01"
                 value={planForm.price || ''}
                 onChange={e => setPlanForm({ ...planForm, price: parseFloat(e.target.value) })}
-                className="w-full bg-black border border-obsidian-700 rounded p-3 text-white focus:border-gold-500 outline-none"
+                className="w-full bg-black border border-obsidian-700 rounded p-3 text-theme-text focus:border-gold-500 outline-none"
                 placeholder="99.90"
                 required
               />
@@ -1426,7 +1426,7 @@ const Admin: React.FC = () => {
                 type="number"
                 value={planForm.display_order || 0}
                 onChange={e => setPlanForm({ ...planForm, display_order: parseInt(e.target.value) })}
-                className="w-full bg-black border border-obsidian-700 rounded p-3 text-white focus:border-gold-500 outline-none"
+                className="w-full bg-black border border-obsidian-700 rounded p-3 text-theme-text focus:border-gold-500 outline-none"
               />
             </div>
           </div>
@@ -1463,13 +1463,13 @@ const Admin: React.FC = () => {
                 value={newFeature}
                 onChange={e => setNewFeature(e.target.value)}
                 onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addFeature(); } }}
-                className="flex-1 bg-black border border-obsidian-700 rounded p-2 text-white focus:border-gold-500 outline-none text-sm"
+                className="flex-1 bg-black border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none text-sm"
                 placeholder="Ex: Guincho 500km, Assistência 24h..."
               />
               <button
                 type="button"
                 onClick={addFeature}
-                className="px-4 py-2 bg-obsidian-700 hover:bg-obsidian-600 text-white rounded transition-colors"
+                className="px-4 py-2 bg-obsidian-700 hover:bg-obsidian-600 text-theme-text rounded transition-colors"
               >
                 <Plus size={18} />
               </button>
@@ -1498,7 +1498,7 @@ const Admin: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsProtectionModalOpen(false)}
-              className="px-4 py-2 text-gray-400 hover:text-white"
+              className="px-4 py-2 text-gray-400 hover:text-theme-text"
             >
               Cancelar
             </button>

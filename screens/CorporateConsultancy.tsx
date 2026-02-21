@@ -53,7 +53,7 @@ const CorporateConsultancy: React.FC = () => {
                 <div className="relative z-20 p-4">
                     <button
                         onClick={() => navigate(-1)}
-                        className="p-2.5 bg-white/10 backdrop-blur-md rounded-full text-white border border-white/10 active:scale-95 transition-transform"
+                        className="p-2.5 bg-white/10 backdrop-blur-md rounded-full text-theme-text border border-white/10 active:scale-95 transition-transform"
                     >
                         <ArrowLeft size={20} />
                     </button>
@@ -64,7 +64,7 @@ const CorporateConsultancy: React.FC = () => {
                     <span className="inline-block px-3 py-1.5 bg-gold-500/15 border border-gold-500/30 rounded-full text-gold-400 text-[11px] font-bold tracking-widest uppercase mb-4">
                         Serviços B2B
                     </span>
-                    <h1 className="text-3xl font-serif font-bold text-white leading-tight mb-3">
+                    <h1 className="text-3xl font-serif font-bold text-theme-text leading-tight mb-3">
                         Consultoria para{' '}
                         <span className="text-gold-500">Associações</span>
                     </h1>
@@ -78,7 +78,7 @@ const CorporateConsultancy: React.FC = () => {
 
                 {/* Serviços Grid */}
                 <section>
-                    <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <h2 className="text-lg font-bold text-theme-text mb-4 flex items-center gap-2">
                         <Building2 size={18} className="text-gold-500" />
                         Nossos Serviços
                     </h2>
@@ -93,7 +93,7 @@ const CorporateConsultancy: React.FC = () => {
                                         {service.icon}
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <h3 className="text-base font-bold text-white mb-1">{service.title}</h3>
+                                        <h3 className="text-base font-bold text-theme-text mb-1">{service.title}</h3>
                                         <p className="text-gray-400 text-xs leading-relaxed">{service.description}</p>
                                     </div>
                                 </div>
@@ -104,7 +104,7 @@ const CorporateConsultancy: React.FC = () => {
 
                 {/* Por que escolher */}
                 <section className="bg-gradient-to-br from-white/5 to-white/[0.02] rounded-2xl p-6 border border-white/5">
-                    <h2 className="text-lg font-bold text-white mb-5">
+                    <h2 className="text-lg font-bold text-theme-text mb-5">
                         Por que a Tavares Car?
                     </h2>
 
@@ -120,15 +120,15 @@ const CorporateConsultancy: React.FC = () => {
                     {/* Stats */}
                     <div className="mt-6 pt-6 border-t border-white/10 grid grid-cols-3 gap-4">
                         <div className="text-center">
-                            <p className="text-2xl font-bold text-white">10+</p>
+                            <p className="text-2xl font-bold text-theme-text">10+</p>
                             <p className="text-[10px] text-gray-500 uppercase tracking-wider mt-1">Anos</p>
                         </div>
                         <div className="text-center border-x border-white/10">
-                            <p className="text-2xl font-bold text-white">500+</p>
+                            <p className="text-2xl font-bold text-theme-text">500+</p>
                             <p className="text-[10px] text-gray-500 uppercase tracking-wider mt-1">Empresas</p>
                         </div>
                         <div className="text-center">
-                            <p className="text-2xl font-bold text-white">98%</p>
+                            <p className="text-2xl font-bold text-theme-text">98%</p>
                             <p className="text-[10px] text-gray-500 uppercase tracking-wider mt-1">Satisfação</p>
                         </div>
                     </div>
@@ -146,7 +146,7 @@ const CorporateConsultancy: React.FC = () => {
 
                             <Button
                                 onClick={handleContact}
-                                className="w-full bg-black text-white hover:bg-gray-900 border-none h-14 text-sm font-bold shadow-xl active:scale-[0.98] transition-transform"
+                                className="w-full bg-black text-theme-text hover:bg-gray-900 border-none h-14 text-sm font-bold shadow-xl active:scale-[0.98] transition-transform"
                             >
                                 <MessageCircle size={18} className="mr-2" />
                                 FALAR COM CONSULTOR

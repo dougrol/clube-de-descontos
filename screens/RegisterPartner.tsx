@@ -90,7 +90,7 @@ const RegisterPartner: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-obsidian-950 font-sans text-white pb-20">
+        <div className="min-h-screen bg-obsidian-950 font-sans text-theme-text pb-20">
 
             {/* Success State */}
             {step === 2 && (
@@ -114,7 +114,7 @@ const RegisterPartner: React.FC = () => {
             <div className="pt-8 px-6 md:px-12 mb-8">
                 <button
                     onClick={() => navigate('/login')}
-                    className="flex items-center text-gray-400 hover:text-white transition-colors group"
+                    className="flex items-center text-gray-400 hover:text-theme-text transition-colors group"
                 >
                     <ArrowLeft size={20} className="mr-2 group-hover:-translate-x-1 transition-transform" />
                     Voltar
@@ -199,7 +199,7 @@ const RegisterPartner: React.FC = () => {
                                 name="category"
                                 value={formData.category}
                                 onChange={handleChange}
-                                className="w-full bg-obsidian-950/50 border border-white/10 rounded-xl px-4 py-3 pl-11 text-sm text-white focus:border-gold-500 focus:ring-1 focus:ring-gold-500 outline-none transition-all appearance-none"
+                                className="w-full bg-obsidian-950/50 border border-white/10 rounded-xl px-4 py-3 pl-11 text-sm text-theme-text focus:border-gold-500 focus:ring-1 focus:ring-gold-500 outline-none transition-all appearance-none"
                             >
                                 {Object.values(PartnerCategory).map((cat) => (
                                     <option key={cat} value={cat}>{cat}</option>

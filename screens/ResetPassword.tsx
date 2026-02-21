@@ -171,7 +171,7 @@ const ResetPassword: React.FC = () => {
                     <div className="inline-flex items-center justify-center w-20 h-20 bg-gold-500/10 rounded-2xl border border-gold-500/20 mb-6">
                         <ShieldCheck size={40} className="text-gold-500" />
                     </div>
-                    <h1 className="text-2xl font-bold text-white mb-2">
+                    <h1 className="text-2xl font-bold text-theme-text mb-2">
                         Nova Senha
                     </h1>
                     <p className="text-gray-500 text-sm">
@@ -189,7 +189,7 @@ const ResetPassword: React.FC = () => {
                             <div className="inline-flex items-center justify-center w-16 h-16 bg-green-500/10 rounded-full mb-4">
                                 <CheckCircle size={32} className="text-green-500" />
                             </div>
-                            <h3 className="text-white font-semibold mb-2">Senha Redefinida!</h3>
+                            <h3 className="text-theme-text font-semibold mb-2">Senha Redefinida!</h3>
                             <p className="text-gray-400 text-sm mb-6">
                                 Sua senha foi alterada com sucesso. Redirecionando para o login...
                             </p>
@@ -199,7 +199,7 @@ const ResetPassword: React.FC = () => {
                             <div className="inline-flex items-center justify-center w-16 h-16 bg-red-500/10 rounded-full mb-4">
                                 <AlertCircle size={32} className="text-red-500" />
                             </div>
-                            <h3 className="text-white font-semibold mb-2">Link Inválido</h3>
+                            <h3 className="text-theme-text font-semibold mb-2">Link Inválido</h3>
                             <p className="text-gray-400 text-sm mb-6">
                                 Este link de redefinição é inválido ou já expirou. Solicite um novo link.
                             </p>

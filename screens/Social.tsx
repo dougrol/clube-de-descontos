@@ -15,12 +15,12 @@ const Social: React.FC = () => {
           <div className="absolute inset-0 bg-gradient-to-tr from-yellow-400 via-red-500 to-emerald-600 rounded-[2rem] blur-xl opacity-50 animate-pulse-slow"></div>
           <div className="relative w-full h-full bg-gradient-to-tr from-yellow-400 via-red-500 to-emerald-600 rounded-[2rem] flex items-center justify-center p-1 shadow-2xl">
             <div className="bg-black w-full h-full rounded-[1.8rem] flex items-center justify-center">
-              <Instagram size={48} className="text-white" />
+              <Instagram size={48} className="text-theme-text" />
             </div>
           </div>
         </div>
 
-        <h1 className="text-3xl md:text-4xl font-serif font-bold text-white mb-2">
+        <h1 className="text-3xl md:text-4xl font-serif font-bold text-theme-text mb-2">
           Siga a <span className="text-gold-500">Tavares Car</span>
         </h1>
 

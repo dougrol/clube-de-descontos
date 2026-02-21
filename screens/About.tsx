@@ -46,12 +46,12 @@ const About: React.FC = () => {
     ];
 
     return (
-        <div className="bg-obsidian-950 min-h-screen pb-32 font-sans text-white">
+        <div className="bg-obsidian-950 min-h-screen pb-32 font-sans text-theme-text">
             {/* Header */}
             <div className="pt-8 px-6 md:px-12">
                 <button
                     onClick={() => navigate(-1)}
-                    className="flex items-center text-gray-400 hover:text-white transition-colors mb-8 group"
+                    className="flex items-center text-gray-400 hover:text-theme-text transition-colors mb-8 group"
                 >
                     <ArrowLeft size={20} className="mr-2 group-hover:-translate-x-1 transition-transform" />
                     Voltar
@@ -77,7 +77,7 @@ const About: React.FC = () => {
                         <div className="w-12 h-12 bg-gold-500/10 rounded-full flex items-center justify-center mb-6 text-gold-500">
                             <Target size={24} />
                         </div>
-                        <h3 className="text-2xl font-bold mb-4 text-white">Missão</h3>
+                        <h3 className="text-2xl font-bold mb-4 text-theme-text">Missão</h3>
                         <p className="text-gray-400 leading-relaxed">
                             Impactar vidas e transformar pessoas por meio de oportunidades profissionais no setor automotivo.
                         </p>
@@ -88,7 +88,7 @@ const About: React.FC = () => {
                         <div className="w-12 h-12 bg-signal-500/10 rounded-full flex items-center justify-center mb-6 text-signal-500">
                             <Eye size={24} />
                         </div>
-                        <h3 className="text-2xl font-bold mb-4 text-white">Visão</h3>
+                        <h3 className="text-2xl font-bold mb-4 text-theme-text">Visão</h3>
                         <p className="text-gray-400 leading-relaxed">
                             Ser referência nacional em consultoria, capacitação e liderança em proteção veicular.
                         </p>
@@ -99,7 +99,7 @@ const About: React.FC = () => {
                         <div className="w-12 h-12 bg-emerald-500/10 rounded-full flex items-center justify-center mb-6 text-emerald-500">
                             <Heart size={24} />
                         </div>
-                        <h3 className="text-2xl font-bold mb-4 text-white">Valores</h3>
+                        <h3 className="text-2xl font-bold mb-4 text-theme-text">Valores</h3>
                         <ul className="space-y-3 text-gray-400">
                             <li className="flex items-center gap-2"><Award size={16} className="text-gold-500" /> Comprometimento</li>
                             <li className="flex items-center gap-2"><Award size={16} className="text-gold-500" /> Integridade</li>
@@ -133,7 +133,7 @@ const About: React.FC = () => {
                                     <span className="text-signal-500 font-bold text-xs tracking-[0.2em] uppercase mb-1 block">
                                         {partner.role}
                                     </span>
-                                    <h3 className="text-2xl font-serif font-bold text-white">
+                                    <h3 className="text-2xl font-serif font-bold text-theme-text">
                                         {partner.name.split(' ')[0]} <span className="text-gold-500">{partner.name.split(' ').slice(1).join(' ')}</span>
                                     </h3>
                                 </div>
@@ -155,7 +155,7 @@ const About: React.FC = () => {
             <section className="px-6 md:px-12 mt-24 max-w-[1600px] mx-auto text-center">
                 <div className="mb-12">
                     <span className="text-gold-500 font-bold tracking-[0.2em] text-sm uppercase">Parcerias</span>
-                    <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mt-2">Empresas Parceiras</h2>
+                    <h2 className="text-3xl md:text-4xl font-serif font-bold text-theme-text mt-2">Empresas Parceiras</h2>
                     <div className="h-1 w-24 bg-gradient-to-r from-transparent via-gold-500 to-transparent mx-auto mt-6"></div>
                 </div>
 

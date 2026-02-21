@@ -55,7 +55,7 @@ const ProductDetail: React.FC = () => {
 
     if (!product) {
         return (
-            <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white p-10">
+            <div className="min-h-screen bg-black flex flex-col items-center justify-center text-theme-text p-10">
                 <Package size={48} className="text-gray-600 mb-4" />
                 <p>Produto não encontrado</p>
                 <Button className="mt-4" onClick={() => navigate('/loja')}>
@@ -76,7 +76,7 @@ const ProductDetail: React.FC = () => {
             <div className="relative h-80 w-full">
                 <button
                     onClick={() => navigate(-1)}
-                    className="absolute top-4 left-4 z-20 h-10 w-10 bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors"
+                    className="absolute top-4 left-4 z-20 h-10 w-10 bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center text-theme-text hover:bg-black/70 transition-colors"
                 >
                     <ArrowLeft size={20} />
                 </button>
@@ -94,7 +94,7 @@ const ProductDetail: React.FC = () => {
 
                 {/* Type Badge */}
                 {isService ? (
-                    <div className="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white text-sm font-bold px-3 py-1.5 rounded-lg flex items-center gap-2">
+                    <div className="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-theme-text text-sm font-bold px-3 py-1.5 rounded-lg flex items-center gap-2">
                         <Wrench size={16} /> SERVIÇO
                     </div>
                 ) : hasDiscount && (
@@ -123,7 +123,7 @@ const ProductDetail: React.FC = () => {
 
                 {/* Title & Price */}
                 <div>
-                    <h1 className="text-2xl font-bold text-white mb-3">{product.title}</h1>
+                    <h1 className="text-2xl font-bold text-theme-text mb-3">{product.title}</h1>
                     <div className="flex items-end gap-3">
                         <span className="text-3xl font-bold text-gold-500">
                             {formatPrice(product.priceDiscount)}
@@ -148,7 +148,7 @@ const ProductDetail: React.FC = () => {
 
                 {/* Description */}
                 <Card className="bg-obsidian-900/50 border-obsidian-800">
-                    <h3 className="font-semibold text-white mb-2">Descrição</h3>
+                    <h3 className="font-semibold text-theme-text mb-2">Descrição</h3>
                     <p className="text-gray-400 text-sm leading-relaxed">
                         {product.description || 'Sem descrição disponível.'}
                     </p>
@@ -157,7 +157,7 @@ const ProductDetail: React.FC = () => {
                 {/* Service: How it works */}
                 {isService && (
                     <Card className="bg-blue-500/10 border-blue-500/30">
-                        <h3 className="font-semibold text-white mb-3 flex items-center gap-2">
+                        <h3 className="font-semibold text-theme-text mb-3 flex items-center gap-2">
                             <Clock size={18} className="text-blue-400" />
                             Como funciona
                         </h3>
@@ -201,22 +201,22 @@ const ProductDetail: React.FC = () => {
                 {!isService && product.stock > 0 && (
                     <Card className="bg-obsidian-900/50 border-obsidian-800">
                         <div className="flex items-center justify-between">
-                            <span className="text-white font-medium">Quantidade</span>
+                            <span className="text-theme-text font-medium">Quantidade</span>
                             <div className="flex items-center gap-4">
                                 <button
                                     onClick={() => handleQuantityChange(-1)}
                                     disabled={quantity <= 1}
-                                    className="h-10 w-10 rounded-lg bg-obsidian-800 text-white flex items-center justify-center disabled:opacity-50 hover:bg-obsidian-700 transition-colors"
+                                    className="h-10 w-10 rounded-lg bg-obsidian-800 text-theme-text flex items-center justify-center disabled:opacity-50 hover:bg-obsidian-700 transition-colors"
                                 >
                                     <Minus size={18} />
                                 </button>
-                                <span className="text-xl font-bold text-white w-8 text-center">
+                                <span className="text-xl font-bold text-theme-text w-8 text-center">
                                     {quantity}
                                 </span>
                                 <button
                                     onClick={() => handleQuantityChange(1)}
                                     disabled={quantity >= product.stock}
-                                    className="h-10 w-10 rounded-lg bg-obsidian-800 text-white flex items-center justify-center disabled:opacity-50 hover:bg-obsidian-700 transition-colors"
+                                    className="h-10 w-10 rounded-lg bg-obsidian-800 text-theme-text flex items-center justify-center disabled:opacity-50 hover:bg-obsidian-700 transition-colors"
                                 >
                                     <Plus size={18} />
                                 </button>
@@ -231,7 +231,7 @@ const ProductDetail: React.FC = () => {
                         <div className="flex items-center gap-3">
                             <Star size={24} className="text-gold-500 fill-gold-500" />
                             <div>
-                                <p className="text-white font-semibold">Benefício Exclusivo</p>
+                                <p className="text-theme-text font-semibold">Benefício Exclusivo</p>
                                 <p className="text-gray-400 text-sm">Apenas para associados Tavares Car</p>
                             </div>
                         </div>

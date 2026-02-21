@@ -71,10 +71,10 @@ const MyCoupons: React.FC = () => {
             {/* Header */}
             <div className="sticky top-0 z-20 bg-black/90 backdrop-blur-lg border-b border-white/5">
                 <div className="flex items-center p-4">
-                    <button onClick={() => navigate(-1)} className="p-2 -ml-2 text-gray-400 hover:text-white">
+                    <button onClick={() => navigate(-1)} className="p-2 -ml-2 text-gray-400 hover:text-theme-text">
                         <ChevronLeft size={24} />
                     </button>
-                    <h1 className="flex-1 text-center text-white text-sm font-bold tracking-[0.2em] uppercase">Meus Cupons</h1>
+                    <h1 className="flex-1 text-center text-theme-text text-sm font-bold tracking-[0.2em] uppercase">Meus Cupons</h1>
                     <button onClick={loadCoupons} className="p-2 -mr-2 text-gold-500 hover:text-gold-400">
                         <RefreshCw size={20} className={loading ? 'animate-spin' : ''} />
                     </button>
@@ -114,7 +114,7 @@ const MyCoupons: React.FC = () => {
                         <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mb-4">
                             <Ticket size={32} className="text-gray-600" />
                         </div>
-                        <h3 className="text-white font-semibold mb-2">Nenhum cupom encontrado</h3>
+                        <h3 className="text-theme-text font-semibold mb-2">Nenhum cupom encontrado</h3>
                         <p className="text-gray-500 text-sm max-w-xs">
                             {filter === 'all'
                                 ? 'Acesse nossos parceiros e gere seu primeiro cupom de desconto!'
@@ -148,7 +148,7 @@ const MyCoupons: React.FC = () => {
                                             <Store size={20} className="text-gold-500" />
                                         </div>
                                         <div>
-                                            <h3 className="text-white font-semibold text-sm">{coupon.partner_name}</h3>
+                                            <h3 className="text-theme-text font-semibold text-sm">{coupon.partner_name}</h3>
                                             <p className="text-gray-500 text-xs">{coupon.benefit}</p>
                                         </div>
                                     </div>
@@ -192,12 +192,12 @@ const MyCoupons: React.FC = () => {
                     <div className="bg-obsidian-900 w-full max-w-sm rounded-3xl border border-gold-500/30 p-8 text-center relative animate-scale-up shadow-[0_0_50px_rgba(212,175,55,0.1)]">
                         <button
                             onClick={() => setSelectedCoupon(null)}
-                            className="absolute top-4 right-4 p-2 bg-white/5 rounded-full text-gray-400 hover:text-white hover:bg-white/10"
+                            className="absolute top-4 right-4 p-2 bg-white/5 rounded-full text-gray-400 hover:text-theme-text hover:bg-white/10"
                         >
                             <X size={20} />
                         </button>
 
-                        <h3 className="text-xl font-bold text-white mb-1">{selectedCoupon.partner_name}</h3>
+                        <h3 className="text-xl font-bold text-theme-text mb-1">{selectedCoupon.partner_name}</h3>
                         <p className="text-gold-500 font-medium mb-6">{selectedCoupon.benefit}</p>
 
                         <div className="mb-6 flex justify-center">

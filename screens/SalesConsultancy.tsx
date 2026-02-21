@@ -29,8 +29,8 @@ const SalesConsultancy: React.FC = () => {
       <div className="min-h-screen bg-black pb-24 animate-fade-in">
          {/* Header */}
          <div className="p-5 flex items-center justify-between border-b border-white/10 sticky top-0 bg-black/90 backdrop-blur-md z-20">
-            <button onClick={() => navigate(-1)} className="text-white"><ArrowLeft /></button>
-            <h1 className="text-white font-bold uppercase tracking-widest text-sm">Parcerias</h1>
+            <button onClick={() => navigate(-1)} className="text-theme-text"><ArrowLeft /></button>
+            <h1 className="text-theme-text font-bold uppercase tracking-widest text-sm">Parcerias</h1>
             <div className="w-6" />
          </div>
 
@@ -46,28 +46,28 @@ const SalesConsultancy: React.FC = () => {
                   <div className="flex items-center gap-2 mb-3">
                      <span className="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">Parceiro Oficial</span>
                   </div>
-                  <h2 className="text-2xl font-bold text-white mb-1">TL+Crédito</h2>
+                  <h2 className="text-2xl font-bold text-theme-text mb-1">TL+Crédito</h2>
                   <p className="text-blue-200 text-sm font-medium mb-4">Soluções Financeiras & Consórcios</p>
 
                   <div className="space-y-3 mb-6">
                      <div className="flex items-start gap-3">
                         <div className="bg-blue-900/50 p-1.5 rounded text-blue-400 mt-0.5"><Percent size={14} /></div>
                         <div>
-                           <h4 className="text-white font-bold text-sm">Empréstimos Consignados</h4>
+                           <h4 className="text-theme-text font-bold text-sm">Empréstimos Consignados</h4>
                            <p className="text-gray-400 text-xs">Todos os tipos disponiveis para você.</p>
                         </div>
                      </div>
                      <div className="flex items-start gap-3">
                         <div className="bg-blue-900/50 p-1.5 rounded text-blue-400 mt-0.5"><Car size={14} /></div>
                         <div>
-                           <h4 className="text-white font-bold text-sm">Consórcios de Veículos</h4>
+                           <h4 className="text-theme-text font-bold text-sm">Consórcios de Veículos</h4>
                            <p className="text-gray-400 text-xs">Planeje seu carro novo com segurança.</p>
                         </div>
                      </div>
                      <div className="flex items-start gap-3">
                         <div className="bg-blue-900/50 p-1.5 rounded text-blue-400 mt-0.5"><Banknote size={14} /></div>
                         <div>
-                           <h4 className="text-white font-bold text-sm">Empréstimo com Garantia</h4>
+                           <h4 className="text-theme-text font-bold text-sm">Empréstimo com Garantia</h4>
                            <p className="text-gray-400 text-xs">Use seu veículo como garantia para melhores taxas.</p>
                         </div>
                      </div>
@@ -84,7 +84,7 @@ const SalesConsultancy: React.FC = () => {
 
             {/* Dynamic Partners List */}
             <div className="space-y-4">
-               <h3 className="text-white font-bold text-sm uppercase tracking-widest mb-4">Nossos Parceiros</h3>
+               <h3 className="text-theme-text font-bold text-sm uppercase tracking-widest mb-4">Nossos Parceiros</h3>
                
                {loading ? (
                   <div className="flex justify-center py-10 text-gold-500">
@@ -113,7 +113,7 @@ const SalesConsultancy: React.FC = () => {
                         <div className="flex-1 flex flex-col justify-between py-0.5">
                            <div>
                               <div className="flex justify-between items-start">
-                                 <h4 className="font-bold text-white text-sm leading-tight mb-1">{partner.name}</h4>
+                                 <h4 className="font-bold text-theme-text text-sm leading-tight mb-1">{partner.name}</h4>
                                  {partner.benefit.includes("%") && (
                                     <Tag size={12} className="text-gold-500" />
                                  )}

@@ -85,7 +85,7 @@ const AdminLogin: React.FC = () => {
                     <div className="inline-flex items-center justify-center w-20 h-20 bg-gold-500/10 rounded-2xl border border-gold-500/20 mb-6">
                         <ShieldAlert size={40} className="text-gold-500" />
                     </div>
-                    <h1 className="text-2xl font-bold text-white mb-2">
+                    <h1 className="text-2xl font-bold text-theme-text mb-2">
                         Painel Administrativo
                     </h1>
                     <p className="text-gray-500 text-sm">

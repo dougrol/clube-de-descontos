@@ -130,13 +130,13 @@ const StorePage: React.FC = () => {
                 {/* Carousel Controls */}
                 <button
                     onClick={prevSlide}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/30 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/50 transition-colors"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/30 backdrop-blur-sm rounded-full flex items-center justify-center text-theme-text hover:bg-black/50 transition-colors"
                 >
                     <ChevronLeft size={18} />
                 </button>
                 <button
                     onClick={nextSlide}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/30 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/50 transition-colors"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/30 backdrop-blur-sm rounded-full flex items-center justify-center text-theme-text hover:bg-black/50 transition-colors"
                 >
                     <ChevronRight size={18} />
                 </button>
@@ -170,7 +170,7 @@ const StorePage: React.FC = () => {
                             >
                                 <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${cat.color} flex items-center justify-center shadow-lg ${selectedCategory === cat.id ? 'ring-2 ring-gold-500 ring-offset-2 ring-offset-black' : ''
                                     }`}>
-                                    <IconComponent size={20} className="text-white" />
+                                    <IconComponent size={20} className="text-theme-text" />
                                 </div>
                                 <span className="text-[10px] text-gray-400 font-medium text-center leading-tight">
                                     {cat.label}
@@ -192,7 +192,7 @@ const StorePage: React.FC = () => {
                                 placeholder="Buscar na loja..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full bg-black/50 border border-obsidian-700 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-gray-500 focus:border-gold-500 focus:ring-1 focus:ring-gold-500/50 transition-all outline-none"
+                                className="w-full bg-black/50 border border-obsidian-700 rounded-xl py-3 pl-10 pr-4 text-theme-text placeholder:text-gray-500 focus:border-gold-500 focus:ring-1 focus:ring-gold-500/50 transition-all outline-none"
                             />
                         </div>
                     </div>
@@ -217,7 +217,7 @@ const StorePage: React.FC = () => {
                             <section className="mt-6">
                                 <div className="flex items-center gap-2 mb-4">
                                     <Flame size={20} className="text-orange-500" />
-                                    <h2 className="text-lg font-bold text-white">Mais Vendidos</h2>
+                                    <h2 className="text-lg font-bold text-theme-text">Mais Vendidos</h2>
                                 </div>
                                 <div className="grid grid-cols-2 gap-3">
                                     {hotProducts.map((product) => (
@@ -239,7 +239,7 @@ const StorePage: React.FC = () => {
                             <section className="mt-8">
                                 <div className="flex items-center gap-2 mb-4">
                                     <Zap size={20} className="text-gold-500" />
-                                    <h2 className="text-lg font-bold text-white">Novidades</h2>
+                                    <h2 className="text-lg font-bold text-theme-text">Novidades</h2>
                                 </div>
                                 <div className="grid grid-cols-2 gap-3">
                                     {newProducts.map((product) => (
@@ -261,7 +261,7 @@ const StorePage: React.FC = () => {
                             <section className="mt-8">
                                 <div className="flex items-center gap-2 mb-4">
                                     <ShoppingBag size={20} className="text-gray-400" />
-                                    <h2 className="text-lg font-bold text-white">Todos os Produtos</h2>
+                                    <h2 className="text-lg font-bold text-theme-text">Todos os Produtos</h2>
                                 </div>
                                 <div className="grid grid-cols-2 gap-3">
                                     {allProducts.slice(8).map((product) => (
@@ -324,21 +324,21 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
                 {/* Service Badge */}
                 {isService && (
-                    <div className="absolute top-2 left-2 bg-gradient-to-r from-blue-600 to-cyan-500 text-white text-[9px] font-bold px-2 py-1 rounded-full flex items-center gap-1">
+                    <div className="absolute top-2 left-2 bg-gradient-to-r from-blue-600 to-cyan-500 text-theme-text text-[9px] font-bold px-2 py-1 rounded-full flex items-center gap-1">
                         <Wrench size={10} /> SERVIÇO
                     </div>
                 )}
 
                 {/* Discount Badge - Only for products */}
                 {hasDiscount && !isService && (
-                    <div className="absolute top-2 left-2 bg-gradient-to-r from-red-600 to-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-lg">
+                    <div className="absolute top-2 left-2 bg-gradient-to-r from-red-600 to-red-500 text-theme-text text-[10px] font-bold px-2 py-1 rounded-full shadow-lg">
                         -{discountPercent}% OFF
                     </div>
                 )}
 
                 {/* Hot/New Badge */}
                 {badge === 'hot' && (
-                    <div className="absolute top-2 right-2 bg-gradient-to-r from-orange-600 to-amber-500 text-white text-[9px] font-bold px-2 py-1 rounded-full flex items-center gap-1">
+                    <div className="absolute top-2 right-2 bg-gradient-to-r from-orange-600 to-amber-500 text-theme-text text-[9px] font-bold px-2 py-1 rounded-full flex items-center gap-1">
                         <Flame size={10} /> TOP
                     </div>
                 )}
@@ -371,7 +371,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 </p>
 
                 {/* Title */}
-                <h3 className="font-medium text-white text-sm leading-tight line-clamp-2 mb-2 min-h-[2.5rem]">
+                <h3 className="font-medium text-theme-text text-sm leading-tight line-clamp-2 mb-2 min-h-[2.5rem]">
                     {product.title}
                 </h3>
 

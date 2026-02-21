@@ -60,7 +60,7 @@ const PartnerDetail: React.FC = () => {
   };
 
   if (loading) return <div className="h-screen flex items-center justify-center bg-black text-gold-500">Carregando...</div>;
-  if (!partner) return <div className="p-10 text-center text-white bg-black h-screen">Parceiro não encontrado</div>;
+  if (!partner) return <div className="p-10 text-center text-theme-text bg-black h-screen">Parceiro não encontrado</div>;
 
   const defaultCover = 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=75&w=1080&auto=format&fit=crop';
   const defaultLogo = `https://ui-avatars.com/api/?name=${encodeURIComponent(partner.name || 'P')}&background=F59E0B&color=000000`;
@@ -72,7 +72,7 @@ const PartnerDetail: React.FC = () => {
         <div className="absolute top-4 left-4 z-20">
           <button
             onClick={() => navigate(-1)}
-            className="h-10 w-10 bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors"
+            className="h-10 w-10 bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center text-theme-text hover:bg-black/70 transition-colors"
           >
             <ArrowLeft size={20} />
           </button>
@@ -109,7 +109,7 @@ const PartnerDetail: React.FC = () => {
       <div className="mt-12 px-5 space-y-6">
         <div>
           <div className="flex justify-between items-start">
-            <h1 className="text-2xl font-bold text-white mb-1 w-3/4 leading-tight">{partner.name}</h1>
+            <h1 className="text-2xl font-bold text-theme-text mb-1 w-3/4 leading-tight">{partner.name}</h1>
             <Badge>{partner.category}</Badge>
           </div>
 
@@ -206,7 +206,7 @@ const PartnerDetail: React.FC = () => {
                 </div>
                 <div>
                   <p className="text-xs text-gray-500">Telefone</p>
-                  <a href={`tel:${partner.phone.replace(/\D/g, '')}`} className="text-sm text-white hover:text-gold-500 transition-colors">
+                  <a href={`tel:${partner.phone.replace(/\D/g, '')}`} className="text-sm text-theme-text hover:text-gold-500 transition-colors">
                     {partner.phone}
                   </a>
                 </div>
@@ -220,7 +220,7 @@ const PartnerDetail: React.FC = () => {
                 </div>
                 <div>
                   <p className="text-xs text-gray-500">Email</p>
-                  <a href={`mailto:${partner.email}`} className="text-sm text-white hover:text-gold-500 transition-colors">
+                  <a href={`mailto:${partner.email}`} className="text-sm text-theme-text hover:text-gold-500 transition-colors">
                     {partner.email}
                   </a>
                 </div>
@@ -234,7 +234,7 @@ const PartnerDetail: React.FC = () => {
                 </div>
                 <div>
                   <p className="text-xs text-gray-500">Responsável</p>
-                  <p className="text-sm text-white">{partner.responsibleName}</p>
+                  <p className="text-sm text-theme-text">{partner.responsibleName}</p>
                 </div>
               </div>
             )}
@@ -245,7 +245,7 @@ const PartnerDetail: React.FC = () => {
                 </div>
                 <div>
                   <p className="text-xs text-gray-500">Razão Social</p>
-                  <p className="text-sm text-white">{partner.companyName}</p>
+                  <p className="text-sm text-theme-text">{partner.companyName}</p>
                 </div>
               </div>
             )}
@@ -263,7 +263,7 @@ const PartnerDetail: React.FC = () => {
           <div className="flex gap-3">
             <Info className="text-gray-500 flex-shrink-0 mt-1" size={18} />
             <div>
-              <h3 className="font-semibold text-white text-sm">Regras de Uso</h3>
+              <h3 className="font-semibold text-theme-text text-sm">Regras de Uso</h3>
               <p className="text-gray-400 text-sm leading-relaxed mt-1">{partner.fullRules || 'Válido mediante apresentação do cupom/QR Code.'}</p>
             </div>
           </div>
@@ -271,7 +271,7 @@ const PartnerDetail: React.FC = () => {
           <div className="flex gap-3">
             <Info className="text-gray-500 flex-shrink-0 mt-1" size={18} />
             <div>
-              <h3 className="font-semibold text-white text-sm">Como usar</h3>
+              <h3 className="font-semibold text-theme-text text-sm">Como usar</h3>
               <p className="text-gray-400 text-sm leading-relaxed mt-1">
                 {partner.isOnline
                   ? 'Clique em resgatar para gerar o código promocional e use no site do parceiro.'

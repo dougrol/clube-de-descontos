@@ -48,7 +48,7 @@ const Home: React.FC = () => {
   const firstName = user?.user_metadata?.name?.split(' ')[0] || 'Membro';
 
   return (
-    <div className="relative min-h-screen bg-obsidian-950 font-sans text-white overflow-hidden pb-32">
+    <div className="relative min-h-screen bg-obsidian-950 font-sans text-theme-text overflow-hidden pb-32">
 
       {/* 1. Dynamic Wave Background */}
       <WaveBackground />
@@ -59,7 +59,7 @@ const Home: React.FC = () => {
         {/* 2. Header */}
         <header className="flex items-center justify-between mb-8 animate-fade-in">
           <div>
-            <h1 className="font-serif text-2xl md:text-3xl text-white">
+            <h1 className="font-serif text-2xl md:text-3xl text-theme-text">
               Olá, <span className="text-gold-500 font-bold">{firstName}</span>
             </h1>
             <p className="text-gray-400 text-xs md:text-sm">Bem-vindo ao seu Clube Exclusive</p>
@@ -137,7 +137,7 @@ const Home: React.FC = () => {
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                   Consultoria Especializada
                 </span>
-                <h3 className="text-lg font-bold text-white mb-1">Escola de Negócios</h3>
+                <h3 className="text-lg font-bold text-theme-text mb-1">Escola de Negócios</h3>
                 <p className="text-gray-400 text-xs max-w-[180px] leading-relaxed">Treinamentos exclusivos para alta performance em vendas.</p>
               </div>
               <div className="w-10 h-10 bg-emerald-600/20 rounded-full flex items-center justify-center border border-emerald-500/30 group-hover:bg-emerald-600 group-hover:text-white transition-all">
@@ -158,11 +158,11 @@ const Home: React.FC = () => {
                   <ShoppingBag size={10} className="animate-bounce" />
                   Novidade
                 </span>
-                <h3 className="text-lg font-bold text-white mb-1">Achadinhos Shopee</h3>
+                <h3 className="text-lg font-bold text-theme-text mb-1">Achadinhos Shopee</h3>
                 <p className="text-gray-400 text-xs max-w-[180px] leading-relaxed">Ofertas exclusivas selecionadas para você.</p>
               </div>
               <div className="w-10 h-10 bg-signal-500 rounded-full flex items-center justify-center shadow-lg shadow-signal-500/30 group-hover:scale-110 transition-transform">
-                <ShoppingBag size={18} className="text-white" />
+                <ShoppingBag size={18} className="text-theme-text" />
               </div>
             </div>
           </div>
@@ -171,7 +171,7 @@ const Home: React.FC = () => {
         {/* 4. Feature Grid (Replaces Bento) */}
         <div className="mb-12 animate-slide-up" style={{ animationDelay: '0.2s' }}>
           <div className="flex items-center justify-between mb-6 px-2">
-            <h3 className="font-bold text-white text-lg">O que você precisa?</h3>
+            <h3 className="font-bold text-theme-text text-lg">O que você precisa?</h3>
           </div>
           <AppGrid />
         </div>
@@ -179,8 +179,8 @@ const Home: React.FC = () => {
         {/* 5. Partners Carousel */}
         <div className="animate-slide-up" style={{ animationDelay: '0.3s' }}>
           <div className="flex items-center justify-between mb-6 px-2">
-            <h3 className="font-bold text-white text-lg">Clube de Vantagens</h3>
-            <button onClick={() => navigate('/benefits')} className="text-gold-500 text-xs font-bold tracking-widest uppercase hover:text-white transition-colors">Ver Todos</button>
+            <h3 className="font-bold text-theme-text text-lg">Clube de Vantagens</h3>
+            <button onClick={() => navigate('/benefits')} className="text-gold-500 text-xs font-bold tracking-widest uppercase hover:text-theme-text transition-colors">Ver Todos</button>
           </div>
 
           <div className="relative w-full overflow-hidden -mx-6 px-6 md:mx-0 md:px-0">
@@ -200,7 +200,7 @@ const Home: React.FC = () => {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900 to-transparent opacity-80"></div>
                       <div className="absolute bottom-4 left-4 right-4">
-                        <h4 className="text-xl font-bold text-white leading-tight mb-1">{partner.name}</h4>
+                        <h4 className="text-xl font-bold text-theme-text leading-tight mb-1">{partner.name}</h4>
                         <span className="text-[10px] uppercase tracking-wider text-gold-500 font-bold bg-black/30 backdrop-blur px-2 py-1 rounded-full">
                           {partner.category}
                         </span>

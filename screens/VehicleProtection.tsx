@@ -54,10 +54,10 @@ const Protection: React.FC = () => {
             <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[80px] pointer-events-none"></div>
 
             <div className="flex items-center gap-4 relative z-10 mb-4">
-               <button onClick={() => step === 'plans' ? setStep('vehicle-select') : navigate(-1)} className="p-2 bg-white/5 rounded-full text-white">
+               <button onClick={() => step === 'plans' ? setStep('vehicle-select') : navigate(-1)} className="p-2 bg-white/5 rounded-full text-theme-text">
                   <ArrowLeft size={20} />
                </button>
-               <h1 className="text-xl font-bold text-white">Simulação Online</h1>
+               <h1 className="text-xl font-bold text-theme-text">Simulação Online</h1>
             </div>
 
             <div className="relative z-10">
@@ -75,7 +75,7 @@ const Protection: React.FC = () => {
 
             {step === 'vehicle-select' && (
                <div className="animate-slide-up">
-                  <h2 className="text-2xl font-bold text-white mb-2">Qual seu veículo?</h2>
+                  <h2 className="text-2xl font-bold text-theme-text mb-2">Qual seu veículo?</h2>
                   <p className="text-gray-400 text-sm mb-8">Selecione o tipo para ver os planos ideais.</p>
 
                   <div className="grid grid-cols-1 gap-4">
@@ -88,12 +88,12 @@ const Protection: React.FC = () => {
                               <Car size={24} />
                            </div>
                            <div className="text-left">
-                              <h3 className="text-white font-bold text-lg">Carro / SUV</h3>
+                              <h3 className="text-theme-text font-bold text-lg">Carro / SUV</h3>
                               <p className="text-gray-500 text-xs">Uso particular ou app</p>
                            </div>
                         </div>
                         <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-blue-500 group-hover:border-blue-500 transition-colors">
-                           <ArrowRight size={16} className="text-white opacity-0 group-hover:opacity-100" />
+                           <ArrowRight size={16} className="text-theme-text opacity-0 group-hover:opacity-100" />
                         </div>
                      </button>
 
@@ -106,12 +106,12 @@ const Protection: React.FC = () => {
                               <Bike size={24} />
                            </div>
                            <div className="text-left">
-                              <h3 className="text-white font-bold text-lg">Motocicleta</h3>
+                              <h3 className="text-theme-text font-bold text-lg">Motocicleta</h3>
                               <p className="text-gray-500 text-xs">Todas as cilindradas</p>
                            </div>
                         </div>
                         <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-blue-500 group-hover:border-blue-500 transition-colors">
-                           <ArrowRight size={16} className="text-white opacity-0 group-hover:opacity-100" />
+                           <ArrowRight size={16} className="text-theme-text opacity-0 group-hover:opacity-100" />
                         </div>
                      </button>
 
@@ -124,12 +124,12 @@ const Protection: React.FC = () => {
                               <Truck size={24} />
                            </div>
                            <div className="text-left">
-                              <h3 className="text-white font-bold text-lg">Pesados</h3>
+                              <h3 className="text-theme-text font-bold text-lg">Pesados</h3>
                               <p className="text-gray-500 text-xs">Caminhões e Utilitários</p>
                            </div>
                         </div>
                         <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-blue-500 group-hover:border-blue-500 transition-colors">
-                           <ArrowRight size={16} className="text-white opacity-0 group-hover:opacity-100" />
+                           <ArrowRight size={16} className="text-theme-text opacity-0 group-hover:opacity-100" />
                         </div>
                      </button>
                   </div>
@@ -146,7 +146,7 @@ const Protection: React.FC = () => {
                   <div className="flex justify-between items-end mb-6">
                      <div>
                         <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Veículo Selecionado</p>
-                        <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                        <h2 className="text-2xl font-bold text-theme-text flex items-center gap-2">
                            {selectedVehicle}
                            <button onClick={() => setStep('vehicle-select')} className="text-xs text-blue-400 font-normal underline">Alterar</button>
                         </h2>
@@ -172,12 +172,12 @@ const Protection: React.FC = () => {
 
                               <div className="flex justify-between items-start mb-6 mt-2">
                                  <div>
-                                    <h4 className="font-bold text-xl text-white">{plan.name}</h4>
+                                    <h4 className="font-bold text-xl text-theme-text">{plan.name}</h4>
                                     <p className="text-gray-500 text-xs mt-1">Cobertura Nacional</p>
                                  </div>
                                  <div className="text-right">
                                     <span className="text-xs text-gray-400 block">Mensalidade</span>
-                                    <span className="text-2xl font-bold text-white">R$ {plan.price.toFixed(0)}</span>
+                                    <span className="text-2xl font-bold text-theme-text">R$ {plan.price.toFixed(0)}</span>
                                     <span className="text-xs text-gray-500">,00</span>
                                  </div>
                               </div>

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { UserRole } from '../types';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 import { AvatarUpload } from '../components/ui';
-import { LogOut, ChevronRight, User, Ticket, LifeBuoy, Crown, CheckCircle2, Key, ShoppingBag, BookOpen, CreditCard, Building2 } from 'lucide-react';
+import { LogOut, ChevronRight, User, Ticket, LifeBuoy, Crown, CheckCircle2, Key, ShoppingBag, BookOpen, CreditCard, Building2, Sun, Moon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { uploadAvatar, updateUserAvatar } from '../services/avatarService';
 import { supabase } from '../services/supabaseClient';
@@ -17,9 +18,10 @@ interface MenuOptionProps {
    subLabel?: string;
    onClick: () => void;
    color?: string;
+   rightElement?: React.ReactNode;
 }
 
-const MenuOption: React.FC<MenuOptionProps> = ({ icon: Icon, label, subLabel, onClick, color = "text-white" }) => (
+const MenuOption: React.FC<MenuOptionProps> = ({ icon: Icon, label, subLabel, onClick, color = "text-theme-text", rightElement }) => (
    <div
       onClick={onClick}
       className="flex items-center justify-between p-4 bg-obsidian-900 border-b border-white/5 last:border-b-0 cursor-pointer active:bg-white/5 transition-colors"
@@ -29,17 +31,18 @@ const MenuOption: React.FC<MenuOptionProps> = ({ icon: Icon, label, subLabel, on
             <Icon size={18} />
          </div>
          <div>
-            <p className="text-white text-sm font-medium">{label}</p>
+            <p className="text-theme-text text-sm font-medium">{label}</p>
             {subLabel && <p className="text-gray-500 text-xs">{subLabel}</p>}
          </div>
       </div>
-      <ChevronRight size={16} className="text-gray-600" />
+      {rightElement || <ChevronRight size={16} className="text-gray-600" />}
    </div>
 );
 
 const Profile: React.FC<ProfileProps> = ({ userRole }) => {
    const navigate = useNavigate();
    const { user, signOut } = useAuth();
+   const { theme, toggleTheme } = useTheme();
    const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
    // Fetch avatar from database on mount
@@ -105,7 +108,7 @@ const Profile: React.FC<ProfileProps> = ({ userRole }) => {
                      <CheckCircle2 size={14} strokeWidth={3} />
                   </div>
                </div>
-               <h1 className="text-xl font-bold text-white mb-1">{userName}</h1>
+               <h1 className="text-xl font-bold text-theme-text mb-1">{userName}</h1>
                <p className="text-gray-500 text-sm mb-4">{userEmail}</p>
 
                {userRole !== UserRole.ADMIN && (
@@ -140,6 +143,18 @@ const Profile: React.FC<ProfileProps> = ({ userRole }) => {
             <div>
                <h3 className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-2 pl-2">Minha Conta</h3>
                <div className="rounded-xl overflow-hidden border border-white/5 bg-obsidian-900">
+                  <MenuOption
+                     icon={theme === 'dark' ? Sun : Moon}
+                     label="Aparência"
+                     subLabel={`Tema Atual: ${theme === 'dark' ? 'Escuro' : 'Claro'}`}
+                     onClick={toggleTheme}
+                     color={theme === 'dark' ? 'text-yellow-400' : 'text-blue-500'}
+                     rightElement={
+                        <div className={`w-10 h-6 rounded-full p-1 transition-colors ${theme === 'dark' ? 'bg-obsidian-700' : 'bg-gold-500'}`}>
+                           <div className={`w-4 h-4 rounded-full bg-white transition-transform ${theme === 'dark' ? 'translate-x-0' : 'translate-x-4'}`} />
+                        </div>
+                     }
+                  />
                   <MenuOption
                      icon={User}
                      label="Dados Pessoais"

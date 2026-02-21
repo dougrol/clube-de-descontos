@@ -175,7 +175,7 @@ const Login: React.FC = () => {
         {/* Logo */}
         <StaggerItem>
           <div className="mb-8 flex flex-col items-center">
-            <h2 className="text-2xl font-serif font-bold text-white mb-1">
+            <h2 className="text-2xl font-serif font-bold text-theme-text mb-1">
               TAVARES <span className="text-gold-500">CAR</span>
             </h2>
             <p className="text-gold-500/80 text-[10px] tracking-[0.3em] uppercase font-medium">Clube de Descontos</p>
@@ -227,7 +227,7 @@ const Login: React.FC = () => {
         {/* Dynamic Header */}
         <StaggerItem>
           <div className="mb-6 text-center">
-            <h3 className="text-lg text-white font-medium">
+            <h3 className="text-lg text-theme-text font-medium">
               {selectedRole === 'partner' ? 'Acesse seu Painel' : 'Entre no Clube'}
             </h3>
             <p className="text-gray-500 text-xs mt-1">
@@ -332,7 +332,7 @@ const Login: React.FC = () => {
                 animate={{ opacity: 1 }}
                 className="bg-gradient-to-r from-signal-500/10 to-orange-500/10 border border-signal-500/30 p-4 rounded-xl text-center"
               >
-                <p className="text-white text-sm mb-2">
+                <p className="text-theme-text text-sm mb-2">
                   <Store size={16} className="inline mr-2 text-signal-500" />
                   Tem um negócio?
                 </p>
@@ -355,7 +355,7 @@ const Login: React.FC = () => {
                   <motion.button
                     onClick={() => navigate('/register')}
                     whileHover={{ scale: 1.02 }}
-                    className="text-white font-semibold underline decoration-gold-500 decoration-2 underline-offset-4 hover:text-gold-400 transition-colors"
+                    className="text-theme-text font-semibold underline decoration-gold-500 decoration-2 underline-offset-4 hover:text-gold-400 transition-colors"
                   >
                     Cadastre-se
                   </motion.button>

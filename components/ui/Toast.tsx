@@ -41,10 +41,10 @@ export const Toast: React.FC<ToastProps> = ({ id, message, type, duration = 3000
             <div className="shrink-0 mt-0.5">
                 {icons[type]}
             </div>
-            <p className="text-white text-sm flex-1">{message}</p>
+            <p className="text-theme-text text-sm flex-1">{message}</p>
             <button
                 onClick={() => onClose(id)}
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-gray-400 hover:text-theme-text transition-colors"
             >
                 <X size={16} />
             </button>

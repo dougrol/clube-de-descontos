@@ -176,7 +176,7 @@ const Register: React.FC = () => {
                 <div className="bg-gold-500/10 p-6 rounded-full mb-6">
                     <CheckCircle size={64} className="text-gold-500" />
                 </div>
-                <h2 className="text-2xl font-bold text-white mb-2">Conta Criada!</h2>
+                <h2 className="text-2xl font-bold text-theme-text mb-2">Conta Criada!</h2>
                 <p className="text-gray-400 mb-6 max-w-xs mx-auto">
                     Enviamos um link de confirmação para <b>{formData.email}</b>. Verifique sua caixa de entrada para ativar sua conta.
                 </p>
@@ -201,13 +201,13 @@ const Register: React.FC = () => {
             <div className="relative z-10 w-full max-w-sm mx-auto animate-fade-in">
                 <button
                     onClick={() => navigate('/login')}
-                    className="flex items-center text-gray-500 hover:text-white mb-6 transition-colors text-sm"
+                    className="flex items-center text-gray-500 hover:text-theme-text mb-6 transition-colors text-sm"
                 >
                     <ArrowLeft size={16} className="mr-2" /> Voltar
                 </button>
 
                 <div className="mb-6">
-                    <h2 className="text-2xl font-serif font-bold text-white mb-2">
+                    <h2 className="text-2xl font-serif font-bold text-theme-text mb-2">
                         Cadastro de <span className="text-gold-500">Associado</span>
                     </h2>
                     <p className="text-gray-500 text-xs">
@@ -271,7 +271,7 @@ const Register: React.FC = () => {
                             <select
                                 value={formData.association}
                                 onChange={(e) => setFormData({ ...formData, association: e.target.value })}
-                                className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-3 text-sm text-white focus:border-gold-500 focus:bg-obsidian-900 outline-none transition-all appearance-none"
+                                className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-3 text-sm text-theme-text focus:border-gold-500 focus:bg-obsidian-900 outline-none transition-all appearance-none"
                                 required
                             >
                                 <option value="" className="bg-obsidian-900">Selecione sua associação</option>

@@ -37,7 +37,7 @@ const AffiliateProductCard: React.FC<AffiliateProductCardProps> = ({ product }) 
         {/* Badge Category */}
         {product.category && (
           <div className="absolute top-2 left-2 z-10">
-            <span className="inline-flex items-center rounded-md bg-black/60 backdrop-blur-md px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-white border border-white/10">
+            <span className="inline-flex items-center rounded-md bg-black/60 backdrop-blur-md px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-theme-text border border-white/10">
               {product.category}
             </span>
           </div>
@@ -47,7 +47,7 @@ const AffiliateProductCard: React.FC<AffiliateProductCardProps> = ({ product }) 
       {/* Content */}
       <div className="flex flex-1 flex-col p-4">
         {/* Title */}
-        <h3 className="line-clamp-2 text-sm font-bold text-white mb-2 leading-snug min-h-[2.5rem]" title={product.title}>
+        <h3 className="line-clamp-2 text-sm font-bold text-theme-text mb-2 leading-snug min-h-[2.5rem]" title={product.title}>
           {product.title}
         </h3>
 

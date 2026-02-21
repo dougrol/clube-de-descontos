@@ -37,10 +37,10 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
             >
                 {/* Header - Fixed */}
                 <div className="flex justify-between items-center p-4 border-b border-obsidian-800 shrink-0">
-                    <h3 className="text-lg sm:text-xl font-bold text-white">{title}</h3>
+                    <h3 className="text-lg sm:text-xl font-bold text-theme-text">{title}</h3>
                     <button
                         onClick={onClose}
-                        className="p-2 -mr-2 text-gray-400 hover:text-white transition-colors active:scale-95"
+                        className="p-2 -mr-2 text-gray-400 hover:text-theme-text transition-colors active:scale-95"
                         aria-label="Fechar"
                     >
                         <X size={24} />

@@ -115,7 +115,7 @@ export const UsedCouponsList: React.FC = () => {
         <div className="space-y-6 animate-fade-in">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                    <h2 className="text-xl font-bold text-theme-text flex items-center gap-2">
                         <Ticket className="text-gold-500" size={24} />
                         Gestão de Cupons
                     </h2>
@@ -151,7 +151,7 @@ export const UsedCouponsList: React.FC = () => {
                         placeholder="Buscar por código, cliente ou parceiro..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="w-full bg-black border border-obsidian-700 rounded-lg pl-10 pr-4 py-2 text-sm text-white focus:border-gold-500 outline-none"
+                        className="w-full bg-black border border-obsidian-700 rounded-lg pl-10 pr-4 py-2 text-sm text-theme-text focus:border-gold-500 outline-none"
                     />
                 </div>
             </div>
@@ -186,7 +186,7 @@ export const UsedCouponsList: React.FC = () => {
                                             }
                                         </td>
                                         <td className="p-4 font-mono text-gold-500 font-bold">{coupon.code}</td>
-                                        <td className="p-4 text-white font-medium">{coupon.user_name || 'Desconhecido'}</td>
+                                        <td className="p-4 text-theme-text font-medium">{coupon.user_name || 'Desconhecido'}</td>
                                         <td className="p-4">{coupon.partner_name}</td>
                                         <td className="p-4 text-green-400">{coupon.benefit}</td>
                                         <td className="p-4 text-center">

@@ -104,7 +104,7 @@ const MyOrders: React.FC = () => {
         <div className="min-h-screen bg-black pb-24 animate-fade-in">
             {/* Header */}
             <div className="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-obsidian-800 px-4 py-4">
-                <h1 className="text-xl font-bold text-white flex items-center gap-2">
+                <h1 className="text-xl font-bold text-theme-text flex items-center gap-2">
                     <ShoppingBag size={24} className="text-gold-500" />
                     Meus Pedidos
                 </h1>
@@ -118,7 +118,7 @@ const MyOrders: React.FC = () => {
                 ) : orders.length === 0 ? (
                     <div className="text-center py-20">
                         <Package size={48} className="mx-auto text-gray-600 mb-4" />
-                        <h3 className="text-white font-medium mb-2">Nenhum pedido ainda</h3>
+                        <h3 className="text-theme-text font-medium mb-2">Nenhum pedido ainda</h3>
                         <p className="text-gray-500 text-sm mb-6">
                             Quando você fizer uma compra, seus pedidos aparecerão aqui.
                         </p>
@@ -147,7 +147,7 @@ const MyOrders: React.FC = () => {
                                             <p className="text-gray-500 text-xs mb-1">
                                                 {formatDate(order.createdAt)}
                                             </p>
-                                            <p className="text-white font-medium">{order.partnerName}</p>
+                                            <p className="text-theme-text font-medium">{order.partnerName}</p>
                                         </div>
                                         <Badge className={`${statusConfig.bg} ${statusConfig.color} ${statusConfig.border}`}>
                                             <StatusIcon size={12} className="mr-1" />
