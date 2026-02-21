@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Lock, ChevronRight, AlertCircle, Store, User, Sparkles, CreditCard, Eye, EyeOff } from 'lucide-react';
+import { Lock, ChevronRight, AlertCircle, Store, User, Sparkles, CreditCard, Eye, EyeOff, Mail, ShieldCheck, HelpCircle, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { ImageWithFallback } from '../components/ui/ImageWithFallback';
 import { Button, Input } from '../components/ui';
 import { StaggerContainer, StaggerItem } from '../components/motion';
 import { supabase } from '../services/supabaseClient';
@@ -175,9 +176,12 @@ const Login: React.FC = () => {
         {/* Logo */}
         <StaggerItem>
           <div className="mb-8 flex flex-col items-center">
-            <h2 className="text-2xl font-serif font-bold text-white mb-1">
-              TAVARES <span className="text-gold-500">CAR</span>
-            </h2>
+            <ImageWithFallback
+              src="/images/logo_shield_v2_transparent.png"
+              alt="Tavares Car"
+              className="w-32 h-32 sm:w-40 sm:h-40 xl:w-48 xl:h-48 mb-2 drop-shadow-[0_0_15px_rgba(212,175,55,0.15)]"
+              objectFit="contain"
+            />
             <p className="text-gold-500/80 text-[10px] tracking-[0.3em] uppercase font-medium">Clube de Descontos</p>
           </div>
         </StaggerItem>
