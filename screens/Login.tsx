@@ -158,7 +158,7 @@ const Login: React.FC = () => {
 
 
   return (
-    <div className="min-h-screen bg-black flex flex-col justify-center px-6 relative overflow-hidden">
+    <div className="dark min-h-screen bg-obsidian-950 flex flex-col justify-center px-6 relative overflow-hidden">
       {/* Background Decor with pulse animation */}
       <motion.div
         className="absolute -top-20 -right-20 w-64 h-64 bg-gold-600/10 rounded-full blur-3xl"

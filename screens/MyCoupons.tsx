@@ -67,9 +67,9 @@ const MyCoupons: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-black animate-fade-in relative">
+        <div className="min-h-screen bg-obsidian-950 animate-fade-in relative">
             {/* Header */}
-            <div className="sticky top-0 z-20 bg-black/90 backdrop-blur-lg border-b border-white/5">
+            <div className="sticky top-0 z-20 bg-obsidian-950/90 backdrop-blur-lg border-b border-white/5">
                 <div className="flex items-center p-4">
                     <button onClick={() => navigate(-1)} className="p-2 -ml-2 text-theme-muted hover:text-theme-text">
                         <ChevronLeft size={24} />
@@ -156,7 +156,7 @@ const MyCoupons: React.FC = () => {
                                 </div>
 
                                 {/* Coupon Code */}
-                                <div className="bg-black/50 rounded-xl p-3 text-center border border-dashed border-white/10 flex flex-col items-center justify-center gap-2">
+                                <div className="bg-obsidian-950/50 rounded-xl p-3 text-center border border-dashed border-white/10 flex flex-col items-center justify-center gap-2">
                                     <div>
                                         <p className="text-[10px] text-theme-muted uppercase tracking-widest mb-1">Código do Cupom</p>
                                         <p className="text-gold-500 font-mono font-bold text-xl tracking-wider">{coupon.code}</p>
@@ -188,7 +188,7 @@ const MyCoupons: React.FC = () => {
 
             {/* QR Code Modal */}
             {selectedCoupon && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-sm p-6 animate-fade-in">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-obsidian-950/95 backdrop-blur-sm p-6 animate-fade-in">
                     <div className="bg-obsidian-900 w-full max-w-sm rounded-3xl border border-gold-500/30 p-8 text-center relative animate-scale-up shadow-[0_0_50px_rgba(212,175,55,0.1)]">
                         <button
                             onClick={() => setSelectedCoupon(null)}

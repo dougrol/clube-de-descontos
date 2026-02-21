@@ -7,7 +7,7 @@ const SocialManagement: React.FC = () => {
    const navigate = useNavigate();
 
    return (
-      <div className="min-h-screen bg-black pb-24 animate-fade-in">
+      <div className="min-h-screen bg-obsidian-950 pb-24 animate-fade-in">
          {/* Stylish Header */}
          <div className="bg-gradient-to-b from-emerald-900/20 to-black pt-10 pb-10 px-6 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-600/10 rounded-full blur-[80px] pointer-events-none"></div>

@@ -176,11 +176,11 @@ const PartnerDashboard: React.FC = () => {
         }
     };
 
-    if (loading) return <div className="min-h-screen bg-black flex items-center justify-center text-theme-text">Carregando painel...</div>;
+    if (loading) return <div className="min-h-screen bg-obsidian-950 flex items-center justify-center text-theme-text">Carregando painel...</div>;
 
     if (!partner) {
         return (
-            <div className="min-h-screen bg-black flex flex-col items-center justify-center text-theme-text p-6 text-center">
+            <div className="min-h-screen bg-obsidian-950 flex flex-col items-center justify-center text-theme-text p-6 text-center">
                 <h2 className="text-xl font-bold text-red-500 mb-2">Erro de Acesso</h2>
                 <p className="text-theme-muted mb-6">Não foi possível carregar o perfil do parceiro. Seus dados locais podem estar desatualizados.</p>
 
@@ -264,7 +264,7 @@ const PartnerDashboard: React.FC = () => {
                         <div className="h-full flex flex-col justify-between relative z-10">
                             <div className="flex justify-between items-center mb-2">
                                 <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-50">Configuração</span>
-                                <Badge className="bg-black/10 text-black border-black/10 text-[9px] font-bold">ATIVA</Badge>
+                                <Badge className="bg-obsidian-950/10 text-black border-black/10 text-[9px] font-bold">ATIVA</Badge>
                             </div>
                             <div>
                                 <p className="text-[10px] font-bold opacity-60 mb-0.5 uppercase tracking-wider">Benefício Atual</p>
@@ -355,7 +355,7 @@ const PartnerDashboard: React.FC = () => {
 
             {/* EDIT PROFILE MODAL */}
             {isEditing && editForm && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-obsidian-950/80 backdrop-blur-sm p-4 animate-fade-in">
                     <div className="bg-obsidian-900 w-full max-w-2xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
                         <div className="p-6 border-b border-white/5 flex justify-between items-center">
                             <h2 className="text-xl font-bold flex items-center gap-2"><Settings size={20} className="text-gold-500" /> Editar Dados da Loja</h2>
@@ -449,7 +449,7 @@ const PartnerDashboard: React.FC = () => {
                                                     <span className="text-xs mt-1">Adicionar capa</span>
                                                 </div>
                                             )}
-                                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                            <div className="absolute inset-0 bg-obsidian-950/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                                 <Camera size={24} className="text-theme-text" />
                                             </div>
                                         </div>
@@ -501,7 +501,7 @@ const PartnerDashboard: React.FC = () => {
                                         <input
                                             type="number"
                                             step="any"
-                                            className="w-full bg-black/20 border border-white/10 text-gray-300 rounded-sm py-2 px-3 text-xs focus:outline-none focus:border-gold-500 font-mono"
+                                            className="w-full bg-obsidian-950/20 border border-white/10 text-gray-300 rounded-sm py-2 px-3 text-xs focus:outline-none focus:border-gold-500 font-mono"
                                             value={editForm.coordinates?.lat || ''}
                                             onChange={(e) => setEditForm(prev => prev ? ({ ...prev, coordinates: { ...prev.coordinates, lat: parseFloat(e.target.value) || 0, lng: prev.coordinates?.lng || 0 } }) : null)}
                                             placeholder="0.000000"
@@ -512,7 +512,7 @@ const PartnerDashboard: React.FC = () => {
                                         <input
                                             type="number"
                                             step="any"
-                                            className="w-full bg-black/20 border border-white/10 text-gray-300 rounded-sm py-2 px-3 text-xs focus:outline-none focus:border-gold-500 font-mono"
+                                            className="w-full bg-obsidian-950/20 border border-white/10 text-gray-300 rounded-sm py-2 px-3 text-xs focus:outline-none focus:border-gold-500 font-mono"
                                             value={editForm.coordinates?.lng || ''}
                                             onChange={(e) => setEditForm(prev => prev ? ({ ...prev, coordinates: { ...prev.coordinates, lng: parseFloat(e.target.value) || 0, lat: prev.coordinates?.lat || 0 } }) : null)}
                                             placeholder="0.000000"
@@ -535,7 +535,7 @@ const PartnerDashboard: React.FC = () => {
 
             {/* VALIDATE COUPON MODAL */}
             {isValidating && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-fade-in">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-obsidian-950/90 backdrop-blur-md p-4 animate-fade-in">
                     <div className="bg-obsidian-900 w-full max-w-sm rounded-3xl border border-white/10 shadow-2xl overflow-hidden p-8 text-center relative">
                         <button onClick={() => setIsValidating(false)} className="absolute top-4 right-4 text-theme-muted hover:text-theme-text"><X size={24} /></button>
 

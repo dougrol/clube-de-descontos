@@ -90,7 +90,7 @@ const RegisterPartner: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-obsidian-950 font-sans text-theme-text pb-20">
+        <div className="dark min-h-screen bg-obsidian-950 font-sans text-theme-text pb-20">
 
             {/* Success State */}
             {step === 2 && (

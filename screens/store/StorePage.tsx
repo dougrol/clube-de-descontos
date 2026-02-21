@@ -101,7 +101,7 @@ const StorePage: React.FC = () => {
     const allProducts = filteredProducts;
 
     return (
-        <div className="pb-24 min-h-screen bg-black animate-fade-in">
+        <div className="pb-24 min-h-screen bg-obsidian-950 animate-fade-in">
             {/* Hero Carousel */}
             <div className="relative h-[180px] w-full overflow-hidden">
                 {BANNER_SLIDES.map((slide, index) => {
@@ -130,13 +130,13 @@ const StorePage: React.FC = () => {
                 {/* Carousel Controls */}
                 <button
                     onClick={prevSlide}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/30 backdrop-blur-sm rounded-full flex items-center justify-center text-theme-text hover:bg-black/50 transition-colors"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-obsidian-950/30 backdrop-blur-sm rounded-full flex items-center justify-center text-theme-text hover:bg-obsidian-950/50 transition-colors"
                 >
                     <ChevronLeft size={18} />
                 </button>
                 <button
                     onClick={nextSlide}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/30 backdrop-blur-sm rounded-full flex items-center justify-center text-theme-text hover:bg-black/50 transition-colors"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-obsidian-950/30 backdrop-blur-sm rounded-full flex items-center justify-center text-theme-text hover:bg-obsidian-950/50 transition-colors"
                 >
                     <ChevronRight size={18} />
                 </button>
@@ -192,7 +192,7 @@ const StorePage: React.FC = () => {
                                 placeholder="Buscar na loja..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full bg-black/50 border border-obsidian-700 rounded-xl py-3 pl-10 pr-4 text-theme-text placeholder:text-theme-muted focus:border-gold-500 focus:ring-1 focus:ring-gold-500/50 transition-all outline-none"
+                                className="w-full bg-obsidian-950/50 border border-obsidian-700 rounded-xl py-3 pl-10 pr-4 text-theme-text placeholder:text-theme-muted focus:border-gold-500 focus:ring-1 focus:ring-gold-500/50 transition-all outline-none"
                             />
                         </div>
                     </div>

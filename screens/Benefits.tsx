@@ -116,11 +116,11 @@ const Benefits: React.FC = () => {
   }
 
   return (
-    <div className="pb-24 min-h-screen bg-black animate-fade-in relative selection:bg-gold-500/30">
+    <div className="pb-24 min-h-screen bg-obsidian-950 animate-fade-in relative selection:bg-gold-500/30">
 
       {/* Radar Scanning Overlay */}
       {isScanning && (
-        <div className="fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-center backdrop-blur-md">
+        <div className="fixed inset-0 z-50 bg-obsidian-950/95 flex flex-col items-center justify-center backdrop-blur-md">
           <div className="relative flex items-center justify-center">
             {/* Ripples */}
             <div className="absolute h-64 w-64 border border-gold-500/30 rounded-full animate-ping [animation-duration:2s]"></div>
@@ -172,7 +172,7 @@ const Benefits: React.FC = () => {
       <div className="px-5">
 
         {/* Search & Filter */}
-        <div className="sticky top-4 bg-black/80 backdrop-blur-md z-40 py-3 px-3 -mx-2 rounded-xl border border-white/10 shadow-2xl mb-8">
+        <div className="sticky top-4 bg-obsidian-950/80 backdrop-blur-md z-40 py-3 px-3 -mx-2 rounded-xl border border-white/10 shadow-2xl mb-8">
           <div className="space-y-4">
             <Input
               placeholder="Buscar parceiro ou cidade..."

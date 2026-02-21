@@ -26,9 +26,9 @@ const SalesConsultancy: React.FC = () => {
    }, []);
 
    return (
-      <div className="min-h-screen bg-black pb-24 animate-fade-in">
+      <div className="min-h-screen bg-obsidian-950 pb-24 animate-fade-in">
          {/* Header */}
-         <div className="p-5 flex items-center justify-between border-b border-white/10 sticky top-0 bg-black/90 backdrop-blur-md z-20">
+         <div className="p-5 flex items-center justify-between border-b border-white/10 sticky top-0 bg-obsidian-950/90 backdrop-blur-md z-20">
             <button onClick={() => navigate(-1)} className="text-theme-text"><ArrowLeft /></button>
             <h1 className="text-theme-text font-bold uppercase tracking-widest text-sm">Parcerias</h1>
             <div className="w-6" />

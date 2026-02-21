@@ -82,7 +82,7 @@ const Checkout: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-black flex items-center justify-center text-gold-500">
+            <div className="min-h-screen bg-obsidian-950 flex items-center justify-center text-gold-500">
                 <Loader2 className="animate-spin" size={32} />
             </div>
         );
@@ -90,7 +90,7 @@ const Checkout: React.FC = () => {
 
     if (!product) {
         return (
-            <div className="min-h-screen bg-black flex flex-col items-center justify-center text-theme-text p-10">
+            <div className="min-h-screen bg-obsidian-950 flex flex-col items-center justify-center text-theme-text p-10">
                 <p>Produto não encontrado</p>
                 <Button className="mt-4" onClick={() => navigate('/loja')}>
                     Voltar à Loja
@@ -104,9 +104,9 @@ const Checkout: React.FC = () => {
     // Show PIX QR Code result
     if (paymentResult?.pixQrCodeBase64) {
         return (
-            <div className="min-h-screen bg-black pb-24 animate-fade-in">
+            <div className="min-h-screen bg-obsidian-950 pb-24 animate-fade-in">
                 {/* Header */}
-                <div className="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-obsidian-800 px-4 py-3">
+                <div className="sticky top-0 z-50 bg-obsidian-950/90 backdrop-blur-md border-b border-obsidian-800 px-4 py-3">
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => navigate('/meus-pedidos')}
@@ -171,9 +171,9 @@ const Checkout: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen bg-black pb-24 animate-fade-in">
+        <div className="min-h-screen bg-obsidian-950 pb-24 animate-fade-in">
             {/* Header */}
-            <div className="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-obsidian-800 px-4 py-3">
+            <div className="sticky top-0 z-50 bg-obsidian-950/90 backdrop-blur-md border-b border-obsidian-800 px-4 py-3">
                 <div className="flex items-center gap-3">
                     <button
                         onClick={() => navigate(-1)}

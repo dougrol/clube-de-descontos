@@ -66,7 +66,7 @@ const AdminLogin: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-obsidian-950 flex flex-col justify-center px-8 relative overflow-hidden">
+        <div className="dark min-h-screen bg-obsidian-950 flex flex-col justify-center px-8 relative overflow-hidden">
             {/* Background Grid Pattern */}
             <div className="absolute inset-0 opacity-5">
                 <div className="absolute inset-0" style={{

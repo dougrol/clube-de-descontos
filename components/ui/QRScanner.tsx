@@ -122,11 +122,11 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onError }) => {
     return (
         <div className="w-full flex flex-col items-center gap-3">
             {/* Scanner Container */}
-            <div className="w-full max-w-[280px] aspect-square rounded-2xl overflow-hidden border-2 border-gold-500/50 bg-black relative">
+            <div className="w-full max-w-[280px] aspect-square rounded-2xl overflow-hidden border-2 border-gold-500/50 bg-obsidian-950 relative">
                 <div id={QR_READER_ID} className="w-full h-full" />
 
                 {!isScanning && hasPermission !== false && (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80">
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-obsidian-950/80">
                         <button
                             onClick={startScanner}
                             className="w-20 h-20 bg-gold-500 rounded-full flex items-center justify-center text-black hover:bg-gold-400 transition-all active:scale-95 shadow-[0_0_30px_rgba(212,175,55,0.3)]"
@@ -138,7 +138,7 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onError }) => {
                 )}
 
                 {hasPermission === false && (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/90 p-4 text-center">
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-obsidian-950/90 p-4 text-center">
                         <CameraOff size={32} className="text-red-400 mb-2" />
                         <p className="text-red-400 text-xs font-bold">Câmera não disponível</p>
                         <p className="text-theme-muted text-[10px] mt-1">Habilite a permissão nas configurações do navegador</p>

@@ -172,7 +172,7 @@ const Register: React.FC = () => {
 
     if (success) {
         return (
-            <div className="min-h-screen bg-black flex flex-col items-center justify-center p-6 text-center">
+            <div className="dark min-h-screen bg-obsidian-950 flex flex-col items-center justify-center p-6 text-center">
                 <div className="bg-gold-500/10 p-6 rounded-full mb-6">
                     <CheckCircle size={64} className="text-gold-500" />
                 </div>
@@ -194,7 +194,7 @@ const Register: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen bg-black flex flex-col justify-center px-6 py-10 relative overflow-hidden">
+        <div className="min-h-screen bg-obsidian-950 flex flex-col justify-center px-6 py-10 relative overflow-hidden">
             {/* Background Decor */}
             <div className="absolute -top-20 -right-20 w-64 h-64 bg-gold-600/10 rounded-full blur-3xl" />
 

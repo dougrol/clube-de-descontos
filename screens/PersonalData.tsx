@@ -178,9 +178,9 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
     const BadgeIcon = badge.icon;
 
     return (
-        <div className="min-h-screen bg-black animate-fade-in">
+        <div className="min-h-screen bg-obsidian-950 animate-fade-in">
             {/* Header */}
-            <div className="sticky top-0 z-20 bg-black/90 backdrop-blur-lg border-b border-white/5">
+            <div className="sticky top-0 z-20 bg-obsidian-950/90 backdrop-blur-lg border-b border-white/5">
                 <div className="flex items-center p-4">
                     <button onClick={() => navigate(-1)} className="p-2 -ml-2 text-theme-muted hover:text-theme-text">
                         <ChevronLeft size={24} />

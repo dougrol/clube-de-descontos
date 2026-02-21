@@ -444,7 +444,7 @@ const Admin: React.FC = () => {
   };
 
   return (
-    <div className="p-4 sm:p-5 pb-32 min-h-screen bg-black animate-fade-in space-y-5 sm:space-y-8">
+    <div className="p-4 sm:p-5 pb-32 min-h-screen bg-obsidian-950 animate-fade-in space-y-5 sm:space-y-8">
       <header className="mb-4 sm:mb-6 flex flex-col gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-theme-text">Painel Gestor</h1>
@@ -713,7 +713,7 @@ const Admin: React.FC = () => {
                 <div className="text-center p-4 text-theme-muted">Nenhum produto encontrado.</div>
               ) : (
                 allProducts.map((product: ProductDB & { partners?: { name: string } }) => (
-                  <div key={product.id} className="bg-black/40 border border-white/5 p-3 rounded-lg flex gap-3">
+                  <div key={product.id} className="bg-obsidian-950/40 border border-white/5 p-3 rounded-lg flex gap-3">
                     <img
                       src={product.image_url || 'https://placehold.co/40x40/1a1a1a/d4af37?text=P'}
                       alt={product.title}
@@ -873,7 +873,7 @@ const Admin: React.FC = () => {
                   <textarea
                     value={item.value}
                     onChange={e => handleContentChange(item.key, e.target.value)}
-                    className="flex-1 bg-black border border-obsidian-700 rounded p-3 text-theme-text focus:border-gold-500 outline-none min-h-[50px] text-sm"
+                    className="flex-1 bg-obsidian-950 border border-obsidian-700 rounded p-3 text-theme-text focus:border-gold-500 outline-none min-h-[50px] text-sm"
                   />
                   <button
                     onClick={() => saveContent(item.key, item.value)}
@@ -921,7 +921,7 @@ const Admin: React.FC = () => {
                 <div className="text-center p-4 text-theme-muted">Nenhum plano encontrado.</div>
               ) : (
                 protectionPlans.map(plan => (
-                  <div key={plan.id} className="bg-black/40 border border-white/5 p-3 rounded-lg">
+                  <div key={plan.id} className="bg-obsidian-950/40 border border-white/5 p-3 rounded-lg">
                     <div className="flex justify-between items-start mb-2">
                       <div className="flex items-center gap-2">
                         <span className="text-theme-text font-medium">{plan.name}</span>
@@ -1280,7 +1280,7 @@ const Admin: React.FC = () => {
               <select
                 value={productForm.partner_id || ''}
                 onChange={e => setProductForm({ ...productForm, partner_id: e.target.value })}
-                className="w-full bg-black border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
+                className="w-full bg-obsidian-950 border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
                 required
               >
                 <option value="">Selecione um parceiro</option>
@@ -1297,7 +1297,7 @@ const Admin: React.FC = () => {
               type="text"
               value={productForm.title || ''}
               onChange={e => setProductForm({ ...productForm, title: e.target.value })}
-              className="w-full bg-black border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
+              className="w-full bg-obsidian-950 border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
               required
             />
           </div>
@@ -1307,7 +1307,7 @@ const Admin: React.FC = () => {
             <textarea
               value={productForm.description || ''}
               onChange={e => setProductForm({ ...productForm, description: e.target.value })}
-              className="w-full bg-black border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none min-h-[80px]"
+              className="w-full bg-obsidian-950 border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none min-h-[80px]"
             />
           </div>
 
@@ -1319,7 +1319,7 @@ const Admin: React.FC = () => {
                 step="0.01"
                 value={productForm.price_original || ''}
                 onChange={e => setProductForm({ ...productForm, price_original: parseFloat(e.target.value) })}
-                className="w-full bg-black border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
+                className="w-full bg-obsidian-950 border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
                 required
               />
             </div>
@@ -1330,7 +1330,7 @@ const Admin: React.FC = () => {
                 step="0.01"
                 value={productForm.price_discount || ''}
                 onChange={e => setProductForm({ ...productForm, price_discount: parseFloat(e.target.value) })}
-                className="w-full bg-black border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
+                className="w-full bg-obsidian-950 border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
                 required
               />
             </div>
@@ -1343,7 +1343,7 @@ const Admin: React.FC = () => {
                 type="number"
                 value={productForm.stock || 0}
                 onChange={e => setProductForm({ ...productForm, stock: parseInt(e.target.value) })}
-                className="w-full bg-black border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
+                className="w-full bg-obsidian-950 border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
               />
             </div>
             <div>
@@ -1351,7 +1351,7 @@ const Admin: React.FC = () => {
               <select
                 value={productForm.active ? 'true' : 'false'}
                 onChange={e => setProductForm({ ...productForm, active: e.target.value === 'true' })}
-                className="w-full bg-black border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
+                className="w-full bg-obsidian-950 border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
               >
                 <option value="false">Inativo</option>
                 <option value="true">Ativo</option>
@@ -1365,7 +1365,7 @@ const Admin: React.FC = () => {
               type="text"
               value={productForm.image_url || ''}
               onChange={e => setProductForm({ ...productForm, image_url: e.target.value })}
-              className="w-full bg-black border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
+              className="w-full bg-obsidian-950 border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none"
               placeholder="https://..."
             />
           </div>
@@ -1401,7 +1401,7 @@ const Admin: React.FC = () => {
               type="text"
               value={planForm.name || ''}
               onChange={e => setPlanForm({ ...planForm, name: e.target.value })}
-              className="w-full bg-black border border-obsidian-700 rounded p-3 text-theme-text focus:border-gold-500 outline-none"
+              className="w-full bg-obsidian-950 border border-obsidian-700 rounded p-3 text-theme-text focus:border-gold-500 outline-none"
               placeholder="Ex: Básico, Ouro, Premium"
               required
             />
@@ -1415,7 +1415,7 @@ const Admin: React.FC = () => {
                 step="0.01"
                 value={planForm.price || ''}
                 onChange={e => setPlanForm({ ...planForm, price: parseFloat(e.target.value) })}
-                className="w-full bg-black border border-obsidian-700 rounded p-3 text-theme-text focus:border-gold-500 outline-none"
+                className="w-full bg-obsidian-950 border border-obsidian-700 rounded p-3 text-theme-text focus:border-gold-500 outline-none"
                 placeholder="99.90"
                 required
               />
@@ -1426,7 +1426,7 @@ const Admin: React.FC = () => {
                 type="number"
                 value={planForm.display_order || 0}
                 onChange={e => setPlanForm({ ...planForm, display_order: parseInt(e.target.value) })}
-                className="w-full bg-black border border-obsidian-700 rounded p-3 text-theme-text focus:border-gold-500 outline-none"
+                className="w-full bg-obsidian-950 border border-obsidian-700 rounded p-3 text-theme-text focus:border-gold-500 outline-none"
               />
             </div>
           </div>
@@ -1463,7 +1463,7 @@ const Admin: React.FC = () => {
                 value={newFeature}
                 onChange={e => setNewFeature(e.target.value)}
                 onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addFeature(); } }}
-                className="flex-1 bg-black border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none text-sm"
+                className="flex-1 bg-obsidian-950 border border-obsidian-700 rounded p-2 text-theme-text focus:border-gold-500 outline-none text-sm"
                 placeholder="Ex: Guincho 500km, Assistência 24h..."
               />
               <button

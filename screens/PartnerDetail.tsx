@@ -59,20 +59,20 @@ const PartnerDetail: React.FC = () => {
     }
   };
 
-  if (loading) return <div className="h-screen flex items-center justify-center bg-black text-gold-500">Carregando...</div>;
-  if (!partner) return <div className="p-10 text-center text-theme-text bg-black h-screen">Parceiro não encontrado</div>;
+  if (loading) return <div className="h-screen flex items-center justify-center bg-obsidian-950 text-gold-500">Carregando...</div>;
+  if (!partner) return <div className="p-10 text-center text-theme-text bg-obsidian-950 h-screen">Parceiro não encontrado</div>;
 
   const defaultCover = 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=75&w=1080&auto=format&fit=crop';
   const defaultLogo = `https://ui-avatars.com/api/?name=${encodeURIComponent(partner.name || 'P')}&background=F59E0B&color=000000`;
 
   return (
-    <div className="min-h-screen bg-black pb-24 relative animate-fade-in">
+    <div className="min-h-screen bg-obsidian-950 pb-24 relative animate-fade-in">
       {/* Header Image */}
       <div className="relative h-72 w-full">
         <div className="absolute top-4 left-4 z-20">
           <button
             onClick={() => navigate(-1)}
-            className="h-10 w-10 bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center text-theme-text hover:bg-black/70 transition-colors"
+            className="h-10 w-10 bg-obsidian-950/50 backdrop-blur-md rounded-full flex items-center justify-center text-theme-text hover:bg-obsidian-950/70 transition-colors"
           >
             <ArrowLeft size={20} />
           </button>

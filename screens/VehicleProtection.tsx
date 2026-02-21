@@ -182,7 +182,7 @@ const Protection: React.FC = () => {
                                  </div>
                               </div>
 
-                              <div className="space-y-3 mb-6 bg-black/20 p-4 rounded-xl">
+                              <div className="space-y-3 mb-6 bg-obsidian-950/20 p-4 rounded-xl">
                                  {plan.features.slice(0, 4).map((feat, i) => (
                                     <div key={i} className="flex items-center gap-3">
                                        <div className="bg-blue-500/20 p-1 rounded-full text-blue-400">

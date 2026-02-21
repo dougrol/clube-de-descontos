@@ -127,14 +127,14 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
 
                 {/* Overlay on hover */}
                 {!disabled && !isUploading && (
-                    <div className="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center rounded-full">
+                    <div className="absolute inset-0 bg-obsidian-950/50 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center rounded-full">
                         <Camera size={iconSizeMap[size]} className="text-theme-text" />
                     </div>
                 )}
 
                 {/* Loading overlay */}
                 {isUploading && (
-                    <div className="absolute inset-0 bg-black/70 flex items-center justify-center rounded-full">
+                    <div className="absolute inset-0 bg-obsidian-950/70 flex items-center justify-center rounded-full">
                         <Loader2 size={iconSizeMap[size]} className="text-gold-500 animate-spin" />
                     </div>
                 )}

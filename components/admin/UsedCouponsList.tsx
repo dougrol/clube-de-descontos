@@ -151,7 +151,7 @@ export const UsedCouponsList: React.FC = () => {
                         placeholder="Buscar por código, cliente ou parceiro..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="w-full bg-black border border-obsidian-700 rounded-lg pl-10 pr-4 py-2 text-sm text-theme-text focus:border-gold-500 outline-none"
+                        className="w-full bg-obsidian-950 border border-obsidian-700 rounded-lg pl-10 pr-4 py-2 text-sm text-theme-text focus:border-gold-500 outline-none"
                     />
                 </div>
             </div>

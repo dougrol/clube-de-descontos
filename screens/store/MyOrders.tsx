@@ -101,9 +101,9 @@ const MyOrders: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-black pb-24 animate-fade-in">
+        <div className="min-h-screen bg-obsidian-950 pb-24 animate-fade-in">
             {/* Header */}
-            <div className="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-obsidian-800 px-4 py-4">
+            <div className="sticky top-0 z-50 bg-obsidian-950/90 backdrop-blur-md border-b border-obsidian-800 px-4 py-4">
                 <h1 className="text-xl font-bold text-theme-text flex items-center gap-2">
                     <ShoppingBag size={24} className="text-gold-500" />
                     Meus Pedidos

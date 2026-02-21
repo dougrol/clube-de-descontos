@@ -87,7 +87,7 @@ const Home: React.FC = () => {
 
             {/* Card Content */}
             <div className="relative z-10">
-              <span className="inline-block px-3 py-1 bg-black/5 rounded-full text-[10px] font-bold tracking-widest text-theme-muted mb-4 uppercase">
+              <span className="inline-block px-3 py-1 bg-obsidian-950/5 rounded-full text-[10px] font-bold tracking-widest text-theme-muted mb-4 uppercase">
                 Tavares Car
               </span>
               <h2 className="text-3xl md:text-5xl font-serif font-bold text-obsidian-950 leading-[0.9] mb-4">
@@ -201,7 +201,7 @@ const Home: React.FC = () => {
                       <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900 to-transparent opacity-80"></div>
                       <div className="absolute bottom-4 left-4 right-4">
                         <h4 className="text-xl font-bold text-theme-text leading-tight mb-1">{partner.name}</h4>
-                        <span className="text-[10px] uppercase tracking-wider text-gold-500 font-bold bg-black/30 backdrop-blur px-2 py-1 rounded-full">
+                        <span className="text-[10px] uppercase tracking-wider text-gold-500 font-bold bg-obsidian-950/30 backdrop-blur px-2 py-1 rounded-full">
                           {partner.category}
                         </span>
                       </div>

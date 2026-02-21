@@ -14,7 +14,7 @@ const Social: React.FC = () => {
         <div className="relative mx-auto mb-8 w-24 h-24">
           <div className="absolute inset-0 bg-gradient-to-tr from-yellow-400 via-red-500 to-emerald-600 rounded-[2rem] blur-xl opacity-50 animate-pulse-slow"></div>
           <div className="relative w-full h-full bg-gradient-to-tr from-yellow-400 via-red-500 to-emerald-600 rounded-[2rem] flex items-center justify-center p-1 shadow-2xl">
-            <div className="bg-black w-full h-full rounded-[1.8rem] flex items-center justify-center">
+            <div className="bg-obsidian-950 w-full h-full rounded-[1.8rem] flex items-center justify-center">
               <Instagram size={48} className="text-theme-text" />
             </div>
           </div>

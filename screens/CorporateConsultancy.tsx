@@ -42,7 +42,7 @@ const CorporateConsultancy: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-black pb-28">
+        <div className="min-h-screen bg-obsidian-950 pb-28">
             {/* Header Compacto Mobile */}
             <div className="relative overflow-hidden">
                 {/* Gradient Background */}
@@ -146,7 +146,7 @@ const CorporateConsultancy: React.FC = () => {
 
                             <Button
                                 onClick={handleContact}
-                                className="w-full bg-black text-theme-text hover:bg-gray-900 border-none h-14 text-sm font-bold shadow-xl active:scale-[0.98] transition-transform"
+                                className="w-full bg-obsidian-950 text-theme-text hover:bg-gray-900 border-none h-14 text-sm font-bold shadow-xl active:scale-[0.98] transition-transform"
                             >
                                 <MessageCircle size={18} className="mr-2" />
                                 FALAR COM CONSULTOR

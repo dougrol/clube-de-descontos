@@ -47,7 +47,7 @@ const ProductDetail: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-black flex items-center justify-center text-gold-500">
+            <div className="min-h-screen bg-obsidian-950 flex items-center justify-center text-gold-500">
                 Carregando...
             </div>
         );
@@ -55,7 +55,7 @@ const ProductDetail: React.FC = () => {
 
     if (!product) {
         return (
-            <div className="min-h-screen bg-black flex flex-col items-center justify-center text-theme-text p-10">
+            <div className="min-h-screen bg-obsidian-950 flex flex-col items-center justify-center text-theme-text p-10">
                 <Package size={48} className="text-gray-600 mb-4" />
                 <p>Produto não encontrado</p>
                 <Button className="mt-4" onClick={() => navigate('/loja')}>
@@ -71,12 +71,12 @@ const ProductDetail: React.FC = () => {
     const totalPrice = product.priceDiscount * quantity;
 
     return (
-        <div className="min-h-screen bg-black pb-40 animate-fade-in">
+        <div className="min-h-screen bg-obsidian-950 pb-40 animate-fade-in">
             {/* Header Image */}
             <div className="relative h-80 w-full">
                 <button
                     onClick={() => navigate(-1)}
-                    className="absolute top-4 left-4 z-20 h-10 w-10 bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center text-theme-text hover:bg-black/70 transition-colors"
+                    className="absolute top-4 left-4 z-20 h-10 w-10 bg-obsidian-950/50 backdrop-blur-md rounded-full flex items-center justify-center text-theme-text hover:bg-obsidian-950/70 transition-colors"
                 >
                     <ArrowLeft size={20} />
                 </button>

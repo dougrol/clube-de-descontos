@@ -142,7 +142,7 @@ const ResetPassword: React.FC = () => {
 
     if (checkingSession) {
         return (
-            <div className="min-h-screen bg-obsidian-950 flex items-center justify-center">
+            <div className="dark min-h-screen bg-obsidian-950 flex items-center justify-center">
                 <div className="text-gold-500 flex flex-col items-center gap-4">
                     <div className="w-8 h-8 border-2 border-gold-500 border-t-transparent rounded-full animate-spin"></div>
                     <span>Verificando sessão...</span>

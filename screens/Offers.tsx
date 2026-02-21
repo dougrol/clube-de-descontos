@@ -19,12 +19,12 @@ const Offers: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black pb-24 animate-fade-in relative">
+    <div className="min-h-screen bg-obsidian-950 pb-24 animate-fade-in relative">
       {/* Background Noise/Gradient */}
       <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-obsidian-900/40 via-black to-black z-0"></div>
 
       {/* Sticky Header */}
-      <div className="sticky top-0 z-40 bg-black/80 backdrop-blur-xl border-b border-white/5">
+      <div className="sticky top-0 z-40 bg-obsidian-950/80 backdrop-blur-xl border-b border-white/5">
         <div className="flex items-center justify-between px-4 h-16 max-w-7xl mx-auto">
           <button 
             onClick={() => navigate(-1)} 

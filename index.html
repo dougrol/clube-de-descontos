@@ -111,9 +111,22 @@
   </script>
   <style>
     /* ========================================
-       THEME VARIABLES (Dark Mode Only)
+       THEME VARIABLES (Light / Dark)
        ======================================== */
     :root {
+      /* LIGHT MODE (Elegant Champagne / Pearl Gradient for better contrast) */
+      --bg-gradient: linear-gradient(135deg, #FDFBF7 0%, #E3DCD2 100%);
+      --color-obsidian-950: 227 220 210; /* #E3DCD2 (Bottom nav & bases) */
+      --color-obsidian-900: 250 248 244; /* #FAF8F4 (Cards/Surfaces) */
+      --color-obsidian-800: 210 200 185; /* Borders / Hovers */
+      --color-obsidian-700: 190 180 160; 
+      --color-obsidian-600: 170 160 140; 
+      --text-main: 0 0 0;                /* Pure black for maximum contrast */
+      --text-muted: 70 70 70;            /* Darker grey for better visibility */
+    }
+
+    .dark {
+      /* DARK MODE (Original Obsidian Palette) */
       --bg-gradient: radial-gradient(circle at 50% 0%, #2a2005 0%, #050505 70%);
       --color-obsidian-950: 5 5 5;       /* #050505 */
       --color-obsidian-900: 10 10 10;    /* #0A0A0A */
