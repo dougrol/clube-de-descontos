@@ -21,7 +21,7 @@ const Splash: React.FC<SplashProps> = ({ onFinish }) => {
   }, [onFinish]);
 
   return (
-    <div className="dark fixed inset-0 bg-obsidian-950 flex flex-col items-center justify-center z-50 px-6">
+    <div className="fixed inset-0 bg-black flex flex-col items-center justify-center z-50 px-6">
       <div className="relative animate-pulse-slow flex flex-col items-center mt-32">
         {/* Glow Effect */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gold-500 blur-[90px] opacity-15 rounded-full animate-pulse pointer-events-none" />
@@ -60,7 +60,7 @@ const Splash: React.FC<SplashProps> = ({ onFinish }) => {
                   showSkeleton={true}
                 />
               </div>
-              <span className="text-theme-muted text-[8px] mt-1.5 uppercase tracking-wider font-medium">{partner.name}</span>
+              <span className="text-gray-400 text-[8px] mt-1.5 uppercase tracking-wider font-medium">{partner.name}</span>
             </div>
           ))}
         </div>

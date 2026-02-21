@@ -172,12 +172,12 @@ const Register: React.FC = () => {
 
     if (success) {
         return (
-            <div className="dark min-h-screen bg-obsidian-950 flex flex-col items-center justify-center p-6 text-center">
+            <div className="min-h-screen bg-black flex flex-col items-center justify-center p-6 text-center">
                 <div className="bg-gold-500/10 p-6 rounded-full mb-6">
                     <CheckCircle size={64} className="text-gold-500" />
                 </div>
-                <h2 className="text-2xl font-bold text-theme-text mb-2">Conta Criada!</h2>
-                <p className="text-theme-muted mb-6 max-w-xs mx-auto">
+                <h2 className="text-2xl font-bold text-white mb-2">Conta Criada!</h2>
+                <p className="text-gray-400 mb-6 max-w-xs mx-auto">
                     Enviamos um link de confirmação para <b>{formData.email}</b>. Verifique sua caixa de entrada para ativar sua conta.
                 </p>
                 <div className="bg-gold-500/10 border border-gold-500/30 rounded-xl p-4 mb-6 max-w-xs mx-auto">
@@ -194,23 +194,23 @@ const Register: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen bg-obsidian-950 flex flex-col justify-center px-6 py-10 relative overflow-hidden">
+        <div className="min-h-screen bg-black flex flex-col justify-center px-6 py-10 relative overflow-hidden">
             {/* Background Decor */}
             <div className="absolute -top-20 -right-20 w-64 h-64 bg-gold-600/10 rounded-full blur-3xl" />
 
             <div className="relative z-10 w-full max-w-sm mx-auto animate-fade-in">
                 <button
                     onClick={() => navigate('/login')}
-                    className="flex items-center text-theme-muted hover:text-theme-text mb-6 transition-colors text-sm"
+                    className="flex items-center text-gray-400 hover:text-white mb-6 transition-colors text-sm"
                 >
                     <ArrowLeft size={16} className="mr-2" /> Voltar
                 </button>
 
                 <div className="mb-6">
-                    <h2 className="text-2xl font-serif font-bold text-theme-text mb-2">
+                    <h2 className="text-2xl font-serif font-bold text-white mb-2">
                         Cadastro de <span className="text-gold-500">Associado</span>
                     </h2>
-                    <p className="text-theme-muted text-xs">
+                    <p className="text-gray-400 text-xs">
                         Exclusivo para associados ativos das associações parceiras.
                     </p>
                 </div>
@@ -263,23 +263,23 @@ const Register: React.FC = () => {
                     />
 
                     <div className="space-y-1">
-                        <label className="text-xs font-bold text-theme-muted uppercase tracking-wider ml-1">
+                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">
                             Associação de Origem
                         </label>
                         <div className="relative">
-                            <Building2 size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-theme-muted" />
+                            <Building2 size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                             <select
                                 value={formData.association}
                                 onChange={(e) => setFormData({ ...formData, association: e.target.value })}
-                                className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-3 text-sm text-theme-text focus:border-gold-500 focus:bg-obsidian-900 outline-none transition-all appearance-none"
+                                className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-3 text-sm text-white focus:border-gold-500 focus:bg-zinc-900 outline-none transition-all appearance-none"
                                 required
                             >
-                                <option value="" className="bg-obsidian-900">Selecione sua associação</option>
-                                <option value="auto_vale" className="bg-obsidian-900">Auto Vale Proteção Veicular</option>
-                                <option value="agv" className="bg-obsidian-900">AGV Proteção</option>
-                                <option value="eleva_mais" className="bg-obsidian-900">Eleva Mais</option>
-                                <option value="protebem" className="bg-obsidian-900">Protebem</option>
-                                <option value="apvs_brasil" className="bg-obsidian-900">APVS Brasil</option>
+                                <option value="" className="bg-zinc-900">Selecione sua associação</option>
+                                <option value="auto_vale" className="bg-zinc-900">Auto Vale Proteção Veicular</option>
+                                <option value="agv" className="bg-zinc-900">AGV Proteção</option>
+                                <option value="eleva_mais" className="bg-zinc-900">Eleva Mais</option>
+                                <option value="protebem" className="bg-zinc-900">Protebem</option>
+                                <option value="apvs_brasil" className="bg-zinc-900">APVS Brasil</option>
                             </select>
                         </div>
                     </div>

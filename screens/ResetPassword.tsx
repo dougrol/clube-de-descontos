@@ -142,7 +142,7 @@ const ResetPassword: React.FC = () => {
 
     if (checkingSession) {
         return (
-            <div className="dark min-h-screen bg-obsidian-950 flex items-center justify-center">
+            <div className="min-h-screen bg-black flex items-center justify-center">
                 <div className="text-gold-500 flex flex-col items-center gap-4">
                     <div className="w-8 h-8 border-2 border-gold-500 border-t-transparent rounded-full animate-spin"></div>
                     <span>Verificando sessão...</span>
@@ -152,7 +152,7 @@ const ResetPassword: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen bg-obsidian-950 flex flex-col justify-center px-8 relative overflow-hidden">
+        <div className="min-h-screen bg-black flex flex-col justify-center px-8 relative overflow-hidden">
             {/* Background Grid Pattern */}
             <div className="absolute inset-0 opacity-5">
                 <div className="absolute inset-0" style={{
@@ -171,10 +171,10 @@ const ResetPassword: React.FC = () => {
                     <div className="inline-flex items-center justify-center w-20 h-20 bg-gold-500/10 rounded-2xl border border-gold-500/20 mb-6">
                         <ShieldCheck size={40} className="text-gold-500" />
                     </div>
-                    <h1 className="text-2xl font-bold text-theme-text mb-2">
+                    <h1 className="text-2xl font-bold text-white mb-2">
                         Nova Senha
                     </h1>
-                    <p className="text-theme-muted text-sm">
+                    <p className="text-gray-400 text-sm">
                         {isValidSession
                             ? 'Digite sua nova senha abaixo'
                             : 'Link inválido ou expirado'
@@ -183,14 +183,14 @@ const ResetPassword: React.FC = () => {
                 </div>
 
                 {/* Card Form */}
-                <div className="bg-obsidian-900 border border-white/10 rounded-2xl p-8 shadow-2xl">
+                <div className="bg-zinc-900 border border-white/10 rounded-2xl p-8 shadow-2xl">
                     {success ? (
                         <div className="text-center py-4">
                             <div className="inline-flex items-center justify-center w-16 h-16 bg-green-500/10 rounded-full mb-4">
                                 <CheckCircle size={32} className="text-green-500" />
                             </div>
-                            <h3 className="text-theme-text font-semibold mb-2">Senha Redefinida!</h3>
-                            <p className="text-theme-muted text-sm mb-6">
+                            <h3 className="text-white font-semibold mb-2">Senha Redefinida!</h3>
+                            <p className="text-gray-400 text-sm mb-6">
                                 Sua senha foi alterada com sucesso. Redirecionando para o login...
                             </p>
                         </div>
@@ -199,8 +199,8 @@ const ResetPassword: React.FC = () => {
                             <div className="inline-flex items-center justify-center w-16 h-16 bg-red-500/10 rounded-full mb-4">
                                 <AlertCircle size={32} className="text-red-500" />
                             </div>
-                            <h3 className="text-theme-text font-semibold mb-2">Link Inválido</h3>
-                            <p className="text-theme-muted text-sm mb-6">
+                            <h3 className="text-white font-semibold mb-2">Link Inválido</h3>
+                            <p className="text-gray-400 text-sm mb-6">
                                 Este link de redefinição é inválido ou já expirou. Solicite um novo link.
                             </p>
                             <Button onClick={() => navigate('/forgot-password')} className="w-full">
@@ -229,7 +229,7 @@ const ResetPassword: React.FC = () => {
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-9 text-theme-muted hover:text-gray-300"
+                                    className="absolute right-3 top-9 text-gray-400 hover:text-gray-300"
                                 >
                                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>

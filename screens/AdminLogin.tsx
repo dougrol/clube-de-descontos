@@ -66,7 +66,7 @@ const AdminLogin: React.FC = () => {
     };
 
     return (
-        <div className="dark min-h-screen bg-obsidian-950 flex flex-col justify-center px-8 relative overflow-hidden">
+        <div className="min-h-screen bg-black flex flex-col justify-center px-8 relative overflow-hidden">
             {/* Background Grid Pattern */}
             <div className="absolute inset-0 opacity-5">
                 <div className="absolute inset-0" style={{
@@ -85,16 +85,16 @@ const AdminLogin: React.FC = () => {
                     <div className="inline-flex items-center justify-center w-20 h-20 bg-gold-500/10 rounded-2xl border border-gold-500/20 mb-6">
                         <ShieldAlert size={40} className="text-gold-500" />
                     </div>
-                    <h1 className="text-2xl font-bold text-theme-text mb-2">
+                    <h1 className="text-2xl font-bold text-white mb-2">
                         Painel Administrativo
                     </h1>
-                    <p className="text-theme-muted text-sm">
+                    <p className="text-gray-400 text-sm">
                         Acesso restrito a administradores do sistema
                     </p>
                 </div>
 
                 {/* Card Form */}
-                <div className="bg-obsidian-900 border border-white/10 rounded-2xl p-8 shadow-2xl">
+                <div className="bg-zinc-900 border border-white/10 rounded-2xl p-8 shadow-2xl">
                     <form onSubmit={handleSubmit} className="space-y-6">
                         {error && (
                             <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 flex items-start gap-3">
@@ -146,7 +146,7 @@ const AdminLogin: React.FC = () => {
                 <div className="mt-8 text-center">
                     <button
                         onClick={() => navigate('/login')}
-                        className="text-theme-muted text-sm hover:text-gray-300 transition-colors"
+                        className="text-gray-400 text-sm hover:text-gray-300 transition-colors"
                     >
                         ← Voltar para login principal
                     </button>
