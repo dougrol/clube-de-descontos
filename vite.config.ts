@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       VitePWA({
-        registerType: "autoUpdate",
+        registerType: "prompt",
         includeAssets: ["favicon.png", "apple-touch-icon.png"],
         manifest: {
           name: "Tavares Car Club",

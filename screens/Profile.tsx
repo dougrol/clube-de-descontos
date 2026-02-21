@@ -165,14 +165,14 @@ const Profile: React.FC<ProfileProps> = ({ userRole }) => {
                   <MenuOption
                      icon={Key}
                      label="Alterar Senha"
-                     onClick={() => navigate('/forgot-password')}
+                     onClick={() => navigate('/change-password')}
                      color="text-yellow-400"
                   />
                   <MenuOption
                      icon={CreditCard}
                      label="Meu Plano"
                      subLabel="Gerenciar assinatura"
-                     onClick={() => { }}
+                     onClick={() => navigate('/protection')}
                      color="text-gold-400"
                   />
                </div>

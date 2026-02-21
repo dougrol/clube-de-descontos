@@ -203,7 +203,7 @@ const ResetPassword: React.FC = () => {
                             <p className="text-theme-muted text-sm mb-6">
                                 Este link de redefinição é inválido ou já expirou. Solicite um novo link.
                             </p>
-                            <Button onClick={() => navigate('/admin-forgot-password')} className="w-full">
+                            <Button onClick={() => navigate('/forgot-password')} className="w-full">
                                 Solicitar Novo Link
                             </Button>
                         </div>

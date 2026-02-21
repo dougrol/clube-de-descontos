@@ -18,6 +18,7 @@ import Admin from './screens/Admin';
 import Protection from './screens/VehicleProtection';
 import SalesConsultancy from './screens/SalesConsultancy';
 import CorporateConsultancy from './screens/CorporateConsultancy';
+import ChangePassword from './screens/ChangePassword';
 
 import About from './screens/About';
 import RegisterPartner from './screens/RegisterPartner';
@@ -132,6 +133,12 @@ const AppRoutes: React.FC = () => {
           element={isAuthenticated ? <PersonalData userRole={role} /> : <Navigate to="/login" />}
         />
 
+        {/* Change Password Route */}
+        <Route
+          path="/change-password"
+          element={isAuthenticated ? <ChangePassword /> : <Navigate to="/login" />}
+        />
+
         {/* My Coupons Route */}
         <Route
           path="/my-coupons"
@@ -190,6 +197,7 @@ const AppRoutes: React.FC = () => {
 };
 
 import { ThemeProvider } from './contexts/ThemeContext';
+import PWAReloadPrompt from './components/PWAReloadPrompt';
 
 const App: React.FC = () => {
   return (
@@ -200,6 +208,7 @@ const App: React.FC = () => {
             <ToastProvider>
               <HashRouter>
                 <AppRoutes />
+                <PWAReloadPrompt />
               </HashRouter>
             </ToastProvider>
           </CMSProvider>
