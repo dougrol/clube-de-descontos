@@ -11,7 +11,6 @@ async function createIcon(size, isMaskable) {
   const logoSize = Math.floor(size * logoRatio);
 
   const logoBuffer = await sharp(inputPath)
-    .trim()
     .resize({ width: logoSize, height: logoSize, fit: 'contain', background: { r: 0, g: 0, b:0, alpha: 0 } })
     .toBuffer();
 
@@ -37,7 +36,6 @@ async function createAppleTouch() {
   const logoSize = Math.floor(size * 0.75);
 
   const logoBuffer = await sharp(inputPath)
-    .trim()
     .resize({ width: logoSize, height: logoSize, fit: 'contain', background: { r: 0, g: 0, b:0, alpha: 0 } })
     .toBuffer();
 
