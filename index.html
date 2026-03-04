@@ -10,6 +10,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="darkreader-lock" content="true" />
   <!-- SEO & Security -->
   <meta name="description"
     content="Clube de Vantagens Tavares Car - Descontos exclusivos para associados em restaurantes, lojas, serviços e muito mais." />
@@ -148,6 +149,16 @@
     /* ========================================
        120Hz PERFORMANCE OPTIMIZATIONS
        ======================================== */
+
+    /* Chrome Autofill fix for contrast */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0 30px rgb(var(--color-obsidian-900)) inset !important;
+        -webkit-text-fill-color: rgb(var(--text-main)) !important;
+        transition: background-color 5000s ease-in-out 0s;
+    }
 
     /* Enable smooth scrolling at high refresh rates */
     html {

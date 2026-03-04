@@ -1,0 +1,67 @@
+screens/Admin.tsx(19,35): error TS2304: Cannot find name 'Partner'.
+screens/Admin.tsx(296,43): error TS2339: Property 'id' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(310,46): error TS2339: Property 'id' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(329,58): error TS2339: Property 'id' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(551,38): error TS2339: Property 'id' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(554,34): error TS2339: Property 'logoUrl' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(556,42): error TS2339: Property 'logoUrl' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(557,42): error TS2339: Property 'name' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(562,104): error TS2339: Property 'name' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(562,119): error TS2339: Property 'name' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(567,38): error TS2339: Property 'name' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(571,86): error TS2339: Property 'name' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(572,76): error TS2339: Property 'category' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(585,34): error TS2339: Property 'city' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(590,71): error TS2339: Property 'id' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(599,71): error TS2339: Property 'id' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(614,63): error TS2339: Property 'id' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(647,42): error TS2339: Property 'id' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(650,40): error TS2339: Property 'logoUrl' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(652,48): error TS2339: Property 'logoUrl' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(653,48): error TS2339: Property 'name' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(658,110): error TS2339: Property 'name' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(658,125): error TS2339: Property 'name' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(664,95): error TS2339: Property 'name' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(667,63): error TS2339: Property 'category' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(668,63): error TS2339: Property 'city' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(679,77): error TS2339: Property 'id' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(688,77): error TS2339: Property 'id' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(703,69): error TS2339: Property 'id' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(1092,34): error TS2339: Property 'name' does not exist on type 'Partial<ExtendedPartner>'.
+screens/Admin.tsx(1093,59): error TS2353: Object literal may only specify known properties, and 'name' does not exist in type 'SetStateAction<Partial<ExtendedPartner>>'.
+screens/Admin.tsx(1101,34): error TS2339: Property 'companyName' does not exist on type 'Partial<ExtendedPartner>'.
+screens/Admin.tsx(1102,59): error TS2353: Object literal may only specify known properties, and 'companyName' does not exist in type 'SetStateAction<Partial<ExtendedPartner>>'.
+screens/Admin.tsx(1113,34): error TS2339: Property 'cnpj' does not exist on type 'Partial<ExtendedPartner>'.
+screens/Admin.tsx(1114,59): error TS2353: Object literal may only specify known properties, and 'cnpj' does not exist in type 'SetStateAction<Partial<ExtendedPartner>>'.
+screens/Admin.tsx(1121,34): error TS2339: Property 'category' does not exist on type 'Partial<ExtendedPartner>'.
+screens/Admin.tsx(1123,59): error TS2353: Object literal may only specify known properties, and 'category' does not exist in type 'SetStateAction<Partial<ExtendedPartner>>'.
+screens/Admin.tsx(1126,32): error TS2304: Cannot find name 'PartnerCategory'.
+screens/Admin.tsx(1127,27): error TS2322: Type 'unknown' is not assignable to type 'Key | null | undefined'.
+screens/Admin.tsx(1127,37): error TS2322: Type 'unknown' is not assignable to type 'string | number | readonly string[] | undefined'.
+screens/Admin.tsx(1127,49): error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+screens/Admin.tsx(1138,34): error TS2339: Property 'responsibleName' does not exist on type 'Partial<ExtendedPartner>'.
+screens/Admin.tsx(1139,59): error TS2353: Object literal may only specify known properties, and 'responsibleName' does not exist in type 'SetStateAction<Partial<ExtendedPartner>>'.
+screens/Admin.tsx(1147,34): error TS2339: Property 'phone' does not exist on type 'Partial<ExtendedPartner>'.
+screens/Admin.tsx(1148,59): error TS2353: Object literal may only specify known properties, and 'phone' does not exist in type 'SetStateAction<Partial<ExtendedPartner>>'.
+screens/Admin.tsx(1158,32): error TS2339: Property 'email' does not exist on type 'Partial<ExtendedPartner>'.
+screens/Admin.tsx(1159,57): error TS2353: Object literal may only specify known properties, and 'email' does not exist in type 'SetStateAction<Partial<ExtendedPartner>>'.
+screens/Admin.tsx(1169,34): error TS2339: Property 'city' does not exist on type 'Partial<ExtendedPartner>'.
+screens/Admin.tsx(1170,59): error TS2353: Object literal may only specify known properties, and 'city' does not exist in type 'SetStateAction<Partial<ExtendedPartner>>'.
+screens/Admin.tsx(1192,34): error TS2339: Property 'plan' does not exist on type 'Partial<ExtendedPartner>'.
+screens/Admin.tsx(1193,59): error TS2353: Object literal may only specify known properties, and 'plan' does not exist in type 'SetStateAction<Partial<ExtendedPartner>>'.
+screens/Admin.tsx(1206,36): error TS2339: Property 'price' does not exist on type 'Partial<ExtendedPartner>'.
+screens/Admin.tsx(1207,61): error TS2353: Object literal may only specify known properties, and 'price' does not exist in type 'SetStateAction<Partial<ExtendedPartner>>'.
+screens/Admin.tsx(1213,44): error TS2339: Property 'plan' does not exist on type 'Partial<ExtendedPartner>'.
+screens/Admin.tsx(1214,55): error TS2339: Property 'id' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(1248,34): error TS2339: Property 'logoUrl' does not exist on type 'Partial<ExtendedPartner>'.
+screens/Admin.tsx(1249,59): error TS2353: Object literal may only specify known properties, and 'logoUrl' does not exist in type 'SetStateAction<Partial<ExtendedPartner>>'.
+screens/Admin.tsx(1257,34): error TS2339: Property 'coverUrl' does not exist on type 'Partial<ExtendedPartner>'.
+screens/Admin.tsx(1258,59): error TS2353: Object literal may only specify known properties, and 'coverUrl' does not exist in type 'SetStateAction<Partial<ExtendedPartner>>'.
+screens/Admin.tsx(1268,32): error TS2339: Property 'benefit' does not exist on type 'Partial<ExtendedPartner>'.
+screens/Admin.tsx(1269,57): error TS2353: Object literal may only specify known properties, and 'benefit' does not exist in type 'SetStateAction<Partial<ExtendedPartner>>'.
+screens/Admin.tsx(1277,32): error TS2339: Property 'fullRules' does not exist on type 'Partial<ExtendedPartner>'.
+screens/Admin.tsx(1278,57): error TS2353: Object literal may only specify known properties, and 'fullRules' does not exist in type 'SetStateAction<Partial<ExtendedPartner>>'.
+screens/Admin.tsx(1320,34): error TS2339: Property 'id' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(1320,47): error TS2339: Property 'id' does not exist on type 'ExtendedPartner'.
+screens/Admin.tsx(1320,54): error TS2339: Property 'name' does not exist on type 'ExtendedPartner'.
+screens/Login.tsx(9,28): error TS2307: Cannot find module '../utils/authUtils' or its corresponding type declarations.

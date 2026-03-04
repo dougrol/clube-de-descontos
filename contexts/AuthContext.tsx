@@ -8,6 +8,8 @@ interface AuthContextType {
     session: Session | null;
     user: User | null;
     role: UserRole;
+    memberStatus: string | null;
+    associationId: string | null;
     loading: boolean;
     signOut: () => Promise<void>;
     refreshSession: () => Promise<void>;
@@ -17,6 +19,8 @@ const AuthContext = createContext<AuthContextType>({
     session: null,
     user: null,
     role: UserRole.USER,
+    memberStatus: null,
+    associationId: null,
     loading: true,
     signOut: async () => { },
     refreshSession: async () => { },
@@ -26,6 +30,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [session, setSession] = useState<Session | null>(null);
     const [user, setUser] = useState<User | null>(null);
     const [role, setRole] = useState<UserRole>(UserRole.USER);
+    const [memberStatus, setMemberStatus] = useState<string | null>(null);
+    const [associationId, setAssociationId] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -124,8 +130,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             } else {
                 setRole(UserRole.USER);
             }
+
+            // Also map member status and association id if applicable
+            const { data: memberData } = await supabase
+                .from('members')
+                .select('status, association_id')
+                .eq('auth_user_id', userId)
+                .single();
+            
+            if (memberData) {
+                setMemberStatus(memberData.status);
+                setAssociationId(memberData.association_id);
+            }
+
         } catch (error) {
-            console.error('Error fetching role:', error);
+            console.error('Error fetching role or member data:', error);
         } finally {
             setLoading(false);
         }
@@ -159,7 +178,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     return (
-        <AuthContext.Provider value={{ session, user, role, loading, signOut, refreshSession }}>
+        <AuthContext.Provider value={{ session, user, role, memberStatus, associationId, loading, signOut, refreshSession }}>
             {children}
         </AuthContext.Provider>
     );

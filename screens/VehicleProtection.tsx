@@ -188,7 +188,7 @@ const Protection: React.FC = () => {
                                        <div className="bg-blue-500/20 p-1 rounded-full text-blue-400">
                                           <CheckCircle2 size={12} strokeWidth={3} />
                                        </div>
-                                       <span className="text-theme-muted text-sm font-medium">{feat}</span>
+                                       <span className="text-gray-300 text-sm font-medium">{feat}</span>
                                     </div>
                                  ))}
                                  {plan.features.length > 4 && (
@@ -197,7 +197,7 @@ const Protection: React.FC = () => {
                               </div>
 
                               <Button
-                                 className={`w-full py-4 rounded-xl font-bold text-sm shadow-none transition-all ${plan.is_popular ? 'bg-blue-600 hover:bg-blue-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
+                                 className={`w-full py-4 rounded-xl font-bold text-sm shadow-none transition-all ${plan.is_popular ? 'bg-blue-600 hover:bg-blue-500 text-white' : 'bg-obsidian-600 hover:bg-obsidian-500 text-white border border-white/10'}`}
                                  onClick={() => window.open(`https://wa.me/5562982553770?text=Olá!%20Fiz%20a%20simulação%20para%20${selectedVehicle}%20e%20gostei%20do%20plano%20${plan.name}`, '_blank')}
                               >
                                  CONTRATAR AGORA
@@ -212,7 +212,7 @@ const Protection: React.FC = () => {
 
          {/* Partner Associations */}
          <div className="px-5 py-8 border-t border-white/5 mt-8">
-            <p className="text-gray-600 text-[9px] uppercase tracking-[0.2em] text-center mb-4">
+            <p className="text-gray-400 text-[9px] uppercase tracking-[0.2em] text-center mb-4">
                Associações Parceiras
             </p>
             <div className="flex items-center justify-center gap-6 sm:gap-8">

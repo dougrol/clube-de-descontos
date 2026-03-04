@@ -9,6 +9,7 @@ import { useCMS, SiteContent } from '../contexts/CMSContext';
 import { toggleProductActive } from '../services/storeService';
 import { updatePartner } from '../services/partners';
 import { UsedCouponsList } from '../components/admin/UsedCouponsList';
+import { AdminImport } from './admin/AdminImport';
 
 interface ChartData {
   name: string;
@@ -35,7 +36,7 @@ const StatCard: React.FC<{ title: string; value: string; icon: React.ReactNode; 
 );
 
 const Admin: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'content' | 'products' | 'coupons' | 'protection'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'content' | 'products' | 'coupons' | 'protection' | 'import'>('dashboard');
   const [totalUsers, setTotalUsers] = useState<number>(0);
   const [activePartnersCount, setActivePartnersCount] = useState<number>(0);
   const [partners, setPartners] = useState<ExtendedPartner[]>([]);
@@ -484,6 +485,12 @@ const Admin: React.FC = () => {
             >
               <ShieldCheck size={16} /> Proteção
             </button>
+            <button
+              onClick={() => setActiveTab('import')}
+              className={`px-4 py-2.5 rounded-md text-sm font-bold flex items-center gap-2 transition-all whitespace-nowrap ${activeTab === 'import' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
+            >
+              <Users size={16} /> Importação Associados
+            </button>
           </div>
         </div>
       </header>
@@ -545,7 +552,16 @@ const Admin: React.FC = () => {
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-3">
                         {partner.logoUrl ? (
-                          <img src={partner.logoUrl} alt={partner.name} className="w-10 h-10 rounded-full object-cover" />
+                          <img 
+                            src={partner.logoUrl} 
+                            alt={partner.name} 
+                            className="w-10 h-10 rounded-full object-cover"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.onerror = null;
+                              target.src = 'https://placehold.co/40x40/1a1a1a/d4af37?text=' + (partner.name ? partner.name.substring(0, 1).toUpperCase() : 'P');
+                            }}
+                          />
                         ) : (
                           <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-xs text-theme-text uppercase">
                             {partner.name.substring(0, 2)}
@@ -632,7 +648,16 @@ const Admin: React.FC = () => {
                           <td className="p-2 sm:p-3 font-medium text-theme-text">
                             <div className="flex items-center gap-2">
                               {partner.logoUrl ? (
-                                <img src={partner.logoUrl} alt={partner.name} className="w-6 h-6 rounded-full object-cover shrink-0" />
+                                <img 
+                                  src={partner.logoUrl} 
+                                  alt={partner.name} 
+                                  className="w-6 h-6 rounded-full object-cover shrink-0" 
+                                  onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.onerror = null;
+                                    target.src = 'https://placehold.co/24x24/1a1a1a/d4af37?text=' + (partner.name ? partner.name.substring(0, 1).toUpperCase() : 'P');
+                                  }}
+                                />
                               ) : (
                                 <div className="w-6 h-6 rounded-full bg-gray-700 shrink-0" />
                               )}
@@ -899,6 +924,11 @@ const Admin: React.FC = () => {
         <UsedCouponsList />
       )}
 
+      {/* Import Users Tab Content */}
+      {activeTab === 'import' && (
+        <AdminImport />
+      )}
+
       {/* Protection Plans Tab Content */}
       {activeTab === 'protection' && (
         <div className="space-y-6">
@@ -1051,6 +1081,7 @@ const Admin: React.FC = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title="Editar Parceiro"
+        maxWidth="2xl"
       >
         <form onSubmit={handleSave} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1272,6 +1303,7 @@ const Admin: React.FC = () => {
         isOpen={isProductModalOpen}
         onClose={() => setIsProductModalOpen(false)}
         title={editingProduct ? 'Editar Produto' : 'Novo Produto'}
+        maxWidth="2xl"
       >
         <form onSubmit={handleSaveProduct} className="space-y-4">
           {!editingProduct && (
@@ -1393,6 +1425,7 @@ const Admin: React.FC = () => {
         isOpen={isProtectionModalOpen}
         onClose={() => setIsProtectionModalOpen(false)}
         title={editingPlan ? 'Editar Plano' : 'Novo Plano de Proteção'}
+        maxWidth="2xl"
       >
         <form onSubmit={handleSavePlan} className="space-y-4">
           <div>

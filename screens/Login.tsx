@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Lock, ChevronRight, AlertCircle, Store, User, Sparkles, CreditCard, Eye, EyeOff, Mail, ShieldCheck, HelpCircle, ArrowRight } from 'lucide-react';
+import { Lock, ChevronRight, AlertCircle, Store, User, Sparkles, CreditCard, Eye, EyeOff } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { ImageWithFallback } from '../components/ui/ImageWithFallback';
 import { Button, Input } from '../components/ui';
 import { StaggerContainer, StaggerItem } from '../components/motion';
 import { supabase } from '../services/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
+import { cpfToEmail } from '../src/utils/authUtils';
 
 // CPF formatting helper
 const formatCPF = (value: string): string => {
@@ -71,12 +71,12 @@ const Login: React.FC = () => {
     try {
       if (selectedRole === 'partner') {
         // Partners login with email
-        const { data, error } = await supabase.auth.signInWithPassword({
+        const { data, error: partnerAuthError } = await supabase.auth.signInWithPassword({
           email: cpf, // For partners, this field is actually email
           password,
         });
 
-        if (error) throw error;
+        if (partnerAuthError) throw partnerAuthError;
 
         const userId = data?.user?.id;
         if (!userId) {
@@ -115,26 +115,37 @@ const Login: React.FC = () => {
         } else {
           navigate('/partner-dashboard');
         }
-      } else {
-        // Clients login with CPF
-        // First, find user by CPF
-        const { data: userData, error: userError } = await supabase
-          .from('users')
-          .select('email')
-          .eq('cpf', cleanCPF)
-          .single();
+        // Clients login with CPF (which resolves to deterministic email)
+        const deterministicEmail = cpfToEmail(cleanCPF);
 
-        if (userError || !userData) {
-          throw new Error('CPF não encontrado. Se você é um associado, faça seu cadastro primeiro.');
-        }
-
-        // Login with the email associated with this CPF
-        const { error } = await supabase.auth.signInWithPassword({
-          email: userData.email,
+        // Login with the deterministic email
+        const { error: clientAuthError } = await supabase.auth.signInWithPassword({
+          email: deterministicEmail,
           password,
         });
 
-        if (error) throw error;
+        if (clientAuthError) {
+           // We can throw generic error or specific. If user not found Auth will complain
+           throw clientAuthError;
+        }
+
+        // Fetch user data from public members table to guarantee association exists
+        const { data: memberData, error: memberError } = await supabase
+          .from('members')
+          .select('id, status')
+          .eq('cpf', cleanCPF)
+          .single();
+          
+        if(memberError || !memberData) {
+            // It could be that Auth exists but member was deleted
+            await supabase.auth.signOut();
+            throw new Error('Cadastro de associado não localizado ou inválido.');
+        }
+
+        if(memberData.status !== 'active') {
+            await supabase.auth.signOut();
+            throw new Error('Sua conta de associado não está ativa no momento.');
+        }
 
         // Force refresh session to ensure AuthContext has the latest role
         await refreshSession();
@@ -246,7 +257,7 @@ const Login: React.FC = () => {
               <motion.div
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="bg-red-500/10 border border-red-500/50 rounded-lg p-3 flex items-start gap-3"
+                className="bg-red-500/15 border border-red-500/60 rounded-lg p-3 flex items-start gap-3"
               >
                 <AlertCircle size={18} className="text-red-500 shrink-0 mt-0.5" />
                 <p className="text-red-200 text-xs">{error}</p>
@@ -381,7 +392,7 @@ const Login: React.FC = () => {
 
             {/* Partner Associations */}
             <div className="pt-6 mt-2">
-              <p className="text-gray-600 text-[9px] uppercase tracking-[0.2em] text-center mb-4">
+              <p className="text-gray-400 text-[9px] uppercase tracking-[0.2em] text-center mb-4">
                 Associações Parceiras
               </p>
               <div className="flex items-center justify-center gap-5">

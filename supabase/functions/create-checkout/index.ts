@@ -1,18 +1,25 @@
+// @ts-expect-error - Deno imports are not recognized by the standard VS Code TS server
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+// @ts-expect-error - Deno imports are not recognized by the standard VS Code TS server
 import Stripe from 'https://esm.sh/stripe@12.18.0?target=deno'
+
+// Declara a variável global Deno para evitar erros no TypeScript
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare const Deno: any;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-serve(async (req) => {
+serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
 
   try {
-    const { partnerId, plan } = await req.json()
+    const body = await req.json() as unknown;
+    const { partnerId, plan } = body as { partnerId: string, plan: string };
 
     // Inicializa Stripe
     const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY')!, {
@@ -59,9 +66,10 @@ serve(async (req) => {
         status: 200 
       }
     )
-  } catch (error) {
+  } catch (error: unknown) {
+    const err = error as Error;
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: err.message }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 400 

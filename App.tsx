@@ -37,7 +37,7 @@ const AppRoutes: React.FC = () => {
   const [showSplash, setShowSplash] = useState(true);
 
   if (loading) {
-    return <div className="min-h-screen bg-black flex items-center justify-center text-gold-500">Carregando...</div>;
+    return <div className="min-h-screen bg-obsidian-950 flex items-center justify-center text-gold-500">Carregando...</div>;
   }
 
   if (showSplash) {

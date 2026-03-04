@@ -1,5 +1,5 @@
 import React from 'react';
-// @ts-ignore - plugin provides this virtual module
+// @ts-expect-error - plugin provides this virtual module
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { RefreshCw, X } from 'lucide-react';
 
@@ -8,10 +8,10 @@ export default function PWAReloadPrompt() {
     needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
   } = useRegisterSW({
-    onRegistered(r: any) {
+    onRegistered(r: unknown) {
       console.log('SW Registered: ' + r);
     },
-    onRegisterError(error: any) {
+    onRegisterError(error: unknown) {
       console.log('SW registration error', error);
     },
   });

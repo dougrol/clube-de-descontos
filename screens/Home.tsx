@@ -196,7 +196,7 @@ const Home: React.FC = () => {
                         src={partner.coverUrl}
                         className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
                         alt={partner.name}
-                        fallbackSrc="https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=800&q=80" // Generic business image
+                        fallbackSrc="https://placehold.co/600x400/1a1a1a/d4af37?text=Parceria" 
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900 to-transparent opacity-80"></div>
                       <div className="absolute bottom-4 left-4 right-4">

@@ -298,7 +298,7 @@ const Register: React.FC = () => {
                         </span>
                     </Button>
 
-                    <p className="text-[10px] text-gray-600 text-center mt-4">
+                    <p className="text-[10px] text-gray-400 text-center mt-4">
                         Ao criar sua conta, você concorda com nossos termos de uso e política de privacidade.
                     </p>
                 </form>
