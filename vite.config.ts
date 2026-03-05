@@ -36,10 +36,11 @@ export default defineConfig(({ mode }) => {
             { src: "/icons/maskable-192.png", sizes: "192x192", type: "image/png", purpose: "maskable" },
             { src: "/icons/maskable-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
           ],
-          screenshots: [
+          // Desativando temporariamente para evitar falha no vite-plugin-pwa generator
+          /*screenshots: [
             { src: "/screenshots/screenshot-wide.png", sizes: "1280x720", type: "image/png", form_factor: "wide", label: "Tela inicial do Clube de Vantagens" },
             { src: "/screenshots/screenshot-narrow.png", sizes: "720x1280", type: "image/png", form_factor: "narrow", label: "Tela inicial no celular" },
-          ],
+          ],*/
         },
       }),
       viteImagemin({
