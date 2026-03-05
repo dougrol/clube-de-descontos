@@ -17,12 +17,14 @@
     "framer-motion": "^12.33.0",
     "html5-qrcode": "^2.3.8",
     "lucide-react": "^0.563.0",
+    "pdfjs-dist": "^5.5.207",
     "qrcode.react": "^4.2.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-router-dom": "^7.13.0",
     "recharts": "^3.7.0",
-    "sharp": "^0.34.5"
+    "sharp": "^0.34.5",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",

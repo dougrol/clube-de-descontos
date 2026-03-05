@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ShoppingBag, ArrowRight, Tag } from 'lucide-react';
 import { Card, Button, ImageWithFallback } from '../components/ui';
 import { fetchPartners } from '../services/partners';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Partner } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -68,7 +68,7 @@ const Home: React.FC = () => {
           <div className="flex items-center gap-3">
 
 
-            <div onClick={() => navigate('/profile')} className="relative cursor-pointer group">
+            <Link to="/profile" className="relative cursor-pointer group outline-none focus-visible:ring-2 focus-visible:ring-gold-500 rounded-full">
               <div className="w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-white/10 p-1 group-hover:border-gold-500 transition-colors duration-300">
                 <ImageWithFallback
                   src={displayAvatar}
@@ -77,7 +77,7 @@ const Home: React.FC = () => {
                   fallbackSrc={`https://ui-avatars.com/api/?name=${user?.user_metadata?.name || 'User'}&background=D4AF37&color=000`}
                 />
               </div>
-            </div>
+            </Link>
           </div>
         </header>
 
@@ -128,7 +128,7 @@ const Home: React.FC = () => {
 
         {/* 3.5 Consultancy Highlight (New) */}
         <div className="mb-8 animate-slide-up" style={{ animationDelay: '0.15s' }}>
-          <div onClick={() => navigate('/consultancy')} className="bg-gradient-to-r from-emerald-900 to-obsidian-900 rounded-2xl p-5 border border-emerald-500/20 relative overflow-hidden group cursor-pointer shadow-lg shadow-emerald-900/10">
+          <Link to="/consultancy" className="block bg-gradient-to-r from-emerald-900 to-obsidian-900 rounded-2xl p-5 border border-emerald-500/20 relative overflow-hidden group cursor-pointer shadow-lg shadow-emerald-900/10 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500">
             <div className="absolute right-0 top-0 w-32 h-32 bg-emerald-600/20 rounded-full blur-3xl -translate-y-10 translate-x-10"></div>
 
             <div className="relative z-10 flex items-center justify-between">
@@ -144,12 +144,12 @@ const Home: React.FC = () => {
                 <ArrowRight size={18} />
               </div>
             </div>
-          </div>
+          </Link>
         </div>
 
         {/* 3.6 Shopee Offers Highlight (New) */}
         <div className="mb-8 animate-slide-up" style={{ animationDelay: '0.18s' }}>
-          <div onClick={() => navigate('/ofertas')} className="bg-gradient-to-r from-signal-500/20 to-obsidian-900 rounded-2xl p-5 border border-signal-500/30 relative overflow-hidden group cursor-pointer shadow-lg shadow-signal-500/10">
+          <Link to="/ofertas" className="block bg-gradient-to-r from-signal-500/20 to-obsidian-900 rounded-2xl p-5 border border-signal-500/30 relative overflow-hidden group cursor-pointer shadow-lg shadow-signal-500/10 outline-none focus-visible:ring-2 focus-visible:ring-signal-500">
             <div className="absolute right-0 bottom-0 w-32 h-32 bg-signal-500/10 rounded-full blur-3xl translate-y-10 translate-x-10"></div>
             
             <div className="relative z-10 flex items-center justify-between">
@@ -165,7 +165,7 @@ const Home: React.FC = () => {
                 <ShoppingBag size={18} className="text-theme-text" />
               </div>
             </div>
-          </div>
+          </Link>
         </div>
 
         {/* 4. Feature Grid (Replaces Bento) */}
@@ -180,53 +180,54 @@ const Home: React.FC = () => {
         <div className="animate-slide-up" style={{ animationDelay: '0.3s' }}>
           <div className="flex items-center justify-between mb-6 px-2">
             <h3 className="font-bold text-theme-text text-lg">Clube de Vantagens</h3>
-            <button onClick={() => navigate('/benefits')} className="text-gold-500 text-xs font-bold tracking-widest uppercase hover:text-theme-text transition-colors">Ver Todos</button>
+            <Link to="/benefits" className="text-gold-500 text-xs font-bold tracking-widest uppercase hover:text-theme-text transition-colors outline-none focus-visible:ring-1 focus-visible:ring-gold-500 rounded px-1">Ver Todos</Link>
           </div>
 
           <div className="relative w-full overflow-hidden -mx-6 px-6 md:mx-0 md:px-0">
             <div className="flex gap-4 overflow-x-auto pb-8 scrollbar-hide snap-x">
               {featuredPartners.map((partner, idx) => (
                 <div key={idx} className="snap-start shrink-0 w-[260px]">
-                  <Card
-                    onClick={() => navigate(`/benefits/${partner.id}`)}
-                    className="h-[320px] p-0 border-0 bg-obsidian-900 rounded-3xl overflow-hidden group hover:scale-[1.02] transition-transform duration-300 shadow-xl shadow-black/50"
-                  >
-                    <div className="h-[65%] relative">
-                      <ImageWithFallback
-                        src={partner.coverUrl}
-                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-                        alt={partner.name}
-                        fallbackSrc="https://placehold.co/600x400/1a1a1a/d4af37?text=Parceria" 
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900 to-transparent opacity-80"></div>
-                      <div className="absolute bottom-4 left-4 right-4">
-                        <h4 className="text-xl font-bold text-theme-text leading-tight mb-1">{partner.name}</h4>
-                        <span className="text-[10px] uppercase tracking-wider text-gold-500 font-bold bg-obsidian-950/30 backdrop-blur px-2 py-1 rounded-full">
-                          {partner.category}
-                        </span>
+                  <Link to={`/benefits/${partner.id}`} className="block outline-none focus-visible:ring-2 focus-visible:ring-gold-500 rounded-3xl">
+                    <Card
+                      className="h-[320px] p-0 border-0 bg-obsidian-900 rounded-3xl overflow-hidden group hover:scale-[1.02] transition-transform duration-300 shadow-xl shadow-black/50"
+                    >
+                      <div className="h-[65%] relative">
+                        <ImageWithFallback
+                          src={partner.coverUrl}
+                          className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                          alt={partner.name}
+                          fallbackSrc="https://placehold.co/600x400/1a1a1a/d4af37?text=Parceria" 
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900 to-transparent opacity-80"></div>
+                        <div className="absolute bottom-4 left-4 right-4">
+                          <h4 className="text-xl font-bold text-theme-text leading-tight mb-1">{partner.name}</h4>
+                          <span className="text-[10px] uppercase tracking-wider text-gold-500 font-bold bg-obsidian-950/30 backdrop-blur px-2 py-1 rounded-full">
+                            {partner.category}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    <div className="h-[35%] p-5 bg-obsidian-900 relative">
-                      <div className="flex items-center gap-2 text-theme-muted text-xs mb-3">
-                        <Tag size={12} className="text-gold-500" />
-                        <span className="line-clamp-1">{partner.benefit}</span>
+                      <div className="h-[35%] p-5 bg-obsidian-900 relative">
+                        <div className="flex items-center gap-2 text-theme-muted text-xs mb-3">
+                          <Tag size={12} className="text-gold-500" />
+                          <span className="line-clamp-1">{partner.benefit}</span>
+                        </div>
+                        <button className="w-full py-2 rounded-xl bg-white/5 text-white text-xs font-bold transition-colors">
+                          USAR DESCONTO
+                        </button>
                       </div>
-                      <button className="w-full py-2 rounded-xl bg-white/5 text-white text-xs font-bold hover:bg-gold-500 hover:text-black transition-colors">
-                        USAR DESCONTO
-                      </button>
-                    </div>
-                  </Card>
+                    </Card>
+                  </Link>
                 </div>
               ))}
 
               {/* View All Card */}
               <div className="snap-start shrink-0 w-[100px] flex items-center justify-center">
-                <button
-                  onClick={() => navigate('/benefits')}
-                  className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-gold-500 hover:text-black transition-colors"
+                <Link
+                  to="/benefits"
+                  className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-gold-500 hover:text-black transition-colors outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
                 >
                   <ArrowRight size={20} />
-                </button>
+                </Link>
               </div>
             </div>
           </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ShoppingBag, ShieldCheck, Briefcase, Handshake, Ticket, User, Building2, BookOpen } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { UserRole } from '../types';
@@ -13,12 +13,10 @@ interface GridItemProps {
 }
 
 const GridItem: React.FC<GridItemProps> = ({ icon: Icon, label, path, color = "text-gold-500" }) => {
-    const navigate = useNavigate();
-
     return (
-        <div
-            onClick={() => navigate(path)}
-            className="flex flex-col items-center gap-3 cursor-pointer group w-full"
+        <Link
+            to={path}
+            className="flex flex-col items-center gap-3 cursor-pointer group w-full outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-4 focus-visible:ring-offset-obsidian-950 rounded-2xl"
         >
             {/* Circular Icon with Gradient Border */}
             <div className="relative">
@@ -40,7 +38,7 @@ const GridItem: React.FC<GridItemProps> = ({ icon: Icon, label, path, color = "t
             <span className="text-xs md:text-sm font-medium text-theme-muted group-hover:text-theme-text text-center leading-tight max-w-[80px] transition-colors duration-300">
                 {label}
             </span>
-        </div>
+        </Link>
     );
 };
 

@@ -50,7 +50,7 @@ serve(async (req) => {
 
     // 5. Loop por cada membro
     for (const member of membersToImport) {
-      const { name, cpf, phone, association_name, status, valid_until, password } = member
+      const { name, cpf, phone, association_name, status, valid_until, password, placa, birth_date } = member
       
       // Validação Básica
       if (!name || !cpf || !association_name) {
@@ -59,19 +59,28 @@ serve(async (req) => {
       }
 
       const cpfDigits = cpf.replace(/\D/g, '')
-      if (cpfDigits.length !== 11) {
-          results.push({ cpf, status: 'error', message: 'Invalid CPF length' })
+      // Aceitar CPF (11 dígitos) ou CNPJ (14 dígitos)
+      if (cpfDigits.length !== 11 && cpfDigits.length !== 14) {
+          results.push({ cpf, status: 'error', message: `CPF/CNPJ inválido (${cpfDigits.length} dígitos, esperado 11 ou 14)` })
           continue
       }
       
-      const deterministicEmail = `${cpfDigits}@login.tavarescar`
-      const passwordToUse = password || cpfDigits // Fallback password = cpf se não passado
+      const deterministicEmail = `${cpfDigits}@login.tavarescar.com.br`
+      const passwordToUse = password || cpfDigits // Fallback password = cpf/cnpj se não passado
 
       try {
         // Passo A: Upsert Associação (se não existir cria, se existir retorna)
+        // Gerar slug a partir do nome (ex: "Eleva Mais" -> "eleva-mais")
+        const associationSlug = association_name
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-|-$/g, '')
+
         const { data: associationData, error: assocError } = await supabaseClient
             .from('associations')
-            .upsert({ name: association_name }, { onConflict: 'name', ignoreDuplicates: false })
+            .upsert({ name: association_name, slug: associationSlug }, { onConflict: 'name', ignoreDuplicates: false })
             .select('*')
             .single()
             
@@ -82,47 +91,89 @@ serve(async (req) => {
         // Passo B: Lidar com o Auth User
         let authUserId = null;
         
-        // 1. Tentar achar esse usuário via CPF Fake Email
-        const { data: existingUsers, error: listUserError } = await supabaseClient.auth.admin.listUsers()
-        if (listUserError) throw new Error(`List Users Error: ${listUserError.message}`)
-            
-        const existingAuthUser = existingUsers.users.find(u => u.email === deterministicEmail)
-        
-        if (existingAuthUser) {
-           // Já existe, pega o ID e podemos ignorar re-criação. Opcional: atualizar a senha
-           authUserId = existingAuthUser.id
-           if(passwordToUse !== cpfDigits) {
-              await supabaseClient.auth.admin.updateUserById(authUserId, { password: passwordToUse })
-           }
+        // 1. Verificar se o membro já existe na tabela members para pegar o ID rapidamente
+        const { data: existingMember } = await supabaseClient
+            .from('members')
+            .select('auth_user_id')
+            .eq('cpf', cpfDigits)
+            .single()
+
+        if (existingMember?.auth_user_id) {
+            authUserId = existingMember.auth_user_id;
+
+            // Opcionalmente atualiza a senha de volta e força o email correto
+            await supabaseClient.auth.admin.updateUserById(authUserId, { 
+                email: deterministicEmail,
+                password: passwordToUse 
+            });
+            // Não verificamos erros de update de forma bloqueante aqui 
+            // pois se o usuário existe, o importante é liberar o acesso na tabela groups
         } else {
-           // Novo usuário, cria via Admin
-           const { data: authData, error: createAuthError } = await supabaseClient.auth.admin.createUser({
-              email: deterministicEmail,
-              password: passwordToUse,
-              email_confirm: true, // Já cria confirmado
-              user_metadata: { name: name, cpf: cpfDigits }
-           })
-           if (createAuthError) throw new Error(`Create Auth Error: ${createAuthError.message}`)
-           authUserId = authData.user.id
+            // Se não estava no members, vamos procurar no Auth
+            const { data: userList, error: listUserError } = await supabaseClient.auth.admin.listUsers({
+              perPage: 1000
+            })
+            if (listUserError) throw new Error(`List Users Error: ${listUserError.message}`)
+                
+            const existingAuthUser = userList.users.find(u => u.email === deterministicEmail || u.email === `${cpfDigits}@login.tavarescar`)
+            
+            if (existingAuthUser) {
+               authUserId = existingAuthUser.id
+               // Se o password ou email mudaram
+               await supabaseClient.auth.admin.updateUserById(authUserId, { 
+                   email: deterministicEmail,
+                   password: passwordToUse 
+               })
+            } else {
+               // Tentar criar
+               const { data: authData, error: createAuthError } = await supabaseClient.auth.admin.createUser({
+                  email: deterministicEmail,
+                  password: passwordToUse,
+                  email_confirm: true,
+                  user_metadata: { name: name, cpf: cpfDigits }
+               })
+               
+               if (createAuthError) {
+                 if (createAuthError.message.includes('already registered')) {
+                    const { data: retryUsers } = await supabaseClient.auth.admin.listUsers({ perPage: 1000 })
+                    const retryUser = retryUsers?.users.find(u => u.email === deterministicEmail)
+                    if (retryUser) {
+                      authUserId = retryUser.id
+                    } else {
+                      throw new Error(`Conflict creating user but couldn't find them in list`)
+                    }
+                 } else {
+                    throw new Error(`Create Auth Error: ${createAuthError.message}`)
+                 }
+               } else {
+                 authUserId = authData.user.id
+               }
+            }
         }
         
-        // Passo C: Upsert na tabela members pública usando id do Auth e Associação
+        // Passo C: Upsert na tabela members pública (com placa e birth_date opcionais)
+        const memberData: any = {
+           name: name,
+           cpf: cpfDigits,
+           phone: phone || null,
+           association_id: associationId,
+           status: status || 'active',
+           valid_until: valid_until || null,
+           auth_user_id: authUserId
+        }
+        
+        // Adicionar campos opcionais apenas se existirem
+        if (placa) memberData.placa = placa
+        if (birth_date) memberData.birth_date = birth_date
+
         const { error: memberUpsertError } = await supabaseClient
             .from('members')
-            .upsert({
-               name: name,
-               cpf: cpfDigits,
-               phone: phone || null,
-               association_id: associationId,
-               status: status || 'active',
-               valid_until: valid_until || null,
-               auth_user_id: authUserId
-            }, { onConflict: 'cpf' })
+            .upsert(memberData, { onConflict: 'cpf' })
             
         if (memberUpsertError) throw new Error(`Member Upsert Error: ${memberUpsertError.message}`)
 
         results.push({ cpf: cpfDigits, status: 'success', member_name: name })
-      } catch (err) {
+      } catch (err: any) {
         results.push({ cpf: cpfDigits, status: 'error', message: err.message })
       }
     }
@@ -133,7 +184,7 @@ serve(async (req) => {
       status: 200,
     })
 
-  } catch (error) {
+  } catch (error: any) {
     return new Response(JSON.stringify({ global_error: error.message }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 400,

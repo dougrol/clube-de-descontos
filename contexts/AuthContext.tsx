@@ -107,11 +107,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 .from('users')
                 .select('role')
                 .eq('id', userId)
-                .single();
-            if (error) {
+                .maybeSingle();
+                
+            if (error && error.code !== 'PGRST116') {
                 console.error('fetchUserRole supabase error:', error);
-                setRole(UserRole.USER);
-                return;
             }
 
             console.log('DEBUG: Role fetched from DB:', data); // LOG HERE
@@ -136,7 +135,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 .from('members')
                 .select('status, association_id')
                 .eq('auth_user_id', userId)
-                .single();
+                .maybeSingle(); // maybeSingle uses HTTP 200 with null instead of 406 for empty results
             
             if (memberData) {
                 setMemberStatus(memberData.status);

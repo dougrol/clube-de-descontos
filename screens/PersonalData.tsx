@@ -33,6 +33,7 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
     const [editName, setEditName] = useState('');
     const [editPhone, setEditPhone] = useState('');
     const [editCpf, setEditCpf] = useState('');
+    const [editEmail, setEditEmail] = useState('');
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -71,6 +72,7 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
                     setEditName(parsed.name);
                     setEditPhone(parsed.phone || '');
                     setEditCpf(parsed.cpf || '');
+                    setEditEmail(parsed.email || '');
                 } else {
                     const fallback: UserData = {
                         name: user.user_metadata?.name || 'Não informado',
@@ -80,6 +82,7 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
                     };
                     setUserData(fallback);
                     setEditName(fallback.name);
+                    setEditEmail(fallback.email);
                 }
             } catch (err) {
                 console.error('Erro ao buscar dados do usuário:', err);
@@ -91,6 +94,7 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
                 };
                 setUserData(fallback);
                 setEditName(fallback.name);
+                setEditEmail(fallback.email);
             } finally {
                 setLoading(false);
             }
@@ -105,22 +109,32 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
 
         try {
             const updates: Record<string, string> = {};
-            if (editName.trim()) updates.name = editName.trim();
-            if (editPhone.trim()) updates.phone = editPhone.replace(/\D/g, '');
-            if (editCpf.trim() && !userData?.cpf) updates.cpf = editCpf.replace(/\D/g, '');
+            if (editName.trim() && editName.trim() !== userData?.name) updates.name = editName.trim();
+            if (editPhone.trim() && editPhone.replace(/\D/g, '') !== userData?.phone) updates.phone = editPhone.replace(/\D/g, '');
+            if (editEmail.trim() && editEmail.trim() !== userData?.email) updates.email = editEmail.trim();
 
-            const { error } = await supabase
-                .from('users')
-                .update(updates)
-                .eq('id', user.id);
+            if (Object.keys(updates).length > 0) {
+                const { error } = await supabase
+                    .from('users')
+                    .update(updates)
+                    .eq('id', user.id);
 
-            if (error) throw error;
+                if (error) throw error;
+            }
 
-            // Also update auth metadata for name
-            if (updates.name) {
-                await supabase.auth.updateUser({
-                    data: { name: updates.name }
-                });
+            // Also update auth metadata for name and auth email
+            const authUpdates: { data?: { name: string }, email?: string } = {};
+            if (updates.name) authUpdates.data = { name: updates.name };
+            if (updates.email) authUpdates.email = updates.email;
+
+            if (Object.keys(authUpdates).length > 0) {
+                const { error: authError } = await supabase.auth.updateUser(authUpdates);
+                if (authError) {
+                    console.error('Erro ao atualizar auth user:', authError);
+                    showToast('Dados atualizados, mas o novo e-mail pode não ter sido validado no Auth.', 'error');
+                } else if (updates.email) {
+                    showToast('Verifique a caixa de entrada do novo e-mail para confirmar a alteração.', 'success');
+                }
             }
 
             setUserData(prev => prev ? {
@@ -128,10 +142,13 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
                 name: updates.name || prev.name,
                 phone: updates.phone || prev.phone,
                 cpf: updates.cpf || prev.cpf,
+                email: updates.email || prev.email,
             } : prev);
 
             setEditing(false);
-            showToast('Dados atualizados com sucesso!', 'success');
+            if (!authUpdates.email) {
+                showToast('Dados atualizados com sucesso!', 'success');
+            }
         } catch (err) {
             console.error('Erro ao salvar:', err);
             showToast('Erro ao salvar dados. Tente novamente.', 'error');
@@ -144,6 +161,7 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
         setEditName(userData?.name || '');
         setEditPhone(userData?.phone || '');
         setEditCpf(userData?.cpf || '');
+        setEditEmail(userData?.email || '');
         setEditing(false);
     };
 
@@ -245,7 +263,7 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
                             </div>
                         </div>
 
-                        {/* Email (read-only) */}
+                        {/* Email */}
                         <div className="bg-obsidian-900 border border-white/5 rounded-2xl p-4">
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 bg-gold-500/10 rounded-xl flex items-center justify-center shrink-0">
@@ -253,8 +271,22 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <p className="text-theme-muted text-[10px] uppercase tracking-widest">E-mail</p>
-                                    <p className="text-theme-text font-medium break-all">{userData?.email}</p>
-                                    {editing && <p className="text-theme-muted text-[10px] mt-1">E-mail não pode ser alterado</p>}
+                                    {editing ? (
+                                        <input
+                                            type="email"
+                                            value={editEmail}
+                                            onChange={(e) => setEditEmail(e.target.value)}
+                                            placeholder="seu@email.com"
+                                            className="w-full bg-transparent text-theme-text font-medium border-b border-gold-500/50 focus:border-gold-500 outline-none py-1 transition-colors"
+                                        />
+                                    ) : (
+                                        <p className="text-theme-text font-medium break-all">{userData?.email}</p>
+                                    )}
+                                    {editing && (
+                                        <p className="text-theme-muted text-[10px] mt-1 text-gold-500/70">
+                                            Atenção: Ao alterar seu e-mail de acesso, enviaremos uma mensagem de confirmação para o novo endereço.
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -292,20 +324,9 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <p className="text-theme-muted text-[10px] uppercase tracking-widest">CPF</p>
-                                    {editing && !userData?.cpf ? (
-                                        <input
-                                            type="text"
-                                            value={formatCPF(editCpf)}
-                                            onChange={(e) => setEditCpf(e.target.value.replace(/\D/g, '').slice(0, 11))}
-                                            placeholder="000.000.000-00"
-                                            className="w-full bg-transparent text-theme-text font-medium border-b border-gold-500/50 focus:border-gold-500 outline-none py-1 transition-colors"
-                                        />
-                                    ) : (
-                                        <p className="text-theme-text font-medium">
-                                            {userData?.cpf ? formatCPF(userData.cpf) : <span className="text-theme-muted italic">Não informado</span>}
-                                        </p>
-                                    )}
-                                    {editing && userData?.cpf && <p className="text-theme-muted text-[10px] mt-1">CPF não pode ser alterado</p>}
+                                    <p className="text-theme-text font-medium">
+                                        {userData?.cpf ? formatCPF(userData.cpf) : <span className="text-theme-muted italic">Não informado</span>}
+                                    </p>
                                 </div>
                             </div>
                         </div>

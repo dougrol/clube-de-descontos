@@ -7,10 +7,7 @@ export const fetchPartners = async (): Promise<Partner[]> => {
     // Opcionalmente também trazemos se tiver custom_benefit
     const { data, error } = await supabase
         .from('partners')
-        .select(`
-            *,
-            association_partners!inner(custom_benefit)
-        `);
+        .select('*');
 
     if (error) {
         console.error('Error fetching partners:', error);

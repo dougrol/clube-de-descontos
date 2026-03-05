@@ -47,10 +47,10 @@ const Offers: React.FC = () => {
            <div className="inline-flex items-center justify-center p-3 bg-gold-500/10 rounded-full mb-4 ring-1 ring-gold-500/30">
               <ShoppingBag className="text-gold-500" size={24} />
            </div>
-           <h2 className="text-2xl md:text-3xl font-bold text-theme-text font-serif">
+           <h2 className="text-2xl md:text-3xl font-bold text-theme-text font-serif text-balance">
              Achadinhos <span className="text-gold-500">Shopee</span>
            </h2>
-           <p className="text-theme-muted text-sm max-w-md mx-auto">
+           <p className="text-theme-muted text-sm max-w-md mx-auto text-balance">
              Seleção especial de produtos com descontos imperdíveis para você aproveitar.
            </p>
         </div>
@@ -59,7 +59,7 @@ const Offers: React.FC = () => {
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 space-y-4">
             <Loader2 className="animate-spin text-gold-500" size={40} />
-            <p className="text-theme-muted text-xs uppercase tracking-widest">Carregando ofertas...</p>
+            <p className="text-theme-muted text-xs uppercase tracking-widest">Carregando ofertas…</p>
           </div>
         ) : products.length === 0 ? (
           <div className="text-center py-20 px-6 rounded-2xl bg-white/5 border border-white/10 border-dashed">

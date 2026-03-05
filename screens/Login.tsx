@@ -8,35 +8,64 @@ import { supabase } from '../services/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
 import { cpfToEmail } from '../src/utils/authUtils';
 
-// CPF formatting helper
-const formatCPF = (value: string): string => {
-  const numbers = value.replace(/\D/g, '').slice(0, 11);
-  if (numbers.length <= 3) return numbers;
-  if (numbers.length <= 6) return `${numbers.slice(0, 3)}.${numbers.slice(3)}`;
-  if (numbers.length <= 9) return `${numbers.slice(0, 3)}.${numbers.slice(3, 6)}.${numbers.slice(6)}`;
-  return `${numbers.slice(0, 3)}.${numbers.slice(3, 6)}.${numbers.slice(6, 9)}-${numbers.slice(9)}`;
+// Identifier (CPF/CNPJ) formatting helper
+const formatIdentifier = (value: string): string => {
+  const numbers = value.replace(/\D/g, '');
+  
+  if (numbers.length <= 11) {
+    // CPF Format: 000.000.000-00
+    const n = numbers.slice(0, 11);
+    if (n.length <= 3) return n;
+    if (n.length <= 6) return `${n.slice(0, 3)}.${n.slice(3)}`;
+    if (n.length <= 9) return `${n.slice(0, 3)}.${n.slice(3, 6)}.${n.slice(6)}`;
+    return `${n.slice(0, 3)}.${n.slice(3, 6)}.${n.slice(6, 9)}-${n.slice(9)}`;
+  } else {
+    // CNPJ Format: 00.000.000/0000-00
+    const n = numbers.slice(0, 14);
+    if (n.length <= 2) return n;
+    if (n.length <= 5) return `${n.slice(0, 2)}.${n.slice(2)}`;
+    if (n.length <= 8) return `${n.slice(0, 2)}.${n.slice(2, 5)}.${n.slice(5)}`;
+    if (n.length <= 12) return `${n.slice(0, 2)}.${n.slice(2, 5)}.${n.slice(5, 8)}/${n.slice(8)}`;
+    return `${n.slice(0, 2)}.${n.slice(2, 5)}.${n.slice(5, 8)}/${n.slice(8, 12)}-${n.slice(12)}`;
+  }
 };
 
-// CPF validation
-const isValidCPF = (cpf: string): boolean => {
-  const numbers = cpf.replace(/\D/g, '');
-  if (numbers.length !== 11) return false;
-  if (/^(\d)\1+$/.test(numbers)) return false; // All same digits
-
-  // Validate check digits
-  let sum = 0;
-  for (let i = 0; i < 9; i++) sum += parseInt(numbers[i]) * (10 - i);
-  let check1 = (sum * 10) % 11;
-  if (check1 === 10) check1 = 0;
-  if (check1 !== parseInt(numbers[9])) return false;
-
-  sum = 0;
-  for (let i = 0; i < 10; i++) sum += parseInt(numbers[i]) * (11 - i);
-  let check2 = (sum * 10) % 11;
-  if (check2 === 10) check2 = 0;
-  if (check2 !== parseInt(numbers[10])) return false;
-
-  return true;
+// Identifier validation (CPF or CNPJ)
+const isValidIdentifier = (value: string): boolean => {
+  const numbers = value.replace(/\D/g, '');
+  
+  if (numbers.length === 11) {
+    // CPF Validation
+    if (/^(\d)\1+$/.test(numbers)) return false;
+    let sum = 0;
+    for (let i = 0; i < 9; i++) sum += parseInt(numbers[i]) * (10 - i);
+    let check1 = (sum * 10) % 11;
+    if (check1 === 10) check1 = 0;
+    if (check1 !== parseInt(numbers[9])) return false;
+    sum = 0;
+    for (let i = 0; i < 10; i++) sum += parseInt(numbers[i]) * (11 - i);
+    let check2 = (sum * 10) % 11;
+    if (check2 === 10) check2 = 0;
+    if (check2 !== parseInt(numbers[10])) return false;
+    return true;
+  } else if (numbers.length === 14) {
+    // CNPJ Validation
+    if (/^(\d)\1+$/.test(numbers)) return false;
+    
+    const calc = (n: string, pos: number[]) => {
+      let sum = 0;
+      for (let i = 0; i < pos.length; i++) sum += parseInt(n[i]) * pos[i];
+      let result = sum % 11;
+      return result < 2 ? 0 : 11 - result;
+    };
+    
+    const d1 = calc(numbers, [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]);
+    const d2 = calc(numbers, [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]);
+    
+    return d1 === parseInt(numbers[12]) && d2 === parseInt(numbers[13]);
+  }
+  
+  return false;
 };
 
 const Login: React.FC = () => {
@@ -50,7 +79,7 @@ const Login: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const handleCPFChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCPF(formatCPF(e.target.value));
+    setCPF(formatIdentifier(e.target.value));
   };
 
 
@@ -61,9 +90,9 @@ const Login: React.FC = () => {
 
     const cleanCPF = cpf.replace(/\D/g, '');
 
-    // Validate CPF format
-    if (selectedRole === 'client' && !isValidCPF(cleanCPF)) {
-      setError('CPF inválido. Verifique os números digitados.');
+    // Validate CPF/CNPJ format
+    if (selectedRole === 'client' && !isValidIdentifier(cleanCPF)) {
+      setError('CPF ou CNPJ inválido. Verifique os números digitados.');
       setIsLoading(false);
       return;
     }
@@ -80,7 +109,6 @@ const Login: React.FC = () => {
 
         const userId = data?.user?.id;
         if (!userId) {
-          // Defensive: ensure we have a user id before proceeding
           throw new Error('Erro ao autenticar parceiro. Tente novamente.');
         }
 
@@ -115,57 +143,60 @@ const Login: React.FC = () => {
         } else {
           navigate('/partner-dashboard');
         }
-        // Clients login with CPF (which resolves to deterministic email)
+      } else {
+        // Clients (Associados) login with CPF/CNPJ (deterministic email)
         const deterministicEmail = cpfToEmail(cleanCPF);
 
-        // Login with the deterministic email
         const { error: clientAuthError } = await supabase.auth.signInWithPassword({
           email: deterministicEmail,
           password,
         });
 
-        if (clientAuthError) {
-           // We can throw generic error or specific. If user not found Auth will complain
-           throw clientAuthError;
-        }
+        if (clientAuthError) throw clientAuthError;
 
-        // Fetch user data from public members table to guarantee association exists
+        // Verify member status
         const { data: memberData, error: memberError } = await supabase
           .from('members')
           .select('id, status')
           .eq('cpf', cleanCPF)
           .single();
           
-        if(memberError || !memberData) {
-            // It could be that Auth exists but member was deleted
+        if (memberError || !memberData) {
             await supabase.auth.signOut();
             throw new Error('Cadastro de associado não localizado ou inválido.');
         }
 
-        if(memberData.status !== 'active') {
+        if (memberData.status !== 'active') {
             await supabase.auth.signOut();
             throw new Error('Sua conta de associado não está ativa no momento.');
         }
 
-        // Force refresh session to ensure AuthContext has the latest role
         await refreshSession();
-
         navigate('/home');
       }
 
-    } catch (err: unknown) {
-      console.error('Login error:', err);
-      const message = err instanceof Error ? err.message : 'Erro no login';
+    } catch (err: any) {
+      console.error('Login error full details:', err);
+      let message = 'Ocorreu um erro ao entrar. Tente novamente.';
+      
+      if (err?.message) {
+        message = err.message;
+      } else if (typeof err === 'string') {
+        message = err;
+      }
+
       if (message === 'Invalid login credentials') {
-        setError('Senha incorreta ou usuário não encontrado.');
+        setError('Senha incorreta ou cadastro não encontrado. Verifique seu CPF/CNPJ.');
       } else if (message.includes('Email not confirmed')) {
         setError('E-mail não confirmado. Verifique sua caixa de entrada.');
       } else {
-        setError(message || 'Ocorreu um erro ao entrar. Tente novamente.');
+        setError(message);
       }
+    } finally {
+      // ALWAYS stop loading unless we successfully navigated (but even then, React Router will handle component teardown)
+      // Since React 18, setting state on unmounting components is perfectly safe (no warnings).
       setIsLoading(false);
     }
-    // Finally block removed to keep loading state on success until redirect happens
   };
 
 
@@ -268,11 +299,13 @@ const Login: React.FC = () => {
               <Input
                 icon={<CreditCard size={18} />}
                 type="text"
-                placeholder="000.000.000-00"
-                label="CPF"
+                placeholder="CPF ou CNPJ (apenas números)"
+                label="CPF / CNPJ"
                 value={cpf}
                 onChange={handleCPFChange}
                 required
+                autoComplete="username"
+                spellCheck={false}
               />
             ) : (
               <Input
@@ -283,6 +316,8 @@ const Login: React.FC = () => {
                 value={cpf}
                 onChange={(e) => setCPF(e.target.value)}
                 required
+                autoComplete="username"
+                spellCheck={false}
               />
             )}
 
@@ -296,6 +331,8 @@ const Login: React.FC = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  autoComplete="current-password"
+                  spellCheck={false}
                 />
                 <button
                   type="button"
