@@ -197,7 +197,6 @@ const AppRoutes: React.FC = () => {
 };
 
 import { ThemeProvider } from './contexts/ThemeContext';
-import PWAReloadPrompt from './components/PWAReloadPrompt';
 
 const App: React.FC = () => {
   return (
@@ -208,7 +207,6 @@ const App: React.FC = () => {
             <ToastProvider>
               <HashRouter>
                 <AppRoutes />
-                <PWAReloadPrompt />
               </HashRouter>
             </ToastProvider>
           </CMSProvider>
