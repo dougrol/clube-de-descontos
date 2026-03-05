@@ -26,6 +26,7 @@ export const AdminImport: React.FC = () => {
     const [progress, setProgress] = useState(0);
     const [results, setResults] = useState<ImportResult[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const [importMode, setImportMode] = useState<'standard' | 'ancore'>('standard');
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,57 +48,75 @@ export const AdminImport: React.FC = () => {
 
         try {
             const text = await file.text();
-            // Basic CSV parsing (assuming comma separated, no complex quotes)
             const lines = text.split('\n').filter(line => line.trim() !== '');
             if (lines.length < 2) throw new Error("O arquivo parece estar vazio ou não possui cabeçalho.");
 
             const headers = lines[0].toLowerCase().split(',').map(h => h.trim());
             
-            // Expected headers mappings
-            const requireHeaders = ['name', 'cpf', 'association_name'];
+            let requireHeaders: string[] = [];
+            
+            if (importMode === 'standard') {
+                requireHeaders = ['name', 'cpf', 'association_name'];
+            } else if (importMode === 'ancore') {
+                requireHeaders = ['nome', 'telefone', 'placa', 'email'];
+            }
+            
             const missing = requireHeaders.filter(h => !headers.includes(h));
             
             if (missing.length > 0) {
-               throw new Error(`Colunas obrigatórias ausentes: ${missing.join(', ')}`);
+               throw new Error(`Colunas obrigatórias ausentes para o modo selecionado: ${missing.join(', ')}`);
             }
 
-            const parsedData: CSVRow[] = [];
+            const parsedData: any[] = [];
             
             for (let i = 1; i < lines.length; i++) {
                 const currentline = lines[i].split(',').map(v => v.trim());
-                if (currentline.length !== headers.length) continue; // Skip malformed lines
+                if (currentline.length !== headers.length) continue; 
 
                 const row: any = {};
                 headers.forEach((header, index) => {
                     row[header] = currentline[index];
                 });
                 
-                parsedData.push({
-                    name: row.name,
-                    cpf: row.cpf,
-                    association_name: row.association_name,
-                    phone: row.phone || row.telefone || undefined,
-                    status: row.status || 'active',
-                    valid_until: row.valid_until || row.validade || undefined,
-                    password: row.password || row.senha || undefined
-                });
+                if (importMode === 'standard') {
+                    parsedData.push({
+                        name: row.name,
+                        cpf: row.cpf,
+                        association_name: row.association_name,
+                        phone: row.phone || row.telefone || undefined,
+                        status: row.status || 'active',
+                        valid_until: row.valid_until || row.validade || undefined,
+                        password: row.password || row.senha || undefined
+                    });
+                } else if (importMode === 'ancore') {
+                    parsedData.push({
+                        name: row.nome,
+                        email: row.email,
+                        placa: row.placa,
+                        phone: row.telefone,
+                        association_name: 'Ancore',
+                        status: 'active'
+                    });
+                }
             }
 
             if (parsedData.length === 0) throw new Error("Nenhum dado válido encontrado para importar.");
 
-            // Chunk processing (e.g. 50 members at a time to not timeout Edge Function)
             const chunkSize = 50;
             let allResults: ImportResult[] = [];
             
-            // We need a session token to call edge function securely
             const { data: { session } } = await supabase.auth.getSession();
             if(!session) throw new Error("Sessão administrativa expirada ou inválida.");
+
+            const functionUrl = importMode === 'standard' 
+              ? `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/import_member`
+              : `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/import_ancore_member`;
 
             for (let i = 0; i < parsedData.length; i += chunkSize) {
                 const chunk = parsedData.slice(i, i + chunkSize);
                 
                 try {
-                    const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/import_member`, {
+                    const response = await fetch(functionUrl, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -118,11 +137,9 @@ export const AdminImport: React.FC = () => {
 
                 } catch (chunkErr: any) {
                     console.error("Chunk Error:", chunkErr);
-                    // Mark this chunk as failed
-                    chunk.forEach(c => allResults.push({ cpf: c.cpf, status: 'error', message: chunkErr.message }));
+                    chunk.forEach(c => allResults.push({ cpf: c.cpf || c.email, status: 'error', message: chunkErr.message }));
                 }
 
-                // Update Progress
                 setProgress(Math.round(((i + chunk.length) / parsedData.length) * 100));
             }
 
@@ -150,22 +167,56 @@ export const AdminImport: React.FC = () => {
             <Card className="p-6 bg-obsidian-900 border-white/5 shadow-2xl">
                 <div className="space-y-6">
                    
+                   {/* Layout Selection */}
+                   <div className="flex gap-4 mb-6 p-1 bg-obsidian-950 rounded-lg max-w-fit">
+                       <button 
+                           onClick={() => { setImportMode('standard'); setFile(null); }}
+                           className={`px-4 py-2 rounded-md text-sm font-bold transition-colors ${importMode === 'standard' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
+                       >
+                           Layout Padrão (CPF)
+                       </button>
+                       <button 
+                           onClick={() => { setImportMode('ancore'); setFile(null); }}
+                           className={`px-4 py-2 rounded-md text-sm font-bold transition-colors ${importMode === 'ancore' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
+                       >
+                           Layout Ancore (Placa)
+                       </button>
+                   </div>
+
                     {/* Instructions */}
                     <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-theme-muted">
                         <h4 className="font-bold text-white mb-2 flex items-center">
                             <FileText size={16} className="mr-2 text-gold-500"/> Instruções e Formato do CSV
                         </h4>
-                        <p className="mb-2">A planilha deve conter **obrigatoriamente** cabeçalhos exatos na primeira linha:</p>
-                        <code className="block bg-black p-3 rounded-lg text-gold-400 font-mono text-xs overflow-x-auto whitespace-nowrap mb-3 whitespace-pre">
-                            name, cpf, association_name, phone, status, valid_until, password
-                        </code>
-                        <ul className="list-disc pl-5 space-y-1 text-xs opacity-80">
-                            <li><strong>name:</strong> Nome completo do associado</li>
-                            <li><strong>cpf:</strong> (será limpo automaticamente)</li>
-                            <li><strong>association_name:</strong> Nome do Clube/Associação (ex: Elevamais). Se não existir, será criado.</li>
-                            <li><strong>status:</strong> (Opcional) 'active', 'inactive'. Padrão: active</li>
-                            <li><strong>password:</strong> (Opcional) Padrão será os 11 dígitos do CPF</li>
-                        </ul>
+                        
+                        {importMode === 'standard' ? (
+                            <>
+                                <p className="mb-2">A planilha deve conter **obrigatoriamente** cabeçalhos exatos na primeira linha:</p>
+                                <code className="block bg-black p-3 rounded-lg text-gold-400 font-mono text-xs overflow-x-auto whitespace-nowrap mb-3 whitespace-pre">
+                                    name, cpf, association_name, phone, status, valid_until, password
+                                </code>
+                                <ul className="list-disc pl-5 space-y-1 text-xs opacity-80">
+                                    <li><strong>name:</strong> Nome completo do associado</li>
+                                    <li><strong>cpf:</strong> (será limpo automaticamente)</li>
+                                    <li><strong>association_name:</strong> Nome do Clube/Associação (ex: Elevamais). Se não existir, será criado.</li>
+                                    <li><strong>status:</strong> (Opcional) 'active', 'inactive'. Padrão: active</li>
+                                    <li><strong>password:</strong> (Opcional) Padrão será os 11 dígitos do CPF</li>
+                                </ul>
+                            </>
+                        ) : (
+                            <>
+                                <p className="mb-2">A planilha para membros <strong className="text-gold-500">Ancore</strong> precisa destes exatos cabeçalhos:</p>
+                                <code className="block bg-black p-3 rounded-lg text-gold-400 font-mono text-xs overflow-x-auto whitespace-nowrap mb-3 whitespace-pre">
+                                    nome, telefone, placa, email
+                                </code>
+                                <ul className="list-disc pl-5 space-y-1 text-xs opacity-80">
+                                    <li><strong>nome:</strong> Nome completo do associado</li>
+                                    <li><strong>email:</strong> Será usado para vincular a conta do associado</li>
+                                    <li><strong>placa:</strong> Será usada como senha no Primeiro Acesso.</li>
+                                    <li><strong>telefone:</strong> Contato do associado</li>
+                                </ul>
+                            </>
+                        )}
                     </div>
 
                     {/* Upload Area */}
