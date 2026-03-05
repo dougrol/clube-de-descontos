@@ -15,7 +15,8 @@ export default defineConfig(({ mode }) => {
 
     plugins: [
       react(),
-      VitePWA({
+      // VitePWA desativado temporariamente por conflitos no step de build minify do Rollup na pipeline do Vercel (TypeError: e3 is not iterable)
+      /*VitePWA({
         registerType: "prompt",
         includeAssets: ["favicon.png", "apple-touch-icon.png"],
         manifest: {
@@ -37,12 +38,12 @@ export default defineConfig(({ mode }) => {
             { src: "/icons/maskable-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
           ],
           // Desativando temporariamente para evitar falha no vite-plugin-pwa generator
-          /*screenshots: [
-            { src: "/screenshots/screenshot-wide.png", sizes: "1280x720", type: "image/png", form_factor: "wide", label: "Tela inicial do Clube de Vantagens" },
-            { src: "/screenshots/screenshot-narrow.png", sizes: "720x1280", type: "image/png", form_factor: "narrow", label: "Tela inicial no celular" },
-          ],*/
+          // screenshots: [
+          //   { src: "/screenshots/screenshot-wide.png", sizes: "1280x720", type: "image/png", form_factor: "wide", label: "Tela inicial do Clube de Vantagens" },
+          //   { src: "/screenshots/screenshot-narrow.png", sizes: "720x1280", type: "image/png", form_factor: "narrow", label: "Tela inicial no celular" },
+          // ],
         },
-      }),
+      }),*/
       viteImagemin({
         gifsicle: { optimizationLevel: 7, interlaced: false },
         optipng: { optimizationLevel: 7 },
