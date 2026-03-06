@@ -2,11 +2,29 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 
-// Força a remoção de Service Workers antigos/presos para garantir atualizações nos celulares
+// Força a remoção de Service Workers antigos e limpa o cache para garantir atualizações nos celulares (PWA instalado)
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then((registrations) => {
-    for (const registration of registrations) {
-      registration.unregister();
+    if (registrations.length > 0) {
+      let unregistered = false;
+      const unregisterPromises = registrations.map(registration => 
+        registration.unregister().then(success => {
+          if (success) unregistered = true;
+        })
+      );
+      
+      Promise.all(unregisterPromises).then(() => {
+        if (unregistered && 'caches' in window) {
+          // Limpa todos os caches salvos pelo Workbox/VitePWA para forçar download do zero
+          caches.keys().then(cacheNames => {
+            Promise.all(cacheNames.map(cacheName => caches.delete(cacheName)))
+              .then(() => {
+                // Força o reload da página após limpar tudo
+                window.location.reload();
+              });
+          });
+        }
+      });
     }
   }).catch(err => {
     console.error('Service worker unregister error:', err);
