@@ -98,14 +98,39 @@ async function parsePdfFile(arrayBuffer: ArrayBuffer): Promise<ImportRow[]> {
             }
             
             // Skip header rows, footer rows, and empty rows
-            if (!rowData.nome || !rowData.cpf) continue;
-            if (rowData.nome.toLowerCase().includes('nome') && rowData.cpf.toLowerCase().includes('cpf')) continue;
-            if (rowData.nome.toLowerCase().includes('total') || rowData.nome.toLowerCase().includes('sga')) continue;
-            if (rowData.nome.toLowerCase().includes('hinova') || rowData.nome.toLowerCase().includes('http')) continue;
+            const lowerNome = (rowData.nome || '').toLowerCase();
+            const lowerCpf = (rowData.cpf || '').toLowerCase();
             
-            // Clean CPF/CNPJ - remove all non-digits
-            const cpfClean = rowData.cpf.replace(/\D/g, '');
-            if (cpfClean.length !== 11 && cpfClean.length !== 14) continue;
+            // If completely empty, skip
+            if (!rowData.nome && !rowData.cpf) continue;
+            
+            // Skip clear header/footer signatures
+            if (lowerNome.includes('nome') && lowerCpf.includes('cpf')) continue;
+            if (lowerNome.includes('total') || lowerNome.includes('sga') || lowerNome.includes('hinova') || lowerNome.includes('http')) continue;
+            
+            // Extract numbers from whatever looks like the CPF column or other columns if misplaced
+            let cpfSource = rowData.cpf || '';
+            // If the PDF merged CPF with another field, let's try to extract any 11 or 14 digit sequence
+            let cpfClean = cpfSource.replace(/\D/g, '');
+            
+            // If not found in CPF column, search the entire text of the row for a CPF/CNPJ pattern
+            if (cpfClean.length !== 11 && cpfClean.length !== 14) {
+               const fullRowText = Object.values(rowData).join(' ').replace(/\D/g, '');
+               const match11 = fullRowText.match(/(\d{11})/);
+               const match14 = fullRowText.match(/(\d{14})/);
+               
+               if (match14) cpfClean = match14[1];
+               else if (match11) cpfClean = match11[1];
+            }
+            
+            // Required: we must have a valid CPF/CNPJ to use as password and login
+            if (cpfClean.length !== 11 && cpfClean.length !== 14) {
+                console.warn("Skipping row due to invalid/missing CPF:", rowData);
+                continue;
+            }
+            
+            // Set a fallback name if empty
+            const finalName = rowData.nome ? rowData.nome.trim() : `Associado ${cpfClean}`;
             
             // Clean phone
             let phone = rowData.telefone || '';
@@ -121,7 +146,7 @@ async function parsePdfFile(arrayBuffer: ArrayBuffer): Promise<ImportRow[]> {
             }
             
             allRows.push({
-                name: rowData.nome.trim(),
+                name: finalName,
                 cpf: cpfClean,
                 placa: rowData.placa?.trim() || undefined,
                 phone: phone || undefined,
