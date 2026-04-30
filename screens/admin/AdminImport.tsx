@@ -392,11 +392,8 @@ export const AdminImport: React.FC = () => {
         setProgress(0);
 
         try {
-            const data = await file.arrayBuffer();
-            let parsedData: ImportRow[];
-            
+            // AGV mode: use dedicated service (no auth user, placa-based)
             if (importMode === 'agv') {
-                // AGV mode: import to associados_universo_agv table (no auth user created)
                 const summary = await importUniversoAgvSpreadsheet(file, (percent) => {
                     setProgress(percent);
                 });
@@ -404,7 +401,13 @@ export const AdminImport: React.FC = () => {
                 setIsProcessing(false);
                 if(fileInputRef.current) fileInputRef.current.value = '';
                 return;
-            } else if (importMode === 'elevamais') {
+            }
+
+            // Standard & Eleva Mais: read file as ArrayBuffer
+            const data = await file.arrayBuffer();
+            let parsedData: ImportRow[];
+            
+            if (importMode === 'elevamais') {
                 // PDF parsing for Eleva Mais
                 if (!file.name.toLowerCase().endsWith('.pdf')) {
                     throw new Error("Para o modo Eleva Mais, envie o relatório em formato PDF.");
