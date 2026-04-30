@@ -161,55 +161,160 @@ async function parsePdfFile(arrayBuffer: ArrayBuffer): Promise<ImportRow[]> {
 }
 
 // ============================================================
-// XLSX/CSV Parser (Standard mode)
+// XLSX/CSV Parser — Intelligent / Any Format
 // ============================================================
-function parseSpreadsheet(arrayBuffer: ArrayBuffer, _importMode: string): ImportRow[] {
+
+// Fuzzy mappings: field -> list of possible header keywords
+const FIELD_KEYWORDS: Record<string, string[]> = {
+    name: ['nome','name','nome completo','nome do associado','associado','razao social','razao','titular','cliente','nome/razao','beneficiario','nome do titular','responsavel'],
+    cpf: ['cpf','cpf/cnpj','cpf_cnpj','cnpj','documento','doc','nr documento','num documento','numero documento','cpf / cnpj','cpf cnpj','inscricao'],
+    phone: ['telefone','tel','celular','phone','fone','contato','whatsapp','tel celular','tel residencial','telefone celular','tel.','cel','cel.','numero celular'],
+    email: ['email','e-mail','correio','mail','e mail','endereco eletronico'],
+    placa: ['placa','placa do veiculo','placa veiculo','plate','veiculo placa'],
+    association_name: ['associacao','associação','association','clube','parceiro','empresa','convenio','grupo','entidade','association_name'],
+    status: ['status','situacao','situação','ativo','active','sit','sit.'],
+    valid_until: ['validade','valid_until','vencimento','data vencimento','vigencia','vigência','dt vencimento','expiracao'],
+    birth_date: ['data nascimento','nascimento','data de nascimento','birth_date','dt nascimento','dt nasc','nasc','aniversario','data nasc'],
+    password: ['senha','password','pass'],
+};
+
+function normalize(str: string): string {
+    return String(str || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9 /]/g, '').trim();
+}
+
+function matchField(header: string): string | null {
+    const norm = normalize(header);
+    if (!norm) return null;
+    for (const [field, keywords] of Object.entries(FIELD_KEYWORDS)) {
+        for (const kw of keywords) {
+            if (norm === kw || norm.includes(kw) || kw.includes(norm)) return field;
+        }
+    }
+    return null;
+}
+
+// Detect CPF column by data pattern (11 or 14 digits after removing non-digits)
+function looksLikeCPF(val: string): boolean {
+    const digits = String(val).replace(/\D/g, '');
+    return digits.length === 11 || digits.length === 14;
+}
+function looksLikePhone(val: string): boolean {
+    const digits = String(val).replace(/\D/g, '');
+    return digits.length >= 10 && digits.length <= 13;
+}
+function looksLikeEmail(val: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(val).trim());
+}
+
+function parseSpreadsheet(arrayBuffer: ArrayBuffer, _importMode: string, associationOverride?: string): ImportRow[] {
     const workbook = XLSX.read(arrayBuffer, { type: 'array' });
     const firstSheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[firstSheetName];
     const rawData = XLSX.utils.sheet_to_json<unknown[]>(worksheet, { header: 1 });
     
-    if (rawData.length < 1) throw new Error("O arquivo parece estar vazio.");
+    if (rawData.length < 2) throw new Error("O arquivo parece estar vazio ou com dados insuficientes.");
 
-    const firstRow = rawData[0].map((v: unknown) => 
-        String(v || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
-    );
+    // --- Step 1: Find the header row (scan first 10 rows) ---
+    let headerRowIndex = -1;
+    let columnMap: Record<string, number> = {};
     
-    let dataStartIndex = 0;
-    const headers = firstRow;
-    
-    const standardKeywords = ['name', 'cpf', 'nome', 'placa', 'email', 'telefone', 'associacao'];
-    const isHeader = firstRow.some((cell: string) => standardKeywords.includes(cell));
-    
-    if (isHeader) {
-        dataStartIndex = 1;
-    } else {
-        throw new Error("Não conseguimos detectar os cabeçalhos. Verifique se a primeira linha contém os nomes das colunas.");
+    const scanLimit = Math.min(rawData.length, 10);
+    for (let r = 0; r < scanLimit; r++) {
+        const row = rawData[r];
+        if (!row || !Array.isArray(row) || row.length < 2) continue;
+        
+        const tempMap: Record<string, number> = {};
+        let matchCount = 0;
+        
+        for (let c = 0; c < row.length; c++) {
+            const cellStr = String(row[c] || '');
+            const field = matchField(cellStr);
+            if (field && !tempMap[field]) {
+                tempMap[field] = c;
+                matchCount++;
+            }
+        }
+        
+        // Accept this row as header if we matched at least 2 fields
+        if (matchCount >= 2 && matchCount > Object.keys(columnMap).length) {
+            headerRowIndex = r;
+            columnMap = { ...tempMap };
+        }
     }
 
+    // --- Step 2: If no header found, try pattern-based detection on data ---
+    let dataStartIndex = 0;
+    
+    if (headerRowIndex >= 0) {
+        dataStartIndex = headerRowIndex + 1;
+    } else {
+        // No headers detected — try to infer columns from data patterns
+        const sampleRow = rawData.find((row, idx) => idx < 5 && Array.isArray(row) && row.length >= 2) as unknown[];
+        if (!sampleRow) throw new Error("Não foi possível detectar dados válidos no arquivo.");
+        
+        for (let c = 0; c < sampleRow.length; c++) {
+            const val = String(sampleRow[c] || '');
+            if (!val.trim()) continue;
+            if (!columnMap.cpf && looksLikeCPF(val)) { columnMap.cpf = c; continue; }
+            if (!columnMap.phone && looksLikePhone(val)) { columnMap.phone = c; continue; }
+            if (!columnMap.email && looksLikeEmail(val)) { columnMap.email = c; continue; }
+        }
+        // Assume first text column is name
+        for (let c = 0; c < sampleRow.length; c++) {
+            const val = String(sampleRow[c] || '').trim();
+            if (val && !Object.values(columnMap).includes(c) && isNaN(Number(val.replace(/\D/g,'').slice(0,3)))) {
+                columnMap.name = c;
+                break;
+            }
+        }
+        dataStartIndex = 0;
+        console.log('Auto-detected columns by pattern:', columnMap);
+    }
+
+    if (!columnMap.name && !columnMap.cpf) {
+        throw new Error("Não foi possível identificar colunas de Nome ou CPF. Verifique o formato do arquivo.");
+    }
+
+    // --- Step 3: Parse rows ---
     const parsedData: ImportRow[] = [];
+    const assocName = associationOverride || 'Geral';
     
     for (let i = dataStartIndex; i < rawData.length; i++) {
-        const row = rawData[i];
-        if (!row || row.length === 0) continue;
+        const row = rawData[i] as unknown[];
+        if (!row || !Array.isArray(row) || row.length < 2) continue;
 
-        const rowData: Record<string, string> = {};
-        headers.forEach((header: string, index: number) => {
-            if (header) rowData[header] = String(row[index] || '');
-        });
+        const getValue = (field: string): string => {
+            const colIdx = columnMap[field];
+            if (colIdx === undefined) return '';
+            return String(row[colIdx] || '').trim();
+        };
+
+        const name = getValue('name');
+        let cpf = getValue('cpf');
         
-        const name = rowData.name || rowData.nome;
-        const cpf = rowData.cpf;
-        if (!name || !cpf) continue;
+        // Clean CPF
+        if (cpf) cpf = cpf.replace(/\D/g, '');
+        
+        // Skip if no useful data
+        if (!name && !cpf) continue;
+        // Skip if CPF exists but is clearly invalid
+        if (cpf && cpf.length !== 11 && cpf.length !== 14) continue;
+        // If we have CPF but no name, use a placeholder
+        const finalName = name || `Associado ${cpf}`;
+        // If we have name but no CPF, skip (required by Edge Function)
+        if (!cpf) continue;
 
         parsedData.push({
-            name,
+            name: finalName,
             cpf,
-            association_name: rowData.association_name || rowData.associacao || 'Geral',
-            phone: rowData.phone || rowData.telefone || undefined,
-            status: rowData.status || 'active',
-            valid_until: rowData.valid_until || rowData.validade || undefined,
-            password: rowData.password || rowData.senha || undefined
+            email: getValue('email') || undefined,
+            phone: getValue('phone') || undefined,
+            placa: getValue('placa') || undefined,
+            association_name: getValue('association_name') || assocName,
+            status: getValue('status') || 'active',
+            valid_until: getValue('valid_until') || undefined,
+            birth_date: getValue('birth_date') || undefined,
+            password: getValue('password') || undefined,
         });
     }
     
@@ -226,6 +331,7 @@ export const AdminImport: React.FC = () => {
     const [results, setResults] = useState<ImportResult[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [importMode, setImportMode] = useState<'standard' | 'elevamais'>('standard');
+    const [associationName, setAssociationName] = useState('');
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -256,8 +362,8 @@ export const AdminImport: React.FC = () => {
                 }
                 parsedData = await parsePdfFile(data);
             } else {
-                // Standard XLSX/CSV parsing
-                parsedData = parseSpreadsheet(data, importMode);
+                // Standard XLSX/CSV parsing — smart detection
+                parsedData = parseSpreadsheet(data, importMode, associationName.trim() || undefined);
             }
 
             if (parsedData.length === 0) throw new Error("Nenhum dado válido encontrado para importar.");
@@ -331,7 +437,7 @@ export const AdminImport: React.FC = () => {
         <div className="space-y-6 animate-fade-in">
             <SectionTitle 
                 title="Importar Associados" 
-                subtitle="Faça upload de uma planilha CSV/Excel ou PDF (Eleva Mais) para cadastrar ou atualizar membros."
+                subtitle="Envie qualquer planilha ou PDF com dados de associados. O sistema detecta automaticamente as colunas."
             />
 
             <Card className="p-6 bg-obsidian-900 border-white/5 shadow-2xl">
@@ -361,39 +467,44 @@ export const AdminImport: React.FC = () => {
                         
                         {importMode === 'standard' ? (
                             <>
-                                <p className="mb-2">A planilha deve conter <strong>obrigatoriamente</strong> cabeçalhos exatos na primeira linha:</p>
-                                <code className="block bg-black p-3 rounded-lg text-gold-400 font-mono text-xs overflow-x-auto whitespace-nowrap mb-3 whitespace-pre">
-                                    name, cpf, association_name, phone, status, valid_until, password
-                                </code>
+                                <p className="mb-2">Envie <strong className="text-gold-500">qualquer planilha</strong> (CSV, Excel) com dados de associados. O sistema detecta automaticamente colunas como:</p>
                                 <ul className="list-disc pl-5 space-y-1 text-xs opacity-80">
-                                    <li><strong>name:</strong> Nome completo do associado</li>
-                                    <li><strong>cpf:</strong> (será limpo automaticamente)</li>
-                                    <li><strong>association_name:</strong> Nome do Clube/Associação (ex: Elevamais). Se não existir, será criado.</li>
-                                    <li><strong>status:</strong> (Opcional) 'active', 'inactive'. Padrão: active</li>
-                                    <li><strong>password:</strong> (Opcional) Padrão será os 11 dígitos do CPF</li>
+                                    <li><strong>Nome:</strong> Nome, Nome Completo, Associado, Titular, Cliente...</li>
+                                    <li><strong>CPF:</strong> CPF, CPF/CNPJ, Documento, Doc...</li>
+                                    <li><strong>Telefone:</strong> Telefone, Celular, Contato, WhatsApp...</li>
+                                    <li><strong>E-mail:</strong> Email, E-mail...</li>
+                                    <li><strong>Placa:</strong> Placa, Placa do Veículo...</li>
                                 </ul>
+                                <p className="mt-2 text-xs text-gold-500/70">💡 O cabeçalho não precisa seguir nenhum formato exato. Nós entendemos variações em português e inglês.</p>
                             </>
                         ) : (
                             <>
                                 <p className="mb-2">Faça o upload do <strong className="text-gold-500">PDF</strong> do relatório de veículos gerado pelo sistema <strong className="text-gold-500">Hinova/SGA</strong> da Eleva Mais.</p>
-                                <p className="mb-3 text-xs opacity-80">O sistema vai extrair automaticamente as seguintes informações:</p>
-                                <ul className="list-disc pl-5 space-y-1 text-xs opacity-80">
-                                    <li><strong>Nome:</strong> Nome completo do associado</li>
-                                    <li><strong>Placa:</strong> Placa do veículo (armazenada no cadastro)</li>
-                                    <li><strong>Telefone:</strong> Contato do associado</li>
-                                    <li><strong>CPF/CNPJ:</strong> Usado como <strong>Login e Senha</strong> no primeiro acesso</li>
-                                    <li><strong>Data de Nascimento:</strong> Armazenada no cadastro</li>
-                                </ul>
                                 <p className="mt-3 text-xs text-gold-500/70">Associação: todos serão vinculados à "Eleva Mais" automaticamente.</p>
                             </>
                         )}
                     </div>
 
+                    {/* Association Name (standard mode) */}
+                    {importMode === 'standard' && (
+                        <div className="space-y-1">
+                            <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Nome da Associação (para vincular todos)</label>
+                            <input
+                                type="text"
+                                placeholder="Ex: Eleva Mais, Ancore, Universo AGV..."
+                                value={associationName}
+                                onChange={(e) => setAssociationName(e.target.value)}
+                                className="w-full bg-obsidian-950 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 text-sm focus:border-gold-500 focus:outline-none transition-colors"
+                            />
+                            <p className="text-xs text-gray-500 ml-1">Deixe vazio para usar o valor da planilha ou "Geral" como padrão.</p>
+                        </div>
+                    )}
+
                     {/* Upload Area */}
                     <div className="border-2 border-dashed border-white/10 hover:border-gold-500/50 transition-colors rounded-xl p-8 flex flex-col items-center justify-center text-center">
                         <input 
                             type="file" 
-                            accept={importMode === 'elevamais' ? '.pdf' : '.csv, .xlsx, .xls'}
+                            accept={importMode === 'elevamais' ? '.pdf' : '.csv,.xlsx,.xls,.ods,.tsv'}
                             ref={fileInputRef}
                             className="hidden"
                             onChange={handleFileChange}
