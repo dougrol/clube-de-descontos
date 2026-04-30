@@ -311,6 +311,29 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       text-rendering: optimizeLegibility;
+      font-size: 16px;
+    }
+
+    /* ========================================
+       MOBILE TYPOGRAPHY & TOUCH SCALE
+       ======================================== */
+
+    /* Prevent iOS auto-zoom on input focus (requires 16px min) */
+    @media (max-width: 768px) {
+      input, select, textarea {
+        font-size: 16px !important;
+        min-height: 44px;
+      }
+
+      button, [role="button"], a.btn {
+        min-height: 44px;
+      }
+
+      /* Ensure body text is never below 14px */
+      body {
+        font-size: 15px;
+        line-height: 1.6;
+      }
     }
 
     /* Reduce motion for users who prefer it */

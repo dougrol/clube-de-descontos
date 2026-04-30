@@ -112,60 +112,60 @@ const Reports: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6 animate-fade-in pb-20">
-      <div className="flex items-center justify-between">
+    <div className="space-y-5 sm:space-y-6 animate-fade-in pb-20 overflow-x-hidden">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <SectionTitle title="Relatórios Gerenciais" subtitle="Estatísticas detalhadas de associados e uso do sistema" />
-        <button onClick={fetchReports} className="text-gray-400 hover:text-white flex items-center text-sm">
-          <Database size={16} className="mr-2" /> Atualizar Dados
+        <button onClick={fetchReports} className="text-gray-400 hover:text-white flex items-center text-sm shrink-0 min-h-[44px] px-4 py-2 rounded-xl hover:bg-white/5 border border-white/10">
+          <Database size={18} className="mr-2" /> Atualizar Dados
         </button>
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-obsidian-800 border-l-4 border-l-blue-500 p-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card className="bg-obsidian-800 border-l-4 border-l-blue-500 p-4 overflow-hidden relative">
           <div className="flex justify-between items-start gap-3">
-            <div>
-              <p className="text-theme-muted text-[10px] sm:text-xs uppercase mb-1">Total de Associados</p>
+            <div className="flex-1">
+              <p className="text-theme-muted text-xs uppercase mb-1 leading-tight break-words font-medium">Total de Associados</p>
               <h3 className="text-2xl font-bold text-white">{data.totalAssociates}</h3>
             </div>
-            <div className="p-2 bg-obsidian-900 rounded-lg text-blue-500">
+            <div className="p-3 bg-obsidian-900 rounded-xl text-blue-500 shrink-0">
               <Users size={20} />
             </div>
           </div>
         </Card>
 
-        <Card className="bg-obsidian-800 border-l-4 border-l-green-500 p-4">
+        <Card className="bg-obsidian-800 border-l-4 border-l-green-500 p-4 overflow-hidden relative">
           <div className="flex justify-between items-start gap-3">
-            <div>
-              <p className="text-theme-muted text-[10px] sm:text-xs uppercase mb-1">Cadastros Completos</p>
+            <div className="flex-1">
+              <p className="text-theme-muted text-xs uppercase mb-1 leading-tight break-words font-medium">Cadastros Completos</p>
               <h3 className="text-2xl font-bold text-white">{data.completeProfile}</h3>
             </div>
-            <div className="p-2 bg-obsidian-900 rounded-lg text-green-500">
+            <div className="p-3 bg-obsidian-900 rounded-xl text-green-500 shrink-0">
               <FileCheck size={20} />
             </div>
           </div>
         </Card>
 
-        <Card className="bg-obsidian-800 border-l-4 border-l-red-500 p-4">
+        <Card className="bg-obsidian-800 border-l-4 border-l-red-500 p-4 overflow-hidden relative">
           <div className="flex justify-between items-start gap-3">
-            <div>
-              <p className="text-theme-muted text-[10px] sm:text-xs uppercase mb-1">Cadastros Incompletos</p>
+            <div className="flex-1">
+              <p className="text-theme-muted text-xs uppercase mb-1 leading-tight break-words font-medium">Cadastros Incompletos</p>
               <h3 className="text-2xl font-bold text-white">{data.incompleteProfile}</h3>
             </div>
-            <div className="p-2 bg-obsidian-900 rounded-lg text-red-500">
+            <div className="p-3 bg-obsidian-900 rounded-xl text-red-500 shrink-0">
               <FileX size={20} />
             </div>
           </div>
         </Card>
 
-        <Card className="bg-obsidian-800 border-l-4 border-l-gold-500 p-4">
+        <Card className="bg-obsidian-800 border-l-4 border-l-gold-500 p-4 overflow-hidden relative">
           <div className="flex justify-between items-start gap-3">
-            <div>
-              <p className="text-theme-muted text-[10px] sm:text-xs uppercase mb-1">1º Acesso AGV Concluído</p>
+            <div className="flex-1">
+              <p className="text-theme-muted text-xs uppercase mb-1 leading-tight break-words font-medium">1º Acesso AGV</p>
               <h3 className="text-2xl font-bold text-white">{data.agvFirstAccessDone}</h3>
-              <p className="text-xs text-gray-500 mt-1">Pendentes: {data.agvFirstAccessPending}</p>
+              <p className="text-xs text-gray-500 mt-1 break-words">Pendentes: {data.agvFirstAccessPending}</p>
             </div>
-            <div className="p-2 bg-obsidian-900 rounded-lg text-gold-500">
+            <div className="p-3 bg-obsidian-900 rounded-xl text-gold-500 shrink-0">
               <BarChart3 size={20} />
             </div>
           </div>
@@ -173,16 +173,16 @@ const Reports: React.FC = () => {
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Associados por Associação */}
-        <Card className="bg-obsidian-800 border-none p-4">
-          <h3 className="text-sm font-medium text-white mb-4">Associados por Associação</h3>
+        <Card className="bg-obsidian-800 border-none p-4 sm:p-5">
+          <h3 className="text-base font-semibold text-white mb-4">Associados por Associação</h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={data.byAssociation} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+              <BarChart data={data.byAssociation} layout="vertical" margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#333" horizontal={false} />
-                <XAxis type="number" stroke="#666" fontSize={10} tickLine={false} axisLine={false} />
-                <YAxis dataKey="name" type="category" stroke="#666" fontSize={10} tickLine={false} axisLine={false} width={100} />
+                <XAxis type="number" stroke="#666" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis dataKey="name" type="category" stroke="#666" fontSize={11} tickLine={false} axisLine={false} width={100} />
                 <Tooltip
                   contentStyle={{ backgroundColor: '#111', border: '1px solid #333', borderRadius: '8px', fontSize: '12px' }}
                   itemStyle={{ color: '#D4AF37' }}
@@ -199,11 +199,11 @@ const Reports: React.FC = () => {
         </Card>
 
         {/* Status Universo AGV */}
-        <Card className="bg-obsidian-800 border-none p-4 flex flex-col">
-          <h3 className="text-sm font-medium text-white mb-4">Status Integração Universo AGV</h3>
-          <div className="flex-1 min-h-[250px]">
+        <Card className="bg-obsidian-800 border-none p-4 sm:p-5 flex flex-col">
+          <h3 className="text-base font-semibold text-white mb-4">Status Integração Universo AGV</h3>
+          <div className="flex-1 min-h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
+              <PieChart margin={{ top: 10, right: 10, bottom: 10, left: 10 }}>
                 <Pie
                   data={[
                     { name: 'Vinculados (App)', value: data.agvFirstAccessDone },
@@ -211,12 +211,13 @@ const Reports: React.FC = () => {
                   ]}
                   cx="50%"
                   cy="50%"
-                  innerRadius={60}
+                  innerRadius={55}
                   outerRadius={80}
                   paddingAngle={5}
                   dataKey="value"
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                  labelLine={false}
+                  label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}
+                  labelLine={{ stroke: '#666', strokeWidth: 1 }}
+                  fontSize={11}
                 >
                   <Cell fill="#10B981" />
                   <Cell fill="#3F3F46" />

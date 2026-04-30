@@ -22,14 +22,14 @@ interface ExtendedPartner extends Partner {
 }
 
 const StatCard: React.FC<{ title: string; value: string; icon: React.ReactNode; trend?: string }> = ({ title, value, icon, trend }) => (
-  <Card className="bg-obsidian-800 border-l-4 border-l-gold-500 p-4">
+  <Card className="bg-obsidian-800 border-l-4 border-l-gold-500 p-4 sm:p-5">
     <div className="flex justify-between items-start gap-3">
       <div className="min-w-0 flex-1">
-        <p className="text-theme-muted text-[10px] sm:text-xs uppercase mb-1 truncate">{title}</p>
-        <h3 className="text-xl sm:text-2xl font-bold text-theme-text truncate">{value}</h3>
-        {trend && <p className="text-green-500 text-[10px] sm:text-xs flex items-center mt-1 truncate"><ArrowUpRight size={12} className="shrink-0" /> <span className="truncate">{trend}</span></p>}
+        <p className="text-theme-muted text-xs uppercase mb-1 truncate font-medium">{title}</p>
+        <h3 className="text-2xl sm:text-3xl font-bold text-theme-text truncate">{value}</h3>
+        {trend && <p className="text-green-500 text-xs flex items-center mt-1.5 truncate"><ArrowUpRight size={14} className="shrink-0" /> <span className="truncate">{trend}</span></p>}
       </div>
-      <div className="p-2 sm:p-3 bg-obsidian-900 rounded-lg text-gold-500 shrink-0">
+      <div className="p-3 bg-obsidian-900 rounded-xl text-gold-500 shrink-0">
         {icon}
       </div>
     </div>
@@ -464,7 +464,7 @@ const Admin: React.FC = () => {
   };
 
   return (
-    <div className="p-4 sm:p-5 pb-32 min-h-screen bg-obsidian-950 animate-fade-in space-y-5 sm:space-y-8">
+    <div className="pb-32 min-h-screen bg-obsidian-950 animate-fade-in space-y-5 sm:space-y-6 md:space-y-8 overflow-x-hidden">
       {/* Header and Tabs are now handled by AdminLayout sidebar */}
       {/* 
       <header className="mb-4 sm:mb-6 flex flex-col gap-4">
@@ -475,7 +475,7 @@ const Admin: React.FC = () => {
       {activeTab === 'dashboard' ? (
         <>
           {/* KPI Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             <StatCard
               title="Total Usuários"
               value={totalUsers.toString()}
@@ -495,14 +495,13 @@ const Admin: React.FC = () => {
             />
           </div>
 
-          {/* Subscription Growth Chart - Reduced height on mobile */}
-          <section className="h-48 sm:h-64 w-full bg-obsidian-800 rounded-xl p-3 sm:p-4 border border-obsidian-700">
-            <h3 className="text-xs sm:text-sm font-medium text-theme-text mb-2">Crescimento de Assinantes</h3>
+          <section className="h-52 sm:h-64 w-full bg-obsidian-800 rounded-2xl p-4 sm:p-5 border border-obsidian-700">
+            <h3 className="text-sm sm:text-base font-semibold text-theme-text mb-3">Crescimento de Assinantes</h3>
             <ResponsiveContainer width="100%" height="85%">
               <BarChart data={chartData.length > 0 ? chartData : [{ name: 'Sem dados', users: 0 }]}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
-                <XAxis dataKey="name" stroke="#666" fontSize={10} tickLine={false} axisLine={false} />
-                <YAxis stroke="#666" fontSize={10} tickLine={false} axisLine={false} width={30} />
+                <XAxis dataKey="name" stroke="#666" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis stroke="#666" fontSize={12} tickLine={false} axisLine={false} width={35} />
                 <Tooltip
                   contentStyle={{ backgroundColor: '#111', border: '1px solid #333', borderRadius: '8px', fontSize: '12px' }}
                   itemStyle={{ color: '#D4AF37' }}
@@ -515,7 +514,7 @@ const Admin: React.FC = () => {
 
           {/* Partner Monitoring List - Mobile optimized with horizontal scroll */}
           <section>
-            <h3 className="text-sm sm:text-base font-medium text-theme-text mb-3">Monitoramento de Parceiros</h3>
+            <h3 className="text-base sm:text-lg font-semibold text-theme-text mb-4">Monitoramento de Parceiros</h3>
 
             {/* Mobile View: Cards */}
             <div className="grid grid-cols-1 gap-4 sm:hidden">
@@ -545,54 +544,54 @@ const Admin: React.FC = () => {
                           </div>
                         )}
                         <div>
-                          <h4 className="font-bold text-theme-text text-sm">{partner.name}</h4>
-                          <span className="text-xs text-gold-500">{partner.category}</span>
+                          <h4 className="font-bold text-theme-text text-base">{partner.name}</h4>
+                          <span className="text-sm text-gold-500">{partner.category}</span>
                         </div>
                       </div>
-                      <span className={`px-2 py-1 rounded text-[10px] items-center gap-1 font-bold uppercase flex ${partner.status === 'active' ? 'bg-green-500/20 text-green-500' :
+                      <span className={`px-2.5 py-1.5 rounded-lg text-xs items-center gap-1.5 font-bold uppercase flex ${partner.status === 'active' ? 'bg-green-500/20 text-green-500' :
                         partner.status === 'suspended' ? 'bg-red-500/20 text-red-500' : 'bg-yellow-500/20 text-yellow-500'
                         }`}>
-                        {partner.status === 'active' ? <CheckCircle size={10} /> : partner.status === 'suspended' ? <Slash size={10} /> : <Clock size={10} />}
+                        {partner.status === 'active' ? <CheckCircle size={14} /> : partner.status === 'suspended' ? <Slash size={14} /> : <Clock size={14} />}
                         {partner.status || 'PENDING'}
                       </span>
                     </div>
 
                     <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/5">
-                      <div className="text-xs text-theme-muted">
+                      <div className="text-sm text-theme-muted">
                         {partner.city || 'Sem local'}
                       </div>
-                      <div className="flex gap-3">
+                      <div className="flex gap-2">
                         {partner.status !== 'active' && (
                           <button
                             onClick={() => handleUpdateStatus(partner.id, 'active')}
-                            className="text-green-500 hover:text-green-400"
+                            className="text-green-500 hover:text-green-400 p-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl hover:bg-green-500/10"
                             title="Aprovar"
                           >
-                            <CheckCircle size={18} />
+                            <CheckCircle size={22} />
                           </button>
                         )}
                         {partner.status === 'active' && (
                           <button
                             onClick={() => handleUpdateStatus(partner.id, 'suspended')}
-                            className="text-red-500 hover:text-red-400"
+                            className="text-red-500 hover:text-red-400 p-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl hover:bg-red-500/10"
                             title="Suspender"
                           >
-                            <Slash size={18} />
+                            <Slash size={22} />
                           </button>
                         )}
                         <button
                           onClick={() => handleEdit(partner)}
-                          className="text-gold-500 hover:text-gold-400"
+                          className="text-gold-500 hover:text-gold-400 p-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl hover:bg-gold-500/10"
                           title="Editar"
                         >
-                          <Pencil size={18} />
+                          <Pencil size={22} />
                         </button>
                         <button
                           onClick={() => handleDelete(partner.id)}
-                          className="text-red-600 hover:text-red-500"
+                          className="text-red-600 hover:text-red-500 p-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl hover:bg-red-500/10"
                           title="Excluir"
                         >
-                          <Trash2 size={18} />
+                          <Trash2 size={22} />
                         </button>
                       </div>
                     </div>
@@ -1325,7 +1324,7 @@ const Admin: React.FC = () => {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm text-theme-muted mb-1">Preço Original (R$)</label>
               <input
@@ -1350,7 +1349,7 @@ const Admin: React.FC = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm text-theme-muted mb-1">Estoque</label>
               <input

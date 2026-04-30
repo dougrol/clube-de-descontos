@@ -203,15 +203,15 @@ const PartnerDashboard: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen bg-obsidian-950 font-sans text-theme-text pb-32">
+        <div className="min-h-screen bg-obsidian-950 font-sans text-theme-text pb-32 overflow-x-hidden">
             {/* Header */}
-            <header className="bg-obsidian-900 border-b border-white/5 p-6 md:px-12 flex justify-between items-center sticky top-0 z-40 backdrop-blur-md bg-opacity-80">
+            <header className="bg-obsidian-900 border-b border-white/5 p-4 sm:p-6 md:px-12 flex justify-between items-center sticky top-0 z-40 backdrop-blur-md bg-opacity-80">
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-gold-500/10 rounded-lg flex items-center justify-center border border-gold-500/20">
                         <Settings className="text-gold-500" size={20} />
                     </div>
                     <div>
-                        <h1 className="text-lg font-bold leading-tight">{partner.name}</h1>
+                        <h1 className="text-base sm:text-lg font-bold leading-tight truncate">{partner.name}</h1>
                         <p className="text-[10px] text-theme-muted tracking-wider uppercase">Painel do Parceiro</p>
                     </div>
                 </div>
@@ -220,10 +220,10 @@ const PartnerDashboard: React.FC = () => {
                 </button>
             </header>
 
-            <div className="p-6 md:p-12 max-w-[1600px] mx-auto space-y-8">
+            <div className="p-4 sm:p-6 md:p-12 max-w-[1600px] mx-auto space-y-6 sm:space-y-8">
 
                 {/* Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                     <Card className="flex flex-col gap-4">
                         <div className="flex justify-between items-start">
                             <div className="p-2 bg-blue-500/10 rounded-lg text-blue-500"><Users size={20} /></div>
@@ -280,22 +280,22 @@ const PartnerDashboard: React.FC = () => {
                 <section>
                     <SectionTitle title="Ações Rápidas" subtitle="Gerencie sua parceria" />
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-                        <button onClick={() => { setIsValidating(true); setValidationStep(0); setValidatedCoupon(null); setValidationMessage(null); setCouponCodeInput(''); }} className="bg-obsidian-900 border border-white/10 hover:border-gold-500/50 p-8 rounded-xl flex items-center gap-6 transition-all group text-left hover:bg-white/5">
-                            <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center group-hover:bg-gold-500 group-hover:text-black transition-colors shadow-lg">
-                                <QrCode size={32} />
+                        <button onClick={() => { setIsValidating(true); setValidationStep(0); setValidatedCoupon(null); setValidationMessage(null); setCouponCodeInput(''); }} className="bg-obsidian-900 border border-white/10 hover:border-gold-500/50 p-5 sm:p-8 rounded-xl flex items-center gap-4 sm:gap-6 transition-all group text-left hover:bg-white/5">
+                            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-800 rounded-full flex items-center justify-center group-hover:bg-gold-500 group-hover:text-black transition-colors shadow-lg shrink-0">
+                                <QrCode size={24} className="sm:hidden" /><QrCode size={32} className="hidden sm:block" />
                             </div>
                             <div>
-                                <h4 className="font-bold text-xl mb-1">Validar Cupom</h4>
+                                <h4 className="font-bold text-base sm:text-xl mb-1">Validar Cupom</h4>
                                 <p className="text-sm text-theme-muted">Ler QR Code do cliente para aplicar desconto</p>
                             </div>
                         </button>
 
-                        <button onClick={() => setIsEditing(true)} className="bg-obsidian-900 border border-white/10 hover:border-gold-500/50 p-8 rounded-xl flex items-center gap-6 transition-all group text-left hover:bg-white/5">
-                            <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center group-hover:bg-gold-500 group-hover:text-black transition-colors shadow-lg">
-                                <Edit3 size={32} />
+                        <button onClick={() => setIsEditing(true)} className="bg-obsidian-900 border border-white/10 hover:border-gold-500/50 p-5 sm:p-8 rounded-xl flex items-center gap-4 sm:gap-6 transition-all group text-left hover:bg-white/5">
+                            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-800 rounded-full flex items-center justify-center group-hover:bg-gold-500 group-hover:text-black transition-colors shadow-lg shrink-0">
+                                <Edit3 size={24} className="sm:hidden" /><Edit3 size={32} className="hidden sm:block" />
                             </div>
                             <div>
-                                <h4 className="font-bold text-xl mb-1">Editar Perfil</h4>
+                                <h4 className="font-bold text-base sm:text-xl mb-1">Editar Perfil</h4>
                                 <p className="text-sm text-theme-muted">Alterar benefício, regras, fotos e descrição</p>
                             </div>
                         </button>
@@ -355,14 +355,14 @@ const PartnerDashboard: React.FC = () => {
 
             {/* EDIT PROFILE MODAL */}
             {isEditing && editForm && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-obsidian-950/80 backdrop-blur-sm p-4 animate-fade-in">
-                    <div className="bg-obsidian-900 w-full max-w-2xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-                        <div className="p-6 border-b border-white/5 flex justify-between items-center">
+                <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-obsidian-950/80 backdrop-blur-sm p-0 sm:p-4 animate-fade-in">
+                    <div className="bg-obsidian-900 w-full max-w-2xl rounded-t-2xl sm:rounded-2xl border border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[95vh] sm:max-h-[90vh]">
+                        <div className="p-4 sm:p-6 border-b border-white/5 flex justify-between items-center shrink-0">
                             <h2 className="text-xl font-bold flex items-center gap-2"><Settings size={20} className="text-gold-500" /> Editar Dados da Loja</h2>
                             <button onClick={() => setIsEditing(false)} className="text-theme-muted hover:text-theme-text"><X size={24} /></button>
                         </div>
 
-                        <div className="p-6 overflow-y-auto custom-scrollbar space-y-6">
+                        <div className="p-4 sm:p-6 overflow-y-auto custom-scrollbar space-y-6">
                             {/* Basic Info */}
                             <div className="space-y-4">
                                 <h4 className="text-xs font-bold text-theme-muted uppercase tracking-widest border-b border-white/10 pb-2">Informações Básicas</h4>
@@ -525,7 +525,7 @@ const PartnerDashboard: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className="p-6 border-t border-white/5 bg-obsidian-950/50 flex justify-end gap-3">
+                        <div className="p-4 sm:p-6 border-t border-white/5 bg-obsidian-950/50 flex flex-col sm:flex-row justify-end gap-3">
                             <Button variant="outline" onClick={() => setIsEditing(false)}>Cancelar</Button>
                             <Button onClick={handleSaveProfile} className="px-8"><Save size={18} className="mr-2" /> Salvar Alterações</Button>
                         </div>
@@ -535,8 +535,8 @@ const PartnerDashboard: React.FC = () => {
 
             {/* VALIDATE COUPON MODAL */}
             {isValidating && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-obsidian-950/90 backdrop-blur-md p-4 animate-fade-in">
-                    <div className="bg-obsidian-900 w-full max-w-sm rounded-3xl border border-white/10 shadow-2xl overflow-hidden p-8 text-center relative">
+                <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-obsidian-950/90 backdrop-blur-md p-0 sm:p-4 animate-fade-in">
+                    <div className="bg-obsidian-900 w-full max-w-sm rounded-t-3xl sm:rounded-3xl border border-white/10 shadow-2xl overflow-hidden p-6 sm:p-8 text-center relative">
                         <button onClick={() => setIsValidating(false)} className="absolute top-4 right-4 text-theme-muted hover:text-theme-text"><X size={24} /></button>
 
                         {validationStep === 0 && (

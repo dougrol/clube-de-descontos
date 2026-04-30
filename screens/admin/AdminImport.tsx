@@ -486,32 +486,32 @@ export const AdminImport: React.FC = () => {
     const errorCount = results.filter(r => r.status === 'error').length;
 
     return (
-        <div className="space-y-6 animate-fade-in">
+        <div className="space-y-4 sm:space-y-6 animate-fade-in overflow-x-hidden">
             <SectionTitle 
                 title="Importar Associados" 
                 subtitle="Envie qualquer planilha ou PDF com dados de associados. O sistema detecta automaticamente as colunas."
             />
 
-            <Card className="p-6 bg-obsidian-900 border-white/5 shadow-2xl">
+            <Card className="p-4 sm:p-6 bg-obsidian-900 border-white/5 shadow-2xl">
                 <div className="space-y-6">
                    
                    {/* Layout Selection */}
-                   <div className="flex flex-wrap gap-2 mb-6 p-1 bg-obsidian-950 rounded-lg max-w-fit">
+                   <div className="flex flex-wrap gap-2 mb-4 sm:mb-6 p-1 bg-obsidian-950 rounded-lg">
                        <button 
                            onClick={() => { setImportMode('agv'); setFile(null); setAgvSummary(null); }}
-                           className={`px-4 py-2 rounded-md text-sm font-bold transition-colors ${importMode === 'agv' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
+                           className={`px-3 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-bold transition-colors flex-1 sm:flex-none text-center ${importMode === 'agv' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
                        >
                            🚗 Universo AGV (Placa)
                        </button>
                        <button 
                            onClick={() => { setImportMode('standard'); setFile(null); setAgvSummary(null); }}
-                           className={`px-4 py-2 rounded-md text-sm font-bold transition-colors ${importMode === 'standard' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
+                           className={`px-3 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-bold transition-colors flex-1 sm:flex-none text-center ${importMode === 'standard' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
                        >
                            Layout Padrão (CPF)
                        </button>
                        <button 
                            onClick={() => { setImportMode('elevamais'); setFile(null); setAgvSummary(null); }}
-                           className={`px-4 py-2 rounded-md text-sm font-bold transition-colors ${importMode === 'elevamais' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
+                           className={`px-3 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-bold transition-colors flex-1 sm:flex-none text-center ${importMode === 'elevamais' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
                        >
                            Eleva Mais (PDF)
                        </button>
@@ -570,7 +570,7 @@ export const AdminImport: React.FC = () => {
                     )}
 
                     {/* Upload Area */}
-                    <div className="border-2 border-dashed border-white/10 hover:border-gold-500/50 transition-colors rounded-xl p-8 flex flex-col items-center justify-center text-center">
+                    <div className="border-2 border-dashed border-white/10 hover:border-gold-500/50 transition-colors rounded-xl p-5 sm:p-8 flex flex-col items-center justify-center text-center">
                         <input 
                             type="file" 
                             accept={importMode === 'elevamais' ? '.pdf' : '.csv,.xlsx,.xls,.ods,.tsv'}
@@ -598,7 +598,7 @@ export const AdminImport: React.FC = () => {
                             </div>
                         )}
 
-                        <div className="flex gap-4">
+                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                              {!file && (
                                 <Button 
                                     onClick={() => fileInputRef.current?.click()}

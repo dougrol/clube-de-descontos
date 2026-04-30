@@ -24,7 +24,7 @@ const GridItem: React.FC<GridItemProps> = ({ icon: Icon, label, path, color = "t
                 <div className="absolute inset-0 rounded-full bg-gradient-to-br from-gold-400 to-gold-600 opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500 scale-75 group-hover:scale-100"></div>
 
                 {/* Outer gradient ring */}
-                <div className="relative w-[72px] h-[72px] md:w-20 md:h-20 p-[2px] rounded-full bg-gradient-to-br from-white/20 via-gold-500/30 to-white/5 group-hover:from-gold-400 group-hover:via-gold-500 group-hover:to-gold-600 transition-all duration-300">
+                <div className="relative w-16 h-16 sm:w-[72px] sm:h-[72px] md:w-20 md:h-20 p-[2px] rounded-full bg-gradient-to-br from-white/20 via-gold-500/30 to-white/5 group-hover:from-gold-400 group-hover:via-gold-500 group-hover:to-gold-600 transition-all duration-300">
                     {/* Inner circle with icon */}
                     <div className="w-full h-full rounded-full bg-obsidian-900 flex items-center justify-center group-hover:bg-obsidian-800 transition-all duration-300 relative overflow-hidden">
                         {/* Shine effect on hover */}

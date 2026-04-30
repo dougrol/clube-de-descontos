@@ -116,7 +116,7 @@ const Benefits: React.FC = () => {
   }
 
   return (
-    <div className="pb-24 min-h-screen bg-obsidian-950 animate-fade-in relative selection:bg-gold-500/30">
+    <div className="pb-24 min-h-screen bg-obsidian-950 animate-fade-in relative selection:bg-gold-500/30 overflow-x-hidden">
 
       {/* Radar Scanning Overlay */}
       {isScanning && (
@@ -138,7 +138,7 @@ const Benefits: React.FC = () => {
       )}
 
       {/* --- HERO SECTION --- */}
-      <div className="relative h-[250px] md:h-[320px] w-full overflow-hidden mb-8 group">
+      <div className="relative h-[220px] sm:h-[250px] md:h-[320px] w-full overflow-hidden mb-6 sm:mb-8 group">
         <div className="absolute inset-0 bg-obsidian-950/50 z-10"></div>
 
         {/* Premium Cover Image */}
@@ -154,13 +154,13 @@ const Benefits: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-20"></div>
 
         {/* Hero Content */}
-        <div className="absolute bottom-6 left-6 right-6 z-30">
+        <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 z-30">
           <div className="flex items-center gap-2 mb-2 opacity-0 animate-slide-up" style={{ animationDelay: '0.1s' }}>
             <span className="bg-gold-500/20 text-gold-500 border border-gold-500/30 px-3 py-1 rounded text-[10px] font-bold tracking-widest uppercase backdrop-blur-sm">
               Exclusive Member
             </span>
           </div>
-          <h1 className="text-3xl md:text-5xl font-serif font-black text-theme-text leading-tight opacity-0 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+          <h1 className="text-2xl sm:text-3xl md:text-5xl font-serif font-black text-theme-text leading-tight opacity-0 animate-slide-up" style={{ animationDelay: '0.2s' }}>
             CLUBE DE <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-600">VANTAGENS</span>
           </h1>
           <p className="text-theme-muted text-sm md:text-base mt-2 max-w-lg opacity-0 animate-slide-up" style={{ animationDelay: '0.3s' }}>
@@ -169,10 +169,10 @@ const Benefits: React.FC = () => {
         </div>
       </div>
 
-      <div className="px-5">
+      <div className="px-3 sm:px-5">
 
         {/* Search & Filter */}
-        <div className="sticky top-4 bg-obsidian-950/80 backdrop-blur-md z-40 py-3 px-3 -mx-2 rounded-xl border border-white/10 shadow-2xl mb-8">
+        <div className="sticky top-4 bg-obsidian-950/80 backdrop-blur-md z-40 py-3 px-2 sm:px-3 -mx-1 sm:-mx-2 rounded-xl border border-white/10 shadow-2xl mb-6 sm:mb-8">
           <div className="space-y-4">
             <Input
               placeholder="Buscar parceiro ou cidade..."
@@ -245,8 +245,8 @@ const Benefits: React.FC = () => {
               }
 
               return (
-                <Card key={partner.id} onClick={() => navigate(`/benefits/${partner.id}`)} className="flex gap-4 p-3 group border-l-4 border-l-transparent hover:border-l-gold-500 transition-all bg-obsidian-900/50 hover:bg-obsidian-900 border-y border-y-transparent hover:border-y-white/5 cursor-pointer">
-                  <div className="w-24 h-24 bg-gray-800 rounded-lg overflow-hidden flex-shrink-0 relative">
+                <Card key={partner.id} onClick={() => navigate(`/benefits/${partner.id}`)} className="flex gap-3 sm:gap-4 p-3 group border-l-4 border-l-transparent hover:border-l-gold-500 transition-all bg-obsidian-900/50 hover:bg-obsidian-900 border-y border-y-transparent hover:border-y-white/5 cursor-pointer">
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gray-800 rounded-lg overflow-hidden flex-shrink-0 relative">
                     <img
                       src={partner.logoUrl || 'https://placehold.co/200x200/1a1a1a/d4af37?text=TC'}
                       alt={partner.name}

@@ -48,13 +48,13 @@ const Home: React.FC = () => {
   const firstName = user?.user_metadata?.name?.split(' ')[0] || 'Membro';
 
   return (
-    <div className="relative min-h-screen bg-obsidian-950 font-sans text-theme-text overflow-hidden pb-32">
+    <div className="relative min-h-screen bg-obsidian-950 font-sans text-theme-text overflow-x-hidden pb-32">
 
       {/* 1. Dynamic Wave Background */}
       <WaveBackground />
 
       {/* Main Content Container */}
-      <div className="relative z-10 px-6 pt-8 md:pt-12 max-w-md mx-auto md:max-w-4xl lg:max-w-6xl">
+      <div className="relative z-10 px-5 sm:px-6 pt-8 md:pt-12 max-w-md mx-auto md:max-w-4xl lg:max-w-6xl">
 
         {/* 2. Header */}
         <header className="flex items-center justify-between mb-8 animate-fade-in">
@@ -62,7 +62,7 @@ const Home: React.FC = () => {
             <h1 className="font-serif text-2xl md:text-3xl text-theme-text">
               Olá, <span className="text-gold-500 font-bold">{firstName}</span>
             </h1>
-            <p className="text-theme-muted text-xs md:text-sm">Bem-vindo ao seu Clube Exclusive</p>
+            <p className="text-theme-muted text-sm md:text-sm">Bem-vindo ao seu Clube Exclusive</p>
           </div>
 
           <div className="flex items-center gap-3">
@@ -83,14 +83,14 @@ const Home: React.FC = () => {
 
         {/* 3. Hero Card (Super App Style) */}
         <div className="mb-10 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-          <div className="relative w-full bg-gradient-to-br from-white to-gray-100 rounded-[2.5rem] p-8 md:p-12 overflow-hidden shadow-2xl shadow-white/5">
+          <div className="relative w-full bg-gradient-to-br from-white to-gray-100 rounded-2xl sm:rounded-[2.5rem] p-6 sm:p-8 md:p-12 overflow-hidden shadow-2xl shadow-white/5">
 
             {/* Card Content */}
             <div className="relative z-10">
-              <span className="inline-block px-3 py-1 bg-obsidian-950/5 rounded-full text-[10px] font-bold tracking-widest text-theme-muted mb-4 uppercase">
+              <span className="inline-block px-3 py-1.5 bg-obsidian-950/5 rounded-full text-xs font-bold tracking-widest text-theme-muted mb-4 uppercase">
                 Tavares Car
               </span>
-              <h2 className="text-3xl md:text-5xl font-serif font-bold text-obsidian-950 leading-[0.9] mb-4">
+              <h2 className="text-2xl sm:text-3xl md:text-5xl font-serif font-bold text-obsidian-950 leading-[0.9] mb-4">
                 O seu <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-600 to-gold-400">
                   Super App
@@ -104,9 +104,9 @@ const Home: React.FC = () => {
               <Button
                 onClick={() => navigate('/loja')}
                 variant="signal"
-                className="rounded-full px-6 shadow-lg shadow-signal-500/20 hover:shadow-signal-500/40 transition-all font-bold text-xs"
+                className="rounded-full px-6 shadow-lg shadow-signal-500/20 hover:shadow-signal-500/40 transition-all font-bold text-sm"
               >
-                ACESSAR LOJA <ArrowRight size={14} className="ml-1" />
+                ACESSAR LOJA <ArrowRight size={16} className="ml-1" />
               </Button>
             </div>
 
@@ -133,15 +133,15 @@ const Home: React.FC = () => {
 
             <div className="relative z-10 flex items-center justify-between">
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400 mb-1 block flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span className="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-1 block flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                   Consultoria Especializada
                 </span>
-                <h3 className="text-lg font-bold text-theme-text mb-1">Escola de Negócios</h3>
-                <p className="text-theme-muted text-xs max-w-[180px] leading-relaxed">Treinamentos exclusivos para alta performance em vendas.</p>
+                <h3 className="text-xl font-bold text-theme-text mb-1">Escola de Negócios</h3>
+                <p className="text-theme-muted text-sm max-w-[200px] leading-relaxed">Treinamentos exclusivos para alta performance em vendas.</p>
               </div>
-              <div className="w-10 h-10 bg-emerald-600/20 rounded-full flex items-center justify-center border border-emerald-500/30 group-hover:bg-emerald-600 group-hover:text-white transition-all">
-                <ArrowRight size={18} />
+              <div className="w-12 h-12 bg-emerald-600/20 rounded-full flex items-center justify-center border border-emerald-500/30 group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                <ArrowRight size={20} />
               </div>
             </div>
           </Link>
@@ -154,15 +154,15 @@ const Home: React.FC = () => {
             
             <div className="relative z-10 flex items-center justify-between">
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-signal-500 mb-1 block flex items-center gap-1">
-                  <ShoppingBag size={10} className="animate-bounce" />
+                <span className="text-xs font-bold uppercase tracking-widest text-signal-500 mb-1 block flex items-center gap-1.5">
+                  <ShoppingBag size={12} className="animate-bounce" />
                   Novidade
                 </span>
-                <h3 className="text-lg font-bold text-theme-text mb-1">Achadinhos Shopee</h3>
-                <p className="text-theme-muted text-xs max-w-[180px] leading-relaxed">Ofertas exclusivas selecionadas para você.</p>
+                <h3 className="text-xl font-bold text-theme-text mb-1">Achadinhos Shopee</h3>
+                <p className="text-theme-muted text-sm max-w-[200px] leading-relaxed">Ofertas exclusivas selecionadas para você.</p>
               </div>
-              <div className="w-10 h-10 bg-signal-500 rounded-full flex items-center justify-center shadow-lg shadow-signal-500/30 group-hover:scale-110 transition-transform">
-                <ShoppingBag size={18} className="text-theme-text" />
+              <div className="w-12 h-12 bg-signal-500 rounded-full flex items-center justify-center shadow-lg shadow-signal-500/30 group-hover:scale-110 transition-transform">
+                <ShoppingBag size={20} className="text-theme-text" />
               </div>
             </div>
           </Link>
@@ -180,13 +180,13 @@ const Home: React.FC = () => {
         <div className="animate-slide-up" style={{ animationDelay: '0.3s' }}>
           <div className="flex items-center justify-between mb-6 px-2">
             <h3 className="font-bold text-theme-text text-lg">Clube de Vantagens</h3>
-            <Link to="/benefits" className="text-gold-500 text-xs font-bold tracking-widest uppercase hover:text-theme-text transition-colors outline-none focus-visible:ring-1 focus-visible:ring-gold-500 rounded px-1">Ver Todos</Link>
+            <Link to="/benefits" className="text-gold-500 text-sm font-bold tracking-widest uppercase hover:text-theme-text transition-colors outline-none focus-visible:ring-1 focus-visible:ring-gold-500 rounded px-1">Ver Todos</Link>
           </div>
 
-          <div className="relative w-full overflow-hidden -mx-6 px-6 md:mx-0 md:px-0">
+          <div className="relative w-full overflow-hidden -mx-4 px-4 sm:-mx-6 sm:px-6 md:mx-0 md:px-0">
             <div className="flex gap-4 overflow-x-auto pb-8 scrollbar-hide snap-x">
               {featuredPartners.map((partner, idx) => (
-                <div key={idx} className="snap-start shrink-0 w-[260px]">
+                <div key={idx} className="snap-start shrink-0 w-[220px] sm:w-[260px]">
                   <Link to={`/benefits/${partner.id}`} className="block outline-none focus-visible:ring-2 focus-visible:ring-gold-500 rounded-3xl">
                     <Card
                       className="h-[320px] p-0 border-0 bg-obsidian-900 rounded-3xl overflow-hidden group hover:scale-[1.02] transition-transform duration-300 shadow-xl shadow-black/50"
@@ -201,17 +201,17 @@ const Home: React.FC = () => {
                         <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900 to-transparent opacity-80"></div>
                         <div className="absolute bottom-4 left-4 right-4">
                           <h4 className="text-xl font-bold text-theme-text leading-tight mb-1">{partner.name}</h4>
-                          <span className="text-[10px] uppercase tracking-wider text-gold-500 font-bold bg-obsidian-950/30 backdrop-blur px-2 py-1 rounded-full">
+                          <span className="text-xs uppercase tracking-wider text-gold-500 font-bold bg-obsidian-950/30 backdrop-blur px-2.5 py-1 rounded-full">
                             {partner.category}
                           </span>
                         </div>
                       </div>
                       <div className="h-[35%] p-5 bg-obsidian-900 relative">
-                        <div className="flex items-center gap-2 text-theme-muted text-xs mb-3">
-                          <Tag size={12} className="text-gold-500" />
+                        <div className="flex items-center gap-2 text-theme-muted text-sm mb-3">
+                          <Tag size={14} className="text-gold-500" />
                           <span className="line-clamp-1">{partner.benefit}</span>
                         </div>
-                        <button className="w-full py-2 rounded-xl bg-white/5 text-white text-xs font-bold transition-colors">
+                        <button className="w-full py-2.5 rounded-xl bg-white/5 text-white text-sm font-bold transition-colors">
                           USAR DESCONTO
                         </button>
                       </div>

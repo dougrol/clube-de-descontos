@@ -229,7 +229,7 @@ const Login: React.FC = () => {
 
 
   return (
-    <div className="min-h-screen bg-black flex flex-col justify-center px-6 relative overflow-hidden">
+    <div className="min-h-screen bg-black flex flex-col justify-center px-5 sm:px-6 relative overflow-hidden">
       {/* Background Decor with pulse animation */}
       <motion.div
         className="absolute -top-20 -right-20 w-64 h-64 bg-gold-600/10 rounded-full blur-3xl"
@@ -245,11 +245,11 @@ const Login: React.FC = () => {
       <StaggerContainer className="relative z-10 w-full max-w-sm mx-auto" staggerDelay={0.12}>
         {/* Logo */}
         <StaggerItem>
-          <div className="mb-8 flex flex-col items-center">
-            <h2 className="text-2xl font-serif font-bold text-white mb-1">
+          <div className="mb-10 flex flex-col items-center">
+            <h2 className="text-3xl font-serif font-bold text-white mb-1">
               TAVARES <span className="text-gold-500">CAR</span>
             </h2>
-            <p className="text-gold-500/80 text-[10px] tracking-[0.3em] uppercase font-medium">Clube de Descontos</p>
+            <p className="text-gold-500/80 text-xs tracking-[0.3em] uppercase font-medium">Clube de Descontos</p>
           </div>
         </StaggerItem>
 
@@ -262,14 +262,14 @@ const Login: React.FC = () => {
               aria-pressed={selectedRole === 'client'}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className={`p-4 rounded-xl border-2 transition-all duration-300 flex flex-col items-center gap-2 ${selectedRole === 'client'
+              className={`p-4 rounded-2xl border-2 transition-all duration-300 flex flex-col items-center gap-2 min-h-[110px] ${selectedRole === 'client'
                 ? 'bg-gold-500 border-gold-500 text-black shadow-lg shadow-gold-500/20'
                 : 'bg-white/5 border-white/10 text-gray-400 hover:border-white/30'
                 }`}
             >
-              <User size={24} />
-              <span className="text-sm font-bold">Associado</span>
-              <span className="text-[10px] opacity-70">Acesse com CPF</span>
+              <User size={28} />
+              <span className="text-base font-bold">Associado</span>
+              <span className="text-xs opacity-70">Acesse com CPF</span>
             </motion.button>
 
             {/* Partner Option */}
@@ -278,19 +278,19 @@ const Login: React.FC = () => {
               aria-pressed={selectedRole === 'partner'}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className={`p-4 rounded-xl border-2 transition-all duration-300 flex flex-col items-center gap-2 relative overflow-hidden ${selectedRole === 'partner'
+              className={`p-4 rounded-2xl border-2 transition-all duration-300 flex flex-col items-center gap-2 relative overflow-hidden min-h-[110px] ${selectedRole === 'partner'
                 ? 'bg-gold-500 border-gold-500 text-black shadow-lg shadow-gold-500/20'
                 : 'bg-gradient-to-br from-signal-500/10 to-orange-500/10 border-signal-500/30 text-white hover:border-signal-500/60'
                 }`}
             >
               {selectedRole !== 'partner' && (
-                <div className="absolute top-1 right-1">
-                  <Sparkles size={14} className="text-signal-500" />
+                <div className="absolute top-1.5 right-1.5">
+                  <Sparkles size={16} className="text-signal-500" />
                 </div>
               )}
-              <Store size={24} />
-              <span className="text-sm font-bold">Parceiro</span>
-              <span className="text-[10px] opacity-70">Acesse com E-mail</span>
+              <Store size={28} />
+              <span className="text-base font-bold">Parceiro</span>
+              <span className="text-xs opacity-70">Acesse com E-mail</span>
             </motion.button>
           </div>
         </StaggerItem>
@@ -298,10 +298,10 @@ const Login: React.FC = () => {
         {/* Dynamic Header */}
         <StaggerItem>
           <div className="mb-6 text-center">
-            <h3 className="text-lg text-white font-medium">
+            <h3 className="text-xl text-white font-semibold">
               {selectedRole === 'partner' ? 'Acesse seu Painel' : 'Entre no Clube'}
             </h3>
-            <p className="text-gray-400 text-xs mt-1">
+            <p className="text-gray-400 text-sm mt-1">
               {selectedRole === 'partner'
                 ? 'Gerencie cupons, veja estatísticas e atualize sua loja'
                 : 'Exclusivo para associados ativos das associações parceiras'}
@@ -318,8 +318,8 @@ const Login: React.FC = () => {
                 animate={{ opacity: 1, x: 0 }}
                 className="bg-red-500/15 border border-red-500/60 rounded-lg p-3 flex items-start gap-3"
               >
-                <AlertCircle size={18} className="text-red-500 shrink-0 mt-0.5" />
-                <p className="text-red-200 text-xs">{error}</p>
+                <AlertCircle size={20} className="text-red-500 shrink-0 mt-0.5" />
+                <p className="text-red-200 text-sm">{error}</p>
               </motion.div>
             )}
 
@@ -409,15 +409,15 @@ const Login: React.FC = () => {
                 animate={{ opacity: 1 }}
                 className="bg-gradient-to-r from-signal-500/10 to-orange-500/10 border border-signal-500/30 p-4 rounded-xl text-center"
               >
-                <p className="text-white text-sm mb-2">
-                  <Store size={16} className="inline mr-2 text-signal-500" />
+                <p className="text-white text-base mb-2">
+                  <Store size={18} className="inline mr-2 text-signal-500" />
                   Tem um negócio?
                 </p>
                 <motion.button
                   onClick={() => navigate('/register-partner')}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="text-signal-500 font-bold text-sm hover:underline"
+                  className="text-signal-500 font-bold text-base hover:underline"
                 >
                   SEJA UM PARCEIRO →
                 </motion.button>
@@ -438,7 +438,7 @@ const Login: React.FC = () => {
                   </motion.button>
                 </p>
                 <div className="pt-3 border-t border-white/5">
-                  <p className="text-gray-400 text-xs">
+                  <p className="text-gray-400 text-sm">
                     Primeiro acesso <span className="text-gold-500">Universo AGV</span>?
                     <br />
                     <motion.button
@@ -455,13 +455,13 @@ const Login: React.FC = () => {
 
             {/* Partner Registration Link */}
             {selectedRole === 'partner' && (
-              <div className="text-center bg-white/5 p-4 rounded-xl border border-white/5">
-                <p className="text-gray-400 text-xs mb-2">Quer oferecer descontos no clube?</p>
+              <div className="text-center bg-white/5 p-4 rounded-2xl border border-white/5">
+                <p className="text-gray-400 text-sm mb-2">Quer oferecer descontos no clube?</p>
                 <motion.button
                   onClick={() => navigate('/register-partner')}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="text-gold-500 font-bold text-sm hover:underline"
+                  className="text-gold-500 font-bold text-base hover:underline"
                 >
                   CADASTRE SUA LOJA
                 </motion.button>
@@ -470,10 +470,10 @@ const Login: React.FC = () => {
 
             {/* Partner Associations */}
             <div className="pt-6 mt-2">
-              <p className="text-gray-400 text-[9px] uppercase tracking-[0.2em] text-center mb-4">
+              <p className="text-gray-400 text-[10px] uppercase tracking-[0.2em] text-center mb-4">
                 Associações Parceiras
               </p>
-              <div className="flex items-center justify-center gap-5">
+              <div className="flex items-center justify-center gap-4 sm:gap-5">
                 {[
                   { name: 'Elevamais', logo: 'https://elevamais.org/wp-content/uploads/2025/05/Foto-Capa-Branding-Elevamais-Protecao-Veicular.png' },
                   { name: 'AGV', logo: '/images/partners/agv.png' },
@@ -481,13 +481,13 @@ const Login: React.FC = () => {
                   { name: 'APVS', logo: '/images/partners/apvs.png' }
                 ].map((partner, index) => (
                   <div key={index} className="flex flex-col items-center group cursor-pointer">
-                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-sm p-2 shadow-lg group-hover:border-gold-500/50 group-hover:bg-white/10 transition-all duration-300 flex items-center justify-center">
+                    <div className="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 rounded-2xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-sm p-2 sm:p-3 shadow-lg group-hover:border-gold-500/50 group-hover:bg-white/10 transition-all duration-300 flex items-center justify-center">
                       <img
                         src={partner.logo}
                         alt={partner.name}
                         loading="lazy"
                         decoding="async"
-                        className="w-full h-full object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300"
+                        className="max-w-full max-h-full object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
                           target.style.display = 'none';
@@ -501,7 +501,7 @@ const Login: React.FC = () => {
                         }}
                       />
                     </div>
-                    <span className="text-gray-400 text-[8px] sm:text-[9px] mt-2 uppercase tracking-[0.15em] font-bold group-hover:text-gold-500 transition-colors">{partner.name}</span>
+                    <span className="text-gray-400 text-[10px] sm:text-xs mt-2 uppercase tracking-[0.15em] font-bold group-hover:text-gold-500 transition-colors">{partner.name}</span>
                   </div>
                 ))}
               </div>
