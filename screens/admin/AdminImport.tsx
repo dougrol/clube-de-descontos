@@ -168,10 +168,11 @@ async function parsePdfFile(arrayBuffer: ArrayBuffer): Promise<ImportRow[]> {
 const FIELD_KEYWORDS: Record<string, string[]> = {
     name: ['nome','name','nome completo','nome do associado','associado','razao social','razao','titular','cliente','nome/razao','beneficiario','nome do titular','responsavel'],
     cpf: ['cpf','cpf/cnpj','cpf_cnpj','cnpj','documento','doc','nr documento','num documento','numero documento','cpf / cnpj','cpf cnpj','inscricao'],
+    matricula: ['matricula','matrícula','registro','cod associado','codigo associado','id associado'],
     phone: ['telefone','tel','celular','phone','fone','contato','whatsapp','tel celular','tel residencial','telefone celular','tel.','cel','cel.','numero celular'],
     email: ['email','e-mail','correio','mail','e mail','endereco eletronico'],
     placa: ['placa','placa do veiculo','placa veiculo','plate','veiculo placa'],
-    association_name: ['associacao','associação','association','clube','parceiro','empresa','convenio','grupo','entidade','association_name'],
+    association_name: ['associacao','associação','association','clube','parceiro','empresa','convenio','grupo','entidade','association_name','instituicao','instituição'],
     status: ['status','situacao','situação','ativo','active','sit','sit.'],
     valid_until: ['validade','valid_until','vencimento','data vencimento','vigencia','vigência','dt vencimento','expiracao'],
     birth_date: ['data nascimento','nascimento','data de nascimento','birth_date','dt nascimento','dt nasc','nasc','aniversario','data nasc'],
@@ -271,12 +272,19 @@ function parseSpreadsheet(arrayBuffer: ArrayBuffer, _importMode: string, associa
         console.log('Auto-detected columns by pattern:', columnMap);
     }
 
-    if (!columnMap.name && !columnMap.cpf) {
-        throw new Error("Não foi possível identificar colunas de Nome ou CPF. Verifique o formato do arquivo.");
+    // Check if we have at least name column
+    if (!columnMap.name && !columnMap.cpf && !columnMap.matricula) {
+        throw new Error("Não foi possível identificar colunas de Nome, CPF ou Matrícula. Verifique o formato do arquivo.");
     }
 
-    // --- Step 3: Parse rows ---
-    const parsedData: ImportRow[] = [];
+    // If no CPF column, use Matricula as fallback identifier
+    const useMatriculaAsCpf = !columnMap.cpf && columnMap.matricula !== undefined;
+    if (useMatriculaAsCpf) {
+        console.log('CPF column not found — using Matricula as identifier (padded to 11 digits)');
+    }
+
+    // --- Step 3: Parse rows with deduplication ---
+    const seenIds = new Map<string, ImportRow>();
     const assocName = associationOverride || 'Geral';
     
     for (let i = dataStartIndex; i < rawData.length; i++) {
@@ -292,33 +300,62 @@ function parseSpreadsheet(arrayBuffer: ArrayBuffer, _importMode: string, associa
         const name = getValue('name');
         let cpf = getValue('cpf');
         
+        // If no CPF column, derive from matricula
+        if (!cpf && useMatriculaAsCpf) {
+            const mat = getValue('matricula').replace(/\D/g, '');
+            if (mat) cpf = mat.padStart(11, '0');
+        }
+        
         // Clean CPF
         if (cpf) cpf = cpf.replace(/\D/g, '');
         
         // Skip if no useful data
         if (!name && !cpf) continue;
-        // Skip if CPF exists but is clearly invalid
+        // If CPF exists, pad to at least 11 digits if shorter
+        if (cpf && cpf.length < 11) cpf = cpf.padStart(11, '0');
+        // Skip if CPF is clearly invalid (too long)
         if (cpf && cpf.length !== 11 && cpf.length !== 14) continue;
         // If we have CPF but no name, use a placeholder
         const finalName = name || `Associado ${cpf}`;
         // If we have name but no CPF, skip (required by Edge Function)
         if (!cpf) continue;
 
-        parsedData.push({
+        // Map status values to system format
+        const rawStatus = getValue('status').toLowerCase();
+        const mappedStatus = rawStatus.includes('ativo') ? 'active' 
+            : rawStatus.includes('cancel') ? 'inactive'
+            : rawStatus.includes('inativo') ? 'inactive'
+            : rawStatus || 'active';
+
+        // Deduplication: same person (by CPF) may appear multiple times (one per vehicle)
+        // Keep first entry, merge phone if missing
+        const dedupeKey = cpf;
+        if (seenIds.has(dedupeKey)) {
+            const existing = seenIds.get(dedupeKey)!;
+            // Merge phone if first was empty
+            if (!existing.phone && getValue('phone')) {
+                existing.phone = getValue('phone');
+            }
+            continue;
+        }
+
+        const entry: ImportRow = {
             name: finalName,
             cpf,
             email: getValue('email') || undefined,
             phone: getValue('phone') || undefined,
             placa: getValue('placa') || undefined,
             association_name: getValue('association_name') || assocName,
-            status: getValue('status') || 'active',
+            status: mappedStatus,
             valid_until: getValue('valid_until') || undefined,
             birth_date: getValue('birth_date') || undefined,
             password: getValue('password') || undefined,
-        });
+        };
+        
+        seenIds.set(dedupeKey, entry);
     }
     
-    return parsedData;
+    return Array.from(seenIds.values());
 }
 
 // ============================================================
