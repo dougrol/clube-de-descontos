@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '../services/supabaseClient';
 import { UserRole } from '../types';
@@ -33,6 +33,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [memberStatus, setMemberStatus] = useState<string | null>(null);
     const [associationId, setAssociationId] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
+    
+    // Guard against duplicate SIGNED_IN events (token refresh fires SIGNED_IN again)
+    const lastProcessedToken = useRef<string | null>(null);
 
     useEffect(() => {
         // Check if URL contains recovery token - redirect to reset-password page
@@ -66,13 +69,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setSession(session);
             setUser(session?.user ?? null);
             if (session?.user) {
+                lastProcessedToken.current = session.access_token;
                 fetchUserRole(session.user.id);
             } else {
                 setLoading(false);
             }
         });
 
-        // 2. Listen for changes
+        // 2. Listen for changes — deduplicate SIGNED_IN to prevent loop
         const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
             console.log('Auth event:', event);
 
@@ -84,8 +88,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 return;
             }
 
-            if (event === 'SIGNED_IN') {
+            // Deduplicate: skip if same access_token already processed
+            if (event === 'SIGNED_IN' && session?.access_token === lastProcessedToken.current) {
+                return;
+            }
+
+            if (event === 'SIGNED_IN' && session) {
+                lastProcessedToken.current = session.access_token;
                 setLoading(true);
+            }
+
+            if (event === 'SIGNED_OUT') {
+                lastProcessedToken.current = null;
             }
 
             setSession(session);
