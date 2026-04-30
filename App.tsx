@@ -3,10 +3,16 @@ import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import Splash from './screens/Splash';
 import Login from './screens/Login';
-import AdminLogin from './screens/AdminLogin';
+import AdminLogin from './screens/admin/AdminLogin';
+import AdminLayout from './components/AdminLayout';
+import AdminLegacy from './screens/admin/AdminLegacy';
+
 import ForgotPassword from './screens/ForgotPassword';
 import ResetPassword from './screens/ResetPassword';
 import Register from './screens/Register';
+import UniversoAgvFirstAccess from './screens/UniversoAgvFirstAccess';
+import RegisterAgv from './screens/RegisterAgv';
+import Reports from './screens/admin/Reports';
 import Home from './screens/Home';
 import Benefits from './screens/Benefits';
 import PartnerDetail from './screens/PartnerDetail';
@@ -14,7 +20,6 @@ import Social from './screens/Social';
 import Profile from './screens/Profile';
 import PersonalData from './screens/PersonalData';
 import MyCoupons from './screens/MyCoupons';
-import Admin from './screens/Admin';
 import Protection from './screens/VehicleProtection';
 import SalesConsultancy from './screens/SalesConsultancy';
 import CorporateConsultancy from './screens/CorporateConsultancy';
@@ -52,16 +57,18 @@ const AppRoutes: React.FC = () => {
         {/* Public Routes */}
         <Route
           path="/login"
-          element={!isAuthenticated ? <Login /> : <Navigate to={role === UserRole.PARTNER ? "/partner-dashboard" : role === UserRole.ADMIN ? "/admin" : "/home"} />}
+          element={!isAuthenticated ? <Login /> : <Navigate to={role === UserRole.PARTNER ? "/partner-dashboard" : role === UserRole.ADMIN ? "/admin/dashboard" : "/home"} />}
         />
         <Route
-          path="/admin-login"
-          element={!isAuthenticated ? <AdminLogin /> : <Navigate to={role === UserRole.ADMIN ? "/admin" : "/home"} />}
+          path="/admin/login"
+          element={!isAuthenticated ? <AdminLogin /> : <Navigate to="/admin/dashboard" />}
         />
+        {/* Compatibility with old routes */}
+        <Route path="/admin-login" element={<Navigate to="/admin/login" replace />} />
         {/* Secret admin login route */}
         <Route
           path="/tc-portal-2024"
-          element={!isAuthenticated ? <AdminLogin /> : <Navigate to={role === UserRole.ADMIN ? "/admin" : "/home"} />}
+          element={!isAuthenticated ? <AdminLogin /> : <Navigate to="/admin/dashboard" />}
         />
         <Route
           path="/forgot-password"
@@ -83,6 +90,14 @@ const AppRoutes: React.FC = () => {
         <Route
           path="/register"
           element={!isAuthenticated ? <Register /> : <Navigate to="/home" />}
+        />
+        <Route
+          path="/primeiro-acesso-agv"
+          element={!isAuthenticated ? <UniversoAgvFirstAccess /> : <Navigate to="/home" />}
+        />
+        <Route
+          path="/register-agv"
+          element={!isAuthenticated ? <RegisterAgv /> : <Navigate to="/home" />}
         />
 
         {/* Protected Routes */}
@@ -179,15 +194,18 @@ const AppRoutes: React.FC = () => {
           }
         />
 
-        {/* Admin Route */}
-        <Route
-          path="/admin"
-          element={
-            isAuthenticated && role === UserRole.ADMIN
-              ? <Admin />
-              : <Navigate to="/home" />
-          }
-        />
+        {/* Admin Routes with AdminLayout */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Navigate to="/admin/dashboard" replace />} />
+          <Route path="dashboard" element={<AdminLegacy />} />
+          <Route path="relatorios" element={<Reports />} />
+          <Route path="associados" element={<AdminLegacy />} />
+          <Route path="importacoes" element={<AdminLegacy />} />
+          <Route path="produtos" element={<AdminLegacy />} />
+          <Route path="conteudo" element={<AdminLegacy />} />
+          <Route path="cupons" element={<AdminLegacy />} />
+          <Route path="protecao" element={<AdminLegacy />} />
+        </Route>
 
         {/* Fallback */}
         <Route path="*" element={<Navigate to={isAuthenticated ? "/home" : "/login"} />} />

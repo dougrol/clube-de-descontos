@@ -115,7 +115,7 @@ serve(async (req) => {
             })
             if (listUserError) throw new Error(`List Users Error: ${listUserError.message}`)
                 
-            const existingAuthUser = userList.users.find(u => u.email === deterministicEmail || u.email === `${cpfDigits}@login.tavarescar`)
+            const existingAuthUser = userList.users.find((u: { email: string | undefined; id: string }) => u.email === deterministicEmail || u.email === `${cpfDigits}@login.tavarescar`)
             
             if (existingAuthUser) {
                authUserId = existingAuthUser.id
@@ -136,7 +136,7 @@ serve(async (req) => {
                if (createAuthError) {
                  if (createAuthError.message.includes('already registered')) {
                     const { data: retryUsers } = await supabaseClient.auth.admin.listUsers({ perPage: 1000 })
-                    const retryUser = retryUsers?.users.find(u => u.email === deterministicEmail)
+                    const retryUser = retryUsers?.users.find((u: { email: string | undefined; id: string }) => u.email === deterministicEmail)
                     if (retryUser) {
                       authUserId = retryUser.id
                     } else {
@@ -152,7 +152,7 @@ serve(async (req) => {
         }
         
         // Passo C: Upsert na tabela members pública (com placa e birth_date opcionais)
-        const memberData: any = {
+        const memberData: Record<string, unknown> = {
            name: name,
            cpf: cpfDigits,
            phone: phone || null,
@@ -173,8 +173,9 @@ serve(async (req) => {
         if (memberUpsertError) throw new Error(`Member Upsert Error: ${memberUpsertError.message}`)
 
         results.push({ cpf: cpfDigits, status: 'success', member_name: name })
-      } catch (err: any) {
-        results.push({ cpf: cpfDigits, status: 'error', message: err.message })
+      } catch (err: unknown) {
+        const errorMsg = err instanceof Error ? err.message : String(err);
+        results.push({ cpf: cpfDigits, status: 'error', message: errorMsg })
       }
     }
 
@@ -184,8 +185,9 @@ serve(async (req) => {
       status: 200,
     })
 
-  } catch (error: any) {
-    return new Response(JSON.stringify({ global_error: error.message }), {
+  } catch (error: unknown) {
+    const globalError = error instanceof Error ? error.message : String(error);
+    return new Response(JSON.stringify({ global_error: globalError }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 400,
     })

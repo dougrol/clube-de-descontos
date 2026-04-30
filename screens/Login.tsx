@@ -55,7 +55,7 @@ const isValidIdentifier = (value: string): boolean => {
     const calc = (n: string, pos: number[]) => {
       let sum = 0;
       for (let i = 0; i < pos.length; i++) sum += parseInt(n[i]) * pos[i];
-      let result = sum % 11;
+      const result = sum % 11;
       return result < 2 ? 0 : 11 - result;
     };
     
@@ -135,11 +135,20 @@ const Login: React.FC = () => {
           throw new Error('Esta conta não tem permissão de parceiro.');
         }
 
+        // Log de sucesso
+        await supabase.from('logs_acesso').insert({
+            user_id: data.user?.id,
+            email: cpf,
+            tipo_usuario: 'PARTNER',
+            status: 'SUCESSO',
+            mensagem: 'Login efetuado com sucesso'
+        });
+
         // Force refresh session to ensure AuthContext has the latest role
         await refreshSession();
 
         if (userData.role === 'ADMIN') {
-          navigate('/admin');
+          navigate('/admin/dashboard');
         } else {
           navigate('/partner-dashboard');
         }
@@ -171,27 +180,46 @@ const Login: React.FC = () => {
             throw new Error('Sua conta de associado não está ativa no momento.');
         }
 
+        // Log de sucesso
+        await supabase.from('logs_acesso').insert({
+            user_id: (await supabase.auth.getUser()).data.user?.id,
+            email: deterministicEmail,
+            tipo_usuario: 'USER',
+            status: 'SUCESSO',
+            mensagem: 'Login efetuado com sucesso'
+        });
+
         await refreshSession();
         navigate('/home');
       }
 
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Login error full details:', err);
       let message = 'Ocorreu um erro ao entrar. Tente novamente.';
       
-      if (err?.message) {
-        message = err.message;
+      const errorObj = err as { message?: string };
+      if (errorObj?.message) {
+        message = errorObj.message;
       } else if (typeof err === 'string') {
         message = err;
       }
 
       if (message === 'Invalid login credentials') {
-        setError('Senha incorreta ou cadastro não encontrado. Verifique seu CPF/CNPJ.');
+        message = 'E-mail ou senha inválidos. Verifique suas credenciais.';
+        setError(message);
       } else if (message.includes('Email not confirmed')) {
         setError('E-mail não confirmado. Verifique sua caixa de entrada.');
       } else {
         setError(message);
       }
+
+      const emailLog = selectedRole === 'partner' ? cpf : cpfToEmail(cleanCPF);
+      await supabase.from('logs_acesso').insert({
+          email: emailLog,
+          tipo_usuario: selectedRole.toUpperCase(),
+          status: 'FALHA',
+          mensagem: message
+      });
     } finally {
       // ALWAYS stop loading unless we successfully navigated (but even then, React Router will handle component teardown)
       // Since React 18, setting state on unmounting components is perfectly safe (no warnings).
@@ -398,7 +426,7 @@ const Login: React.FC = () => {
 
             {/* Client Registration */}
             {selectedRole === 'client' && (
-              <div className="text-center">
+              <div className="text-center space-y-3">
                 <p className="text-gray-400 text-sm">
                   Associado e ainda não tem conta?{' '}
                   <motion.button
@@ -409,6 +437,19 @@ const Login: React.FC = () => {
                     Cadastre-se
                   </motion.button>
                 </p>
+                <div className="pt-3 border-t border-white/5">
+                  <p className="text-gray-400 text-xs">
+                    Primeiro acesso <span className="text-gold-500">Universo AGV</span>?
+                    <br />
+                    <motion.button
+                      onClick={() => navigate('/primeiro-acesso-agv')}
+                      whileHover={{ scale: 1.02 }}
+                      className="text-white font-semibold mt-1 hover:text-gold-400 transition-colors"
+                    >
+                      Valide sua placa aqui →
+                    </motion.button>
+                  </p>
+                </div>
               </div>
             )}
 

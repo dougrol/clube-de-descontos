@@ -1,0 +1,20 @@
+
+C:\Users\dougl\Downloads\tavares-car\screens\admin\AdminImport.tsx
+    2:18  error  'Users' is defined but never used                     @typescript-eslint/no-unused-vars
+  112:17  error  'cpfSource' is never reassigned. Use 'const' instead  prefer-const
+  166:53  error  'importMode' is defined but never used                @typescript-eslint/no-unused-vars
+  179:9   error  'headers' is never reassigned. Use 'const' instead    prefer-const
+
+C:\Users\dougl\Downloads\tavares-car\supabase\functions\import_ancore_member\index.ts
+   72:63  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  106:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  116:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\dougl\Downloads\tavares-car\supabase\functions\import_member\index.ts
+  155:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  176:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  187:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+Ô£û 10 problems (10 errors, 0 warnings)
+  2 errors and 0 warnings potentially fixable with the `--fix` option.
+

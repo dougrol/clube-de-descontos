@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
-import { SectionTitle, Card } from '../components/ui';
-import Modal from '../components/ui/Modal';
+import { SectionTitle, Card } from '../../components/ui';
+import Modal from '../../components/ui/Modal';
 import { Users, DollarSign, Award, ArrowUpRight, CheckCircle, Clock, Save, Pencil, Trash2, Slash, XCircle, Type, Layout, Package, Plus, Eye, EyeOff, Ticket, ShieldCheck, Star, X } from 'lucide-react';
-import { supabase } from '../services/supabaseClient';
-import { Partner, PartnerCategory, ProductDB } from '../types';
-import { useCMS, SiteContent } from '../contexts/CMSContext';
-import { toggleProductActive } from '../services/storeService';
-import { updatePartner } from '../services/partners';
-import { UsedCouponsList } from '../components/admin/UsedCouponsList';
-import { AdminImport } from './admin/AdminImport';
+import { supabase } from '../../services/supabaseClient';
+import { Partner, PartnerCategory, ProductDB } from '../../types';
+import { useCMS, SiteContent } from '../../contexts/CMSContext';
+import { toggleProductActive } from '../../services/storeService';
+import { updatePartner, fetchPartners as fetchPartnersService } from '../../services/partners';
+import { UsedCouponsList } from '../../components/admin/UsedCouponsList';
+import { AdminImport } from './AdminImport';
+import { UniversoAgvImport } from './UniversoAgvImport';
 
 interface ChartData {
   name: string;
@@ -35,8 +36,30 @@ const StatCard: React.FC<{ title: string; value: string; icon: React.ReactNode; 
   </Card>
 );
 
+import { useNavigate, useLocation } from 'react-router-dom';
+
 const Admin: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'content' | 'products' | 'coupons' | 'protection' | 'import'>('dashboard');
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const getTabFromPath = () => {
+    const path = location.pathname;
+    if (path.includes('/admin/produtos')) return 'products';
+    if (path.includes('/admin/conteudo')) return 'content';
+    if (path.includes('/admin/cupons')) return 'coupons';
+    if (path.includes('/admin/protecao')) return 'protection';
+    if (path.includes('/admin/importacoes')) return 'import';
+    if (path.includes('/admin/associados')) return 'universo-agv'; // or whatever tab it maps to
+    if (path.includes('/admin/dashboard')) return 'dashboard';
+    return 'dashboard';
+  };
+
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'content' | 'products' | 'coupons' | 'protection' | 'import' | 'universo-agv'>(getTabFromPath());
+  
+  useEffect(() => {
+    setActiveTab(getTabFromPath());
+  }, [location.pathname]);
+
   const [totalUsers, setTotalUsers] = useState<number>(0);
   const [activePartnersCount, setActivePartnersCount] = useState<number>(0);
   const [partners, setPartners] = useState<ExtendedPartner[]>([]);
@@ -236,12 +259,8 @@ const Admin: React.FC = () => {
         .eq('status', 'active');
       setActivePartnersCount(partnerCount || 0);
 
-      // 3. All Partners for List
-      const { data: partnersData } = await supabase
-        .from('partners')
-        .select('*')
-        .order('created_at', { ascending: false });
-
+      // 3. All Partners for List (use service for proper snake_case -> camelCase mapping)
+      const partnersData = await fetchPartnersService();
       if (partnersData) {
         setPartners(partnersData as ExtendedPartner[]);
       }
@@ -446,54 +465,12 @@ const Admin: React.FC = () => {
 
   return (
     <div className="p-4 sm:p-5 pb-32 min-h-screen bg-obsidian-950 animate-fade-in space-y-5 sm:space-y-8">
+      {/* Header and Tabs are now handled by AdminLayout sidebar */}
+      {/* 
       <header className="mb-4 sm:mb-6 flex flex-col gap-4">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-theme-text">Painel Gestor</h1>
-          <p className="text-theme-muted text-xs sm:text-sm">Visão geral do negócio</p>
-        </div>
-
-        {/* Tab Switcher - Mobile Optimized: horizontal scroll */}
-        <div className="overflow-x-auto scrollbar-hide -mx-5 px-5">
-          <div className="flex bg-obsidian-900 rounded-lg p-1 border border-obsidian-700 min-w-max">
-            <button
-              onClick={() => setActiveTab('dashboard')}
-              className={`px-4 py-2.5 rounded-md text-sm font-bold flex items-center gap-2 transition-all whitespace-nowrap ${activeTab === 'dashboard' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
-            >
-              <Layout size={16} /> Dashboard
-            </button>
-            <button
-              onClick={() => setActiveTab('products')}
-              className={`px-4 py-2.5 rounded-md text-sm font-bold flex items-center gap-2 transition-all whitespace-nowrap ${activeTab === 'products' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
-            >
-              <Package size={16} /> Produtos
-            </button>
-            <button
-              onClick={() => setActiveTab('content')}
-              className={`px-4 py-2.5 rounded-md text-sm font-bold flex items-center gap-2 transition-all whitespace-nowrap ${activeTab === 'content' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
-            >
-              <Type size={16} /> Conteúdo
-            </button>
-            <button
-              onClick={() => setActiveTab('coupons')}
-              className={`px-4 py-2.5 rounded-md text-sm font-bold flex items-center gap-2 transition-all whitespace-nowrap ${activeTab === 'coupons' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
-            >
-              <Ticket size={16} /> Cupons
-            </button>
-            <button
-              onClick={() => setActiveTab('protection')}
-              className={`px-4 py-2.5 rounded-md text-sm font-bold flex items-center gap-2 transition-all whitespace-nowrap ${activeTab === 'protection' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
-            >
-              <ShieldCheck size={16} /> Proteção
-            </button>
-            <button
-              onClick={() => setActiveTab('import')}
-              className={`px-4 py-2.5 rounded-md text-sm font-bold flex items-center gap-2 transition-all whitespace-nowrap ${activeTab === 'import' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
-            >
-              <Users size={16} /> Importação Associados
-            </button>
-          </div>
-        </div>
-      </header>
+        ... legacy header ...
+      </header> 
+      */}
 
       {activeTab === 'dashboard' ? (
         <>
@@ -927,6 +904,11 @@ const Admin: React.FC = () => {
       {/* Import Users Tab Content */}
       {activeTab === 'import' && (
         <AdminImport />
+      )}
+
+      {/* Universo AGV Import Tab Content */}
+      {activeTab === 'universo-agv' && (
+        <UniversoAgvImport />
       )}
 
       {/* Protection Plans Tab Content */}

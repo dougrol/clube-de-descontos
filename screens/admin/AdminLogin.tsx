@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, ShieldAlert, ChevronRight, AlertCircle } from 'lucide-react';
-import { Button, Input } from '../components/ui';
-import { supabase } from '../services/supabaseClient';
+import { Button, Input } from '../../components/ui';
+import { supabase } from '../../services/supabaseClient';
 
 const AdminLogin: React.FC = () => {
     const navigate = useNavigate();
@@ -24,40 +24,49 @@ const AdminLogin: React.FC = () => {
 
             if (error) throw error;
 
-            // Check if user is actually an admin
-            const { data: userData, error: userError } = await supabase
-                .from('users')
-                .select('role')
-                .eq('id', data.user?.id)
-                .single();
+            // Check if user is actually an admin in admin_users
+            const { data: adminData, error: adminError } = await supabase
+                .from('admin_users')
+                .select('ativo')
+                .eq('user_id', data.user?.id)
+                .maybeSingle(); // Changed to maybeSingle to handle 0 rows
 
-            if (userError) {
-                console.error('Error fetching user role:', userError);
-                throw new Error('Erro ao verificar permissões. Tente novamente.');
-            }
-
-            console.log('Admin login - User role from DB:', userData?.role);
-
-            // Case-insensitive check for admin role
-            const userRole = userData?.role?.toString().toUpperCase();
-            if (userRole !== 'ADMIN') {
+            if (adminError || !adminData?.ativo) {
+                console.error('Error fetching admin status:', adminError);
                 await supabase.auth.signOut();
-                throw new Error('Acesso não autorizado. Esta área é restrita a administradores.');
+                throw new Error('Acesso não autorizado. Esta área é restrita a administradores ativos.');
             }
+
+            // Log de sucesso
+            await supabase.from('logs_acesso').insert({
+                user_id: data.user?.id,
+                email,
+                tipo_usuario: 'ADMIN',
+                status: 'SUCESSO',
+                mensagem: 'Login efetuado com sucesso'
+            });
 
             // Wait longer for AuthContext to sync the auth state
             await new Promise(resolve => setTimeout(resolve, 800));
 
-            // Force full page reload to admin panel for clean state
-            window.location.href = window.location.origin + window.location.pathname + '#/admin';
-            window.location.reload();
+            // Redirect to the new admin dashboard
+            navigate('/admin/dashboard', { replace: true });
 
         } catch (err: unknown) {
             console.error('Admin login error:', err);
             const errorMessage = err instanceof Error ? err.message : 'Erro ao entrar. Tente novamente.';
+            
+            // Log de falha
+            await supabase.from('logs_acesso').insert({
+                email,
+                tipo_usuario: 'ADMIN',
+                status: 'FALHA',
+                mensagem: errorMessage
+            });
+
             setError(
                 errorMessage === 'Invalid login credentials'
-                    ? 'Credenciais inválidas.'
+                    ? 'E-mail ou senha inválidos.'
                     : errorMessage
             );
         } finally {
@@ -134,7 +143,7 @@ const AdminLogin: React.FC = () => {
                     <div className="mt-4 text-center border-t border-white/5 pt-4">
                         <button
                             type="button"
-                            onClick={() => navigate('/admin-forgot-password')}
+                            onClick={() => navigate('/forgot-password')}
                             className="text-gold-500 text-sm hover:text-gold-400 transition-colors"
                         >
                             Esqueci minha senha

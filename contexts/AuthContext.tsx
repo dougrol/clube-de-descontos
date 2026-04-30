@@ -101,33 +101,59 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return () => subscription.unsubscribe();
     }, []);
 
-    const fetchUserRole = async (userId: string) => {
+    const fetchUserRole = async (userId: string, userEmail?: string) => {
         try {
-            const { data, error } = await supabase
+            // 1. Check if user is Admin
+            const { data: adminData } = await supabase
+                .from('admin_users')
+                .select('ativo')
+                .eq('user_id', userId)
+                .maybeSingle();
+
+            if (adminData && adminData.ativo) {
+                setRole(UserRole.ADMIN);
+                console.log('DEBUG: Role set to ADMIN (from admin_users)');
+                return;
+            }
+
+            // 2. Check if user is Partner
+            const { data: partnerData } = await supabase
+                .from('partners')
+                .select('status')
+                .eq('auth_user_id', userId)
+                .maybeSingle();
+
+            if (partnerData && partnerData.status !== 'inativo') {
+                setRole(UserRole.PARTNER);
+                console.log('DEBUG: Role set to PARTNER (from partners)');
+                return;
+            }
+
+            // 3. Fallback to users table or set as USER (Associado)
+            const { data: userData, error } = await supabase
                 .from('users')
                 .select('role')
                 .eq('id', userId)
                 .maybeSingle();
-                
+
             if (error && error.code !== 'PGRST116') {
                 console.error('fetchUserRole supabase error:', error);
             }
 
-            console.log('DEBUG: Role fetched from DB:', data); // LOG HERE
-
-            if (data && data.role) {
-                const dbRole = data.role;
-                // Case-insensitive check
-                if (dbRole.toUpperCase() === 'ADMIN') {
+            if (userData && userData.role) {
+                const dbRole = userData.role.toUpperCase();
+                if (dbRole === 'ADMIN' || dbRole === 'TI') {
+                    // Fallback se não achou na admin_users mas a role diz que é admin
                     setRole(UserRole.ADMIN);
-                } else if (dbRole.toUpperCase() === 'PARTNER') {
+                } else if (dbRole === 'PARTNER') {
                     setRole(UserRole.PARTNER);
                 } else {
                     setRole(UserRole.USER);
                 }
-                console.log('DEBUG: Final Role Set:', dbRole); // LOG HERE
+                console.log('DEBUG: Final Role Set from users table:', dbRole);
             } else {
                 setRole(UserRole.USER);
+                console.log('DEBUG: Defaulting to USER');
             }
 
             // Also map member status and association id if applicable
@@ -135,7 +161,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 .from('members')
                 .select('status, association_id')
                 .eq('auth_user_id', userId)
-                .maybeSingle(); // maybeSingle uses HTTP 200 with null instead of 406 for empty results
+                .maybeSingle();
             
             if (memberData) {
                 setMemberStatus(memberData.status);
@@ -144,6 +170,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         } catch (error) {
             console.error('Error fetching role or member data:', error);
+            setRole(UserRole.USER);
         } finally {
             setLoading(false);
         }

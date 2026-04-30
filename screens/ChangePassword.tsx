@@ -20,8 +20,16 @@ const ChangePassword: React.FC = () => {
       e.preventDefault();
       setError(null);
 
-      if (newPassword.length < 6) {
-         setError('A nova senha deve ter pelo menos 6 caracteres.');
+      const pwdError = (() => {
+         if (newPassword.length < 8) return 'A nova senha deve ter pelo menos 8 caracteres.';
+         if (!/[a-zA-Z]/.test(newPassword)) return 'A nova senha deve conter pelo menos uma letra.';
+         if (!/\d/.test(newPassword)) return 'A nova senha deve conter pelo menos um número.';
+         if (!/[!@#$%^&*(),.?":{}|<>]/.test(newPassword)) return 'A nova senha deve conter pelo menos um caractere especial.';
+         return null;
+      })();
+
+      if (pwdError) {
+         setError(pwdError);
          return;
       }
 

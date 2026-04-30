@@ -32,7 +32,6 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
     // Editable fields
     const [editName, setEditName] = useState('');
     const [editPhone, setEditPhone] = useState('');
-    const [editCpf, setEditCpf] = useState('');
     const [editEmail, setEditEmail] = useState('');
 
     useEffect(() => {
@@ -71,7 +70,6 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
                     setUserData(parsed);
                     setEditName(parsed.name);
                     setEditPhone(parsed.phone || '');
-                    setEditCpf(parsed.cpf || '');
                     setEditEmail(parsed.email || '');
                 } else {
                     const fallback: UserData = {
@@ -160,7 +158,6 @@ const PersonalData: React.FC<PersonalDataProps> = ({ userRole }) => {
     const handleCancel = () => {
         setEditName(userData?.name || '');
         setEditPhone(userData?.phone || '');
-        setEditCpf(userData?.cpf || '');
         setEditEmail(userData?.email || '');
         setEditing(false);
     };

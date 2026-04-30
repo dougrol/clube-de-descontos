@@ -69,7 +69,7 @@ serve(async (req) => {
         const { data: existingUsers, error: listUserError } = await supabaseClient.auth.admin.listUsers()
         if (listUserError) throw new Error(`List Users Error: ${listUserError.message}`)
             
-        const existingAuthUser = existingUsers.users.find((u: any) => u.email === normalizedEmail)
+        const existingAuthUser = existingUsers.users.find((u: { email: string; id: string }) => u.email === normalizedEmail)
         
         if (existingAuthUser) {
            authUserId = existingAuthUser.id
@@ -103,8 +103,9 @@ serve(async (req) => {
         if (memberUpsertError) throw new Error(`Member Upsert Error: ${memberUpsertError.message}`)
 
         results.push({ email: normalizedEmail, status: 'success', member_name: name })
-      } catch (err: any) {
-        results.push({ email, status: 'error', message: err.message })
+      } catch (err: unknown) {
+        const errorMsg = err instanceof Error ? err.message : String(err);
+        results.push({ email, status: 'error', message: errorMsg })
       }
     }
 
@@ -113,8 +114,9 @@ serve(async (req) => {
       status: 200,
     })
 
-  } catch (error: any) {
-    return new Response(JSON.stringify({ global_error: error.message }), {
+  } catch (error: unknown) {
+    const globalMsg = error instanceof Error ? error.message : String(error);
+    return new Response(JSON.stringify({ global_error: globalMsg }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 400,
     })

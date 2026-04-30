@@ -1,0 +1,40 @@
+
+> tavares-car@0.0.1 lint
+> eslint .
+
+
+C:\Users\dougl\Downloads\tavares-car\screens\Login.tsx
+   58:11  error  'result' is never reassigned. Use 'const' instead  prefer-const
+  178:19  error  Unexpected any. Specify a different type           @typescript-eslint/no-explicit-any
+
+C:\Users\dougl\Downloads\tavares-car\screens\PersonalData.tsx
+  35:12  error  'editCpf' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\dougl\Downloads\tavares-car\screens\admin\AdminImport.tsx
+    2:18  error  'Users' is defined but never used                     @typescript-eslint/no-unused-vars
+   76:49  error  Unexpected any. Specify a different type              @typescript-eslint/no-explicit-any
+  112:17  error  'cpfSource' is never reassigned. Use 'const' instead  prefer-const
+  166:53  error  'importMode' is defined but never used                @typescript-eslint/no-unused-vars
+  170:20  error  Unexpected any. Specify a different type              @typescript-eslint/no-explicit-any
+  174:41  error  Unexpected any. Specify a different type              @typescript-eslint/no-explicit-any
+  179:9   error  'headers' is never reassigned. Use 'const' instead    prefer-const
+  196:24  error  Unexpected any. Specify a different type              @typescript-eslint/no-explicit-any
+  296:36  error  Unexpected any. Specify a different type              @typescript-eslint/no-explicit-any
+  310:23  error  Unexpected any. Specify a different type              @typescript-eslint/no-explicit-any
+
+C:\Users\dougl\Downloads\tavares-car\services\partners.ts
+  21:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\dougl\Downloads\tavares-car\supabase\functions\import_ancore_member\index.ts
+   72:63  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  106:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  116:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\dougl\Downloads\tavares-car\supabase\functions\import_member\index.ts
+  155:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  176:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  187:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+Ô£û 20 problems (20 errors, 0 warnings)
+  3 errors and 0 warnings potentially fixable with the `--fix` option.
+

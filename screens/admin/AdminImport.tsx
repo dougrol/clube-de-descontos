@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Upload, Users, CheckCircle, AlertCircle, Loader2, FileText, ChevronRight } from 'lucide-react';
+import { FileText, Import, AlertCircle, CheckCircle, Upload, Trash2, Download, ChevronRight, Loader2, Users } from 'lucide-react';
 import { Card, Button, SectionTitle } from '../../components/ui';
 import { supabase } from '../../services/supabaseClient';
 import * as XLSX from 'xlsx';
@@ -73,7 +73,7 @@ async function parsePdfFile(arrayBuffer: ArrayBuffer): Promise<ImportRow[]> {
         // Group text items by Y position (each row in the table)
         const rowsByY: Record<number, PdfTextItem[]> = {};
         
-        for (const item of textContent.items as any[]) {
+        for (const item of textContent.items as Array<{str: string, transform: number[]}>) {
             if (!item.str || !item.str.trim()) continue;
             const y = Math.round(item.transform[5]);
             const x = Math.round(item.transform[4]);
@@ -109,7 +109,7 @@ async function parsePdfFile(arrayBuffer: ArrayBuffer): Promise<ImportRow[]> {
             if (lowerNome.includes('total') || lowerNome.includes('sga') || lowerNome.includes('hinova') || lowerNome.includes('http')) continue;
             
             // Extract numbers from whatever looks like the CPF column or other columns if misplaced
-            let cpfSource = rowData.cpf || '';
+            const cpfSource = rowData.cpf || '';
             // If the PDF merged CPF with another field, let's try to extract any 11 or 14 digit sequence
             let cpfClean = cpfSource.replace(/\D/g, '');
             
@@ -163,20 +163,20 @@ async function parsePdfFile(arrayBuffer: ArrayBuffer): Promise<ImportRow[]> {
 // ============================================================
 // XLSX/CSV Parser (Standard mode)
 // ============================================================
-function parseSpreadsheet(arrayBuffer: ArrayBuffer, importMode: string): ImportRow[] {
+function parseSpreadsheet(arrayBuffer: ArrayBuffer, _importMode: string): ImportRow[] {
     const workbook = XLSX.read(arrayBuffer, { type: 'array' });
     const firstSheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[firstSheetName];
-    const rawData: any[] = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+    const rawData = XLSX.utils.sheet_to_json<unknown[]>(worksheet, { header: 1 });
     
     if (rawData.length < 1) throw new Error("O arquivo parece estar vazio.");
 
-    const firstRow = rawData[0].map((v: any) => 
+    const firstRow = rawData[0].map((v: unknown) => 
         String(v || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
     );
     
     let dataStartIndex = 0;
-    let headers = firstRow;
+    const headers = firstRow;
     
     const standardKeywords = ['name', 'cpf', 'nome', 'placa', 'email', 'telefone', 'associacao'];
     const isHeader = firstRow.some((cell: string) => standardKeywords.includes(cell));
@@ -193,9 +193,9 @@ function parseSpreadsheet(arrayBuffer: ArrayBuffer, importMode: string): ImportR
         const row = rawData[i];
         if (!row || row.length === 0) continue;
 
-        const rowData: any = {};
+        const rowData: Record<string, string> = {};
         headers.forEach((header: string, index: number) => {
-            if (header) rowData[header] = row[index];
+            if (header) rowData[header] = String(row[index] || '');
         });
         
         const name = rowData.name || rowData.nome;
@@ -293,11 +293,16 @@ export const AdminImport: React.FC = () => {
                         allResults = [...allResults, ...resData.results];
                     }
 
-                } catch (chunkErr: any) {
+                } catch (chunkErr: unknown) {
                     console.error("Chunk Error:", chunkErr);
-                    let errMsg = chunkErr.message;
-                    if (chunkErr.message === 'Failed to fetch') {
-                        errMsg = 'Erro de CORS ou rede. A Edge Function não foi encontrada ou falhou ao processar a requisição.';
+                    let errMsg = 'Erro desconhecido';
+                    if (chunkErr instanceof Error) {
+                        errMsg = chunkErr.message;
+                        if (chunkErr.message === 'Failed to fetch') {
+                            errMsg = 'Erro de CORS ou rede. A Edge Function não foi encontrada ou falhou ao processar a requisição.';
+                        }
+                    } else if (typeof chunkErr === 'string') {
+                        errMsg = chunkErr;
                     }
                     chunk.forEach(c => allResults.push({ cpf: c.cpf || c.email, status: 'error', message: errMsg }));
                 }
@@ -307,9 +312,12 @@ export const AdminImport: React.FC = () => {
 
             setResults(allResults);
 
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error("Import error:", err);
-            setError(err.message);
+            let errMsg = 'Erro desconhecido';
+            if (err instanceof Error) errMsg = err.message;
+            else if (typeof err === 'string') errMsg = err;
+            setError(errMsg);
         } finally {
             setIsProcessing(false);
             if(fileInputRef.current) fileInputRef.current.value = '';

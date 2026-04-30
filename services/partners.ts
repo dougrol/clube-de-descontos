@@ -7,7 +7,8 @@ export const fetchPartners = async (): Promise<Partner[]> => {
     // Opcionalmente também trazemos se tiver custom_benefit
     const { data, error } = await supabase
         .from('partners')
-        .select('*');
+        .select('*')
+        .order('created_at', { ascending: false });
 
     if (error) {
         console.error('Error fetching partners:', error);
@@ -17,7 +18,7 @@ export const fetchPartners = async (): Promise<Partner[]> => {
     // Map snake_case DB columns to camelCase TS interface
     // Includes overriding 'benefit' if a 'custom_benefit' exists in the association_partners pivot.
     // Ensure data is treated carefully as we joined table
-    const partnersData = data as any[];
+    const partnersData = data as Array<PartnerDB & { association_partners?: Array<{ custom_benefit: string }> }>;
 
     return partnersData.map((p) => {
         // If there is an array of association_partners returned, we pick the first custom_benefit
@@ -119,8 +120,7 @@ export const createPartner = async (partnerData: Omit<PartnerDB, 'id'>): Promise
 };
 
 export const updatePartner = async (id: string, updates: Partial<Partner>): Promise<Partner | null> => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const dbUpdates: any = {
+    const dbUpdates: Record<string, unknown> = {
         name: updates.name,
         category: updates.category,
         description: updates.description,
