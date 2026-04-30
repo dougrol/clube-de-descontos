@@ -33,7 +33,7 @@ const Reports: React.FC = () => {
   const fetchReports = async () => {
     setLoading(true);
     try {
-      // Fetch total from associates
+      // Fetch total from associates (fully registered)
       const { data: associates, error: assocError } = await supabase
         .from('associates')
         .select('association, email, cpf, name, phone, status');
@@ -58,12 +58,10 @@ const Reports: React.FC = () => {
         }
       });
 
-      const byAssociation = Object.entries(assocMap).map(([name, count]) => ({ name, count }));
-
-      // Fetch AGV first access
+      // Fetch AGV data (imported via spreadsheet, pending registration)
       const { data: agvUsers, error: agvError } = await supabase
         .from('associados_universo_agv')
-        .select('user_id');
+        .select('user_id, nome, placa');
 
       if (agvError) throw agvError;
 
@@ -78,11 +76,26 @@ const Reports: React.FC = () => {
         }
       });
 
+      // Add AGV pending to association chart
+      if (agvPending > 0) {
+        assocMap['Universo AGV (Pendentes)'] = (assocMap['Universo AGV (Pendentes)'] || 0) + agvPending;
+      }
+      if (agvDone > 0) {
+        assocMap['Universo AGV (Ativos)'] = (assocMap['Universo AGV (Ativos)'] || 0) + agvDone;
+      }
+
+      const byAssociation = Object.entries(assocMap).map(([name, count]) => ({ name, count }));
+
+      // Total = registered associates + AGV pending (all people in the system)
+      const totalFromAssociates = associates?.length || 0;
+      const totalAgv = agvUsers?.length || 0;
+      const totalAll = totalFromAssociates + totalAgv;
+
       setData({
-        totalAssociates: associates?.length || 0,
+        totalAssociates: totalAll,
         byAssociation,
         completeProfile: complete,
-        incompleteProfile: incomplete,
+        incompleteProfile: incomplete + agvPending, // AGV pending = incomplete profile
         agvFirstAccessDone: agvDone,
         agvFirstAccessPending: agvPending
       });
