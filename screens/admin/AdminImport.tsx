@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { FileText, Import, AlertCircle, CheckCircle, Upload, Trash2, Download, ChevronRight, Loader2, Users } from 'lucide-react';
 import { Card, Button, SectionTitle } from '../../components/ui';
 import { supabase } from '../../services/supabaseClient';
+import { importUniversoAgvSpreadsheet, ImportSummary as AgvImportSummary } from '../../services/universoAgvImportService';
 import * as XLSX from 'xlsx';
 import * as pdfjsLib from 'pdfjs-dist';
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
@@ -367,8 +368,9 @@ export const AdminImport: React.FC = () => {
     const [progress, setProgress] = useState(0);
     const [results, setResults] = useState<ImportResult[]>([]);
     const [error, setError] = useState<string | null>(null);
-    const [importMode, setImportMode] = useState<'standard' | 'elevamais'>('standard');
+    const [importMode, setImportMode] = useState<'standard' | 'elevamais' | 'agv'>('agv');
     const [associationName, setAssociationName] = useState('');
+    const [agvSummary, setAgvSummary] = useState<AgvImportSummary | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -386,13 +388,23 @@ export const AdminImport: React.FC = () => {
         setIsProcessing(true);
         setError(null);
         setResults([]);
+        setAgvSummary(null);
         setProgress(0);
 
         try {
             const data = await file.arrayBuffer();
             let parsedData: ImportRow[];
             
-            if (importMode === 'elevamais') {
+            if (importMode === 'agv') {
+                // AGV mode: import to associados_universo_agv table (no auth user created)
+                const summary = await importUniversoAgvSpreadsheet(file, (percent) => {
+                    setProgress(percent);
+                });
+                setAgvSummary(summary);
+                setIsProcessing(false);
+                if(fileInputRef.current) fileInputRef.current.value = '';
+                return;
+            } else if (importMode === 'elevamais') {
                 // PDF parsing for Eleva Mais
                 if (!file.name.toLowerCase().endsWith('.pdf')) {
                     throw new Error("Para o modo Eleva Mais, envie o relatório em formato PDF.");
@@ -481,18 +493,24 @@ export const AdminImport: React.FC = () => {
                 <div className="space-y-6">
                    
                    {/* Layout Selection */}
-                   <div className="flex gap-4 mb-6 p-1 bg-obsidian-950 rounded-lg max-w-fit">
+                   <div className="flex flex-wrap gap-2 mb-6 p-1 bg-obsidian-950 rounded-lg max-w-fit">
                        <button 
-                           onClick={() => { setImportMode('standard'); setFile(null); }}
+                           onClick={() => { setImportMode('agv'); setFile(null); setAgvSummary(null); }}
+                           className={`px-4 py-2 rounded-md text-sm font-bold transition-colors ${importMode === 'agv' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
+                       >
+                           🚗 Universo AGV (Placa)
+                       </button>
+                       <button 
+                           onClick={() => { setImportMode('standard'); setFile(null); setAgvSummary(null); }}
                            className={`px-4 py-2 rounded-md text-sm font-bold transition-colors ${importMode === 'standard' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
                        >
                            Layout Padrão (CPF)
                        </button>
                        <button 
-                           onClick={() => { setImportMode('elevamais'); setFile(null); }}
+                           onClick={() => { setImportMode('elevamais'); setFile(null); setAgvSummary(null); }}
                            className={`px-4 py-2 rounded-md text-sm font-bold transition-colors ${importMode === 'elevamais' ? 'bg-gold-500 text-black' : 'text-gray-400 hover:text-white'}`}
                        >
-                           Layout Eleva Mais (PDF)
+                           Eleva Mais (PDF)
                        </button>
                    </div>
 
@@ -502,7 +520,18 @@ export const AdminImport: React.FC = () => {
                             <FileText size={16} className="mr-2 text-gold-500"/> Instruções e Formato
                         </h4>
                         
-                        {importMode === 'standard' ? (
+                        {importMode === 'agv' ? (
+                            <>
+                                <p className="mb-2">Envie a planilha do sistema <strong className="text-gold-500">Hinova/SGA</strong> (Universo AGV).</p>
+                                <ul className="list-disc pl-5 space-y-1 text-xs opacity-80">
+                                    <li><strong>Associado:</strong> Nome do associado</li>
+                                    <li><strong>Placa:</strong> Placa do veículo (usado para login inicial)</li>
+                                    <li><strong>Fone 1/2:</strong> Telefone de contato</li>
+                                    <li><strong>Instituição:</strong> Universo AGV</li>
+                                </ul>
+                                <p className="mt-2 text-xs text-gold-500/70">💡 <strong>Sem CPF?</strong> Sem problema! O associado fará o cadastro completo (CPF, email, senha) pelo "Primeiro Acesso" usando a placa.</p>
+                            </>
+                        ) : importMode === 'standard' ? (
                             <>
                                 <p className="mb-2">Envie <strong className="text-gold-500">qualquer planilha</strong> (CSV, Excel) com dados de associados. O sistema detecta automaticamente colunas como:</p>
                                 <ul className="list-disc pl-5 space-y-1 text-xs opacity-80">
@@ -522,7 +551,7 @@ export const AdminImport: React.FC = () => {
                         )}
                     </div>
 
-                    {/* Association Name (standard mode) */}
+                    {/* Association Name (standard mode only) */}
                     {importMode === 'standard' && (
                         <div className="space-y-1">
                             <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Nome da Associação (para vincular todos)</label>
@@ -560,7 +589,7 @@ export const AdminImport: React.FC = () => {
                         ) : (
                             <div className="mb-4">
                                 <p className="text-white font-medium mb-1">
-                                    {importMode === 'elevamais' ? 'Selecione o PDF do relatório' : 'Selecione o arquivo CSV ou Excel'}
+                                    {importMode === 'elevamais' ? 'Selecione o PDF do relatório' : 'Selecione a planilha (CSV, Excel)'}
                                 </p>
                                 <p className="text-gray-400 text-xs">Arraste ou clique abaixo</p>
                             </div>
@@ -654,6 +683,54 @@ export const AdminImport: React.FC = () => {
                                      </div>
                                  </div>
                              )}
+                        </div>
+                    )}
+
+                    {/* AGV Import Summary */}
+                    {agvSummary && !isProcessing && (
+                        <div className="space-y-4 pt-4 border-t border-white/10">
+                             <h4 className="font-bold text-white text-lg">Resumo da Importação AGV</h4>
+                             
+                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                 <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 flex flex-col items-center">
+                                      <Users size={24} className="text-blue-400 mb-2"/>
+                                      <span className="text-2xl font-black text-white">{agvSummary.totalLidas}</span>
+                                      <span className="text-xs text-blue-300 uppercase tracking-widest mt-1 font-bold">Lidas</span>
+                                 </div>
+                                 <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4 flex flex-col items-center">
+                                      <CheckCircle size={24} className="text-green-500 mb-2"/>
+                                      <span className="text-2xl font-black text-white">{agvSummary.importados}</span>
+                                      <span className="text-xs text-green-400 uppercase tracking-widest mt-1 font-bold">Novos</span>
+                                 </div>
+                                 <div className="bg-gold-500/10 border border-gold-500/20 rounded-xl p-4 flex flex-col items-center">
+                                      <Import size={24} className="text-gold-400 mb-2"/>
+                                      <span className="text-2xl font-black text-white">{agvSummary.atualizados}</span>
+                                      <span className="text-xs text-gold-300 uppercase tracking-widest mt-1 font-bold">Atualizados</span>
+                                 </div>
+                                 <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 flex flex-col items-center">
+                                      <AlertCircle size={24} className="text-red-500 mb-2"/>
+                                      <span className="text-2xl font-black text-white">{agvSummary.erros}</span>
+                                      <span className="text-xs text-red-400 uppercase tracking-widest mt-1 font-bold">Erros</span>
+                                 </div>
+                             </div>
+
+                             {agvSummary.detalhesErros.length > 0 && (
+                                 <div className="mt-4">
+                                     <h5 className="text-sm font-bold text-gray-300 mb-3">Erros Detalhados:</h5>
+                                     <div className="max-h-60 overflow-y-auto space-y-2 pr-2 scrollbar-thin">
+                                         {agvSummary.detalhesErros.map((err, idx) => (
+                                              <div key={idx} className="bg-red-500/5 border border-red-500/10 p-3 rounded-lg flex items-start gap-3 text-sm">
+                                                  <span className="font-mono text-red-400 text-xs bg-red-500/10 px-2 py-0.5 rounded">L{err.linha}</span>
+                                                  <span className="text-gray-300">{err.motivo}</span>
+                                              </div>
+                                         ))}
+                                     </div>
+                                 </div>
+                             )}
+
+                             <p className="text-xs text-gold-500/70 mt-3">
+                                 💡 Os associados importados poderão acessar o sistema pelo <strong>"Primeiro Acesso AGV"</strong> digitando a placa do veículo.
+                             </p>
                         </div>
                     )}
 
